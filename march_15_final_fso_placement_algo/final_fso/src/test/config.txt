@@ -1,0 +1,37 @@
+#unless otherwise stated, all the distances are in meter
+#unless otherwise stated, all the link capacities are in mbps
+
+#------global params: same for both map and synthetic graph------------
+[global]
+graphType: synthetic 
+seed: 101349
+experiment_name: Test
+gateway_to_node_ratio: 0.01
+link_capacity: 1000.0
+fso_per_node: 4
+target_spacing: 10
+
+output_statistics_file: ./stat/synthetic_graph_stat.txt
+#dynamic_graph_specification_folder: ./spec/
+graph_output_folder: ./output/
+
+max_short_edge_length: 100.0
+max_long_edge_length: 1000.0
+
+#------params applicable to synthetic graph only------------
+[synthetic]
+no_of_samples: 1
+number_of_nodes: 50
+max_x_coord: 1000 
+max_y_coord:  500
+max_no_of_edges: 100
+short_to_long_edge_ratio: 1.5
+
+
+#------params applicable to map-input(osm file) only------------
+[map]
+
+
+
+
+
