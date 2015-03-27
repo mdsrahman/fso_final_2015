@@ -2,12 +2,12 @@ import unittest
 from final_fso.src.target_handler import TargetHandler
 
 
-class TestGenerateInput(unittest.TestCase):
+class TestTargetHandler(unittest.TestCase):
   def setUp(self):
     unittest.TestCase.setUp(self)
     self.th = TargetHandler('./config.txt')
     #self.gi.generateNodePositions()
-    print "Test for GenerateInput.."
+    print "Test for TargetHandler.."
   
 
   def test_heuristicTargetCover(self):
