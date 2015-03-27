@@ -9,8 +9,8 @@ class TestGenerateInput(unittest.TestCase):
     #self.gi.generateNodePositions()
     print "Test for GenerateInput.."
   
-  @unittest.skip("skipping test_params_synthetic_graph")
-  def test_params_synthetic_graph(self):
+
+  def mtest_params_synthetic_graph(self):
  
     self.assertIsInstance(self.gi.graphType, str, 'type(str) error for:graphType')
     self.assertEqual(self.gi.graphType, 'synthetic', 'value error for:graphType')
@@ -68,8 +68,8 @@ class TestGenerateInput(unittest.TestCase):
   #TODO: test case for params read for map input
   #elif self.gi.graphType == 'map':
     #todo...
-  
-  def test_generateNodePositions(self):
+
+  def mtest_generateNodePositions(self):
     '''
     ensures that:
       i) both node_x and node_y has exactly  nodes = number_of_nodes
@@ -80,7 +80,8 @@ class TestGenerateInput(unittest.TestCase):
     self.assertLessEqual(max(self.gi.node_x), self.gi.max_x_coord, "node_x value exceeds max_x_coord")
     self.assertLessEqual(max(self.gi.node_y), self.gi.max_y_coord, "node_y value exceeds max_y_coord")
   
-  def test_generateSyntheticGraph(self):
+ 
+  def mtest_generateSyntheticGraph(self):
     '''ensure that:
         i) total nodes in adj equals self.number_of_nodes
         ii) total_edges in adj <= self.max_no_of_edges
@@ -103,10 +104,50 @@ class TestGenerateInput(unittest.TestCase):
       self.assertLessEqual(u_short_edge_counter, self.gi.max_short_edge_per_node,'max_short_edge_per_node exceeded')
       self.assertLessEqual(u_long_edge_counter, self.gi.max_long_edge_per_node,'max_long_edge_per_node exceeded')
   
-  @unittest.skip("skipping test_visualizeGraph") 
-  def test_visualizeGraph(self):
-    self.gi.visualizeGraph(self.gi.adj)
+  
+  
+  def mtest_selectGateways(self):
+    '''
+    ensures that
+      i) if number of gateways is higher than specified as ratio in the config file,
+          then each comes from separate connected components, i.e. there is no path 
+          between any pairs of gateways
+      ii) else, the number of gateways must be almost equal to the ratio specified
+    '''
     
+    current_gateway_to_node_ratio  = 1.0*len(self.gi.gateways)/self.gi.adj.number_of_nodes()
+    if current_gateway_to_node_ratio > self.gi.gateway_to_node_ratio:
+      for u in self.gi.gateways:
+        for v in self.gi.gateways:
+          if u != v:
+            self.assertFalse(nx.has_path(self.gi.adj,u,v),
+              'Gateways have path between them even though the gateway ratio is higher i.e they are from the same connected component')
+    else:
+      self.assertAlmostEqual(current_gateway_to_node_ratio, 
+                           self.gi.gateway_to_node_ratio, places = 4, 
+                           msg = 'gateway_to_node ratio is erroneous by 4 decimal places:'
+                           +str(current_gateway_to_node_ratio)+' vs '
+                           +str(self.gi.gateway_to_node_ratio))
+      
+      for g in self.gi.gateways:
+        self.assertGreaterEqual( self.gi.adj.degree(g), 0, 'warning! Disconnected node selected as gateway')
+    
+
+ 
+  def mtest_visualizeGraph(self):
+    '''
+    for now, just visualize the two graphs self.adj and self.short_edge_adj
+    '''
+    self.gi.visualizeGraph(self.gi.adj)
+    self.gi.visualizeGraph(self.gi.short_edge_adj)
+  
+  def test_class_methods(self):
+    '''
+    calls the mtest_* methods that is only the methods of interest
+    '''
+    self.mtest_generateSyntheticGraph()
+    self.mtest_selectGateways()
+    self.mtest_visualizeGraph()
 if __name__=='__main__':
   unittest.main(verbosity = 2)
   
