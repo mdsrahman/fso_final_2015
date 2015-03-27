@@ -4,7 +4,7 @@
 #------global params: same for both map and synthetic graph------------
 [global]
 graphType: synthetic 
-seed: 101349
+seed: 101395
 experiment_name: Test
 gateway_to_node_ratio: 0.01
 link_capacity: 1000.0
@@ -21,10 +21,10 @@ max_long_edge_length: 1000.0
 #------params applicable to synthetic graph only------------
 [synthetic]
 no_of_samples: 1
-number_of_nodes: 50
-max_x_coord: 1000 
+number_of_nodes: 500
+max_x_coord: 1000
 max_y_coord:  500
-max_no_of_edges: 100
+max_no_of_edges: 10000
 short_to_long_edge_ratio: 1.5
 
 
