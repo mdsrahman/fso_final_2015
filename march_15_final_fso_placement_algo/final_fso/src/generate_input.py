@@ -120,6 +120,10 @@ class GenerateInput:
   adj (networkx.Graph obj): the adjacency matrix generated either synthetically or from the map
                         initialized in generateSyntheticGraph(..) method or 
                         #TODO: document corresponding function for map-calls
+  short_edge_adj(networkx.Graph obj): a subgraph of adj (*class-field) with only the 'short'
+                        fso links the corresponding nodes, initialized and built up in method 
+                        generateEdges(..)
+  gateways(list of int): the list of gateway/sink nodes, set at the method selectGateways(..)
   ''' 
   
   def __init__(self, configFile):
@@ -127,6 +131,7 @@ class GenerateInput:
     #           Class Fields
     #----------------------------------------------------------
     #--------the following class-fields get initial values externally-----
+    
     self.configFile = configFile
     self.graphType =  None
     self.seed = None
@@ -159,6 +164,8 @@ class GenerateInput:
     self.short_edge_counter =  None
     self.long_edge_counter = None
     self.adj = None
+    self.short_edge_adj = None
+    self.gateways = None
     #----------------------------------------------------------
     #           End of Class Fields
     #----------------------------------------------------------
@@ -168,7 +175,7 @@ class GenerateInput:
     random.seed(self.seed)
     if self.graphType == 'synthetic':
       self.generateSyntheticGraph()
-    
+    self.selectGateways()
   def parseConfigFile(self):
     '''
     populates class fields with values from configFile(*class-field)
@@ -234,6 +241,7 @@ class GenerateInput:
     #task (iii)
     self.generateEdges()
     return
+  
   def generateNodePositions(self):
     '''
     generates the random positions for all number_of_nodes, 
@@ -326,10 +334,13 @@ class GenerateInput:
               ii) for any node:
                   total_short_edge <= self.max_short_edge_per_node
                   total_long_edge <= self.max_long_edge_per_node
+              iii) self.short_edge_adj is also initialized and 'short' edges are added 
+                  simultaneously as with adj
       Args: None
       Returns: None
     '''
     #initialize the max short and long edge values
+    self.short_edge_adj = nx.Graph()
     expected_edge_per_node =  int(round( 1.0*self.max_no_of_edges/ self.number_of_nodes, 0))
     self.max_long_edge_per_node = int(round(1.0* expected_edge_per_node / (self.short_to_long_edge_ratio+1),0))
     self.max_short_edge_per_node = int(round(1.0*self.max_long_edge_per_node*self.short_to_long_edge_ratio,0))
@@ -340,11 +351,12 @@ class GenerateInput:
     
     #now consider pairs of nodes and assign edges both long and short between them
     for n1 in xrange(self.number_of_nodes - 1):
-      for n2 in xrange(self.number_of_nodes - 2):
+      for n2 in xrange(n1+1, self.number_of_nodes):
         distance_sq =  self.getDistanceSquare(n1, n2) 
         if distance_sq  <= self.max_short_edge_length**2:
           if self.hasRoomForShortEdge(n1) and self.hasRoomForShortEdge(n2):
             self.addEdge(n1, n2, 'short')
+            self.short_edge_adj.add_edge(n1,n2)
         elif distance_sq  <= self.max_long_edge_length**2:
           if self.hasRoomForLongEdge(n1) and self.hasRoomForLongEdge(n2):
             self.addEdge(n1, n2, 'long')
@@ -352,25 +364,81 @@ class GenerateInput:
           return
     return
   
-  def visualizeGraph(self, g):
+  def selectGateways(self):
     '''
-    visualize any graph using pyplot
-    Args: g, must be a networkx.Graph object
+    pre-condition: self.adj must be initialized
+    post-condition:
+      i) selects one gateway from each connected component from self.adj graph
+      ii) selects the rest number of gateways from the rest of the nodes which has degree>0
+    Args: None
     Returns: None
     '''
-    node_position =  list(zip(self.node_x, self.node_y))
-    node_colors = ['w' for i in self.adj.nodes()]
     
-    nx.draw_networkx(G = self.adj, 
-                     pos = node_position , 
-                     nodelist =  g.nodes(),
-                     edgelist = g.edges(),
+    self.gateways = []
+
+    connected_components = nx.connected_components(self.adj)
+    
+    for l in connected_components:
+      n = random.choice(l)
+      self.gateways.append(n)
+      
+    num_gateways = int(round(1.0 * self.gateway_to_node_ratio*self.number_of_nodes,0)) 
+    selection_attempts = 0
+    while (num_gateways > len(self.gateways)):
+      selection_attempts += 1
+      if selection_attempts > self.adj.number_of_nodes():
+        break
+      candidate_gateways = random.sample(self.adj.nodes(), num_gateways - len(self.gateways))
+      for i in candidate_gateways :     
+        if i not in self.gateways and self.adj.degree(i)>0:  
+          self.gateways.append(i)
+    return
+  
+  def is_short_edge(self,n1,n2):
+    '''
+    Args: n1,n2: node no, must be 0 <= and <self.number_of_nodes
+    Returns: True if (n1,n2) is a short edge in self.adj graph, otherwise False
+    '''
+    if self.adj.has_edge(n1, n2):
+      con_type =  self.adj[n1][n2]['con_type']
+      if con_type == 'short':
+        return True
+    return False
+  
+  def visualizeGraph(self, g):
+    '''
+    pre-condition: must be called after self.adj and self.gateways are set or initialized
+    visualize any graph that is subgraph of self.adj using pyplot
+    Args: g, must be a networkx.Graph object and must be a subgraph of self.adj
+    Returns: None
+    '''
+    #build node positions and node colors:
+    node_positions = {}
+    node_colors = []
+    for n in g.nodes():
+      node_positions[n] = (self.node_x[n], self.node_y[n])
+      if n in self.gateways:
+        node_colors.append('r')
+      else:
+        node_colors.append('w')
+        
+    
+    #build edge_colors:
+    edge_colors=[]
+    for u,v in g.edges():
+      if self.is_short_edge(u, v):
+        edge_colors.append('r')
+      else:
+        edge_colors.append('k')
+        
+    nx.draw_networkx(G = g, 
+                     pos = node_positions , 
                      with_labels = True, 
-                     node_color = node_colors)
+                     node_color = node_colors,
+                     edge_color = edge_colors)
     plt.show()
     return
-if __name__=='__main__':
-  gp = GenerateInput('./test/config.txt')
+
   
   
   
