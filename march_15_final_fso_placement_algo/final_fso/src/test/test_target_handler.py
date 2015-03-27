@@ -16,6 +16,8 @@ class TestTargetHandler(unittest.TestCase):
     print "Total Nodes:",self.th.number_of_nodes
     print "Targets Covered:",self.th.no_of_targets_covered
     print "Total Targets:",self.th.total_targets
+    print "Target max_x:",self.th.max_tx
+    print "Target max_y:",self.th.max_ty
     print "Is Node-heap empty:",self.th.node_hp.isHeapEmpty()
     
     
