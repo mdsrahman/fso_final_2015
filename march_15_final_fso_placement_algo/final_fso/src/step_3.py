@@ -1,6 +1,6 @@
 from final_fso.src.step_2 import Step_2
 import networkx as nx
-from networkx.algorithms.traversal.breadth_first_search import bfs_successors
+
 class Step_3(Step_2):
   '''
   class to reduce node degrees in the backbone graph
