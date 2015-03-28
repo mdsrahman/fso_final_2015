@@ -397,7 +397,7 @@ class GenerateInput:
           self.gateways.append(i)
     return
   
-  def is_short_edge(self,n1,n2):
+  def isShortEdge(self,n1,n2):
     '''
     Args: n1,n2: node no, must be 0 <= and <self.number_of_nodes
     Returns: True if (n1,n2) is a short edge in self.adj graph, otherwise False
@@ -407,6 +407,7 @@ class GenerateInput:
       if con_type == 'short':
         return True
     return False
+
   
   def visualizeGraph(self, g, show_edges = True):
     '''
@@ -433,7 +434,7 @@ class GenerateInput:
       
     edge_colors=[]
     for u,v in g.edges():
-      if self.is_short_edge(u, v):
+      if self.isShortEdge(u, v):
         edge_colors.append('r')
       else:
         edge_colors.append('k')

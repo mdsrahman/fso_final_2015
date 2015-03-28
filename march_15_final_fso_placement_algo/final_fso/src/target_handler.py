@@ -266,7 +266,7 @@ class TargetHandler(GenerateInput):
       
     edge_colors=[]
     for u,v in g.edges():
-      if self.is_short_edge(u, v):
+      if self.isShortEdge(u, v):
         edge_colors.append('r')
       else:
         edge_colors.append('k')
