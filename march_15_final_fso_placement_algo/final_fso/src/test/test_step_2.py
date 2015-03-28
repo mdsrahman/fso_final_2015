@@ -8,12 +8,16 @@ class TestTargetHandler(unittest.TestCase):
     self.s2 = Step_2('./config.txt')
     #self.gi.generateNodePositions()
     print "Test for Step_2 class.."
-  
+    
 
   def test_Step2_graph_plot(self):
     '''
     selective calls to methods...
     '''
+    self.s2.runInputGenerator()
+    self.s2.runStep_1()
+    self.s2.runStep_2()
+    
     graphs = [self.s2.adj, self.s2.short_edge_adj, self.s2.backbone_graph]
     graph_title = ['Adjacency graph', 'Short Edge Adjacency graph', 'Backbone graph']
     
