@@ -1,14 +1,15 @@
 import unittest
 from final_fso.src.input_generator import InputGenerator
 import networkx as nx
+from matplotlib import pyplot as plt
 
-class TestGenerateInput(unittest.TestCase):
+class TestInputGenerator(unittest.TestCase):
   def setUp(self):
     unittest.TestCase.setUp(self)
     self.gi = InputGenerator('./config.txt')
     #self.gi.generateNodePositions()
     print "Test for GenerateInput.."
-  
+    self.gi.runInputGenerator()
 
   def mtest_params_synthetic_graph(self):
     self.assertIsInstance(self.gi.graphType, str, 'type(str) error for:graphType')
@@ -137,18 +138,24 @@ class TestGenerateInput(unittest.TestCase):
     '''
     for now, just visualize the two graphs self.adj and self.short_edge_adj
     '''
+    plt.figure(1)
+    plt.title("Adjacency Graph")
     self.gi.visualizeGraph(self.gi.adj)
+    plt.figure(2)
+    plt.title("Short-edge Adjacency Graph Graph")
     self.gi.visualizeGraph(self.gi.short_edge_adj)
+    plt.show()
   
-  def test_class_methods(self):
+  def test_summmary(self):
     '''
     calls the mtest_* methods that is only the methods of interest
     '''
-    self.gi.runInputGenerator()
+    print "running inputGenerator Processes"
     
     self.mtest_generateSyntheticGraph()
     self.mtest_selectGateways()
     self.mtest_visualizeGraph()
+
 if __name__=='__main__':
   unittest.main(verbosity = 2)
   
