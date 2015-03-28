@@ -1,10 +1,10 @@
 import networkx as nx
 
 
-from target_handler import TargetHandler
+from step_1 import Step_1
 from my_util import MyHeap
 
-class Step_2(TargetHandler):
+class Step_2(Step_1):
   '''
   description of the class fields
   backbone_graph(networkx.Graph obj): background graph generated after running the BFS,
@@ -37,7 +37,7 @@ class Step_2(TargetHandler):
                           each node visited in the BFS
   '''
   def __init__(self, configFile):
-    TargetHandler.__init__(self, configFile) 
+    Step_1.__init__(self, configFile) 
         #super class initializer must be called at the top
         
     #---class fields------------   
@@ -49,8 +49,13 @@ class Step_2(TargetHandler):
     self.bfs_heap = None
     self.remaining_bfs_node_cover = None
     #---end of class fields----- 
-    self.runBFS()
+    
 
+  def runStep_2(self):
+    '''runs all the tasks in step 2
+    '''
+    self.runBFS()
+    
   def getBFSPath(self, u, v):
     '''
     Args:
