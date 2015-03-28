@@ -9,7 +9,6 @@ class MyHeap:
     self.pq = []                         # list of entries arranged in a heap
     self.object_finder = {}               # mapping of objects to entries
     self.REMOVED = removed_obj_marker      # placeholder for a removed obj
-    self.is_heap_empty = True
     
   def push(self, obj, priority):
       if obj in self.object_finder: #this might be costly for a large heap
@@ -20,7 +19,6 @@ class MyHeap:
       self.object_finder[obj] = entry
       
       hq.heappush(self.pq, entry)
-      self.is_heap_empty = False
   
   def pop(self):
       while self.pq:
@@ -28,18 +26,21 @@ class MyHeap:
           if obj != self.REMOVED:
               del self.object_finder[obj]
               return obj
-      self.is_heap_empty = True #couldn't return a single object, so heap is empty now
       return None #return None if trying to pop from empty heap
     
   def debugPrintHeapContent(self):
-    print "Heap Content:"
+    
+    print "Heap Content:-------"
     for obj in self.object_finder:
       entry = self.object_finder[obj]
       if entry[1] != self.REMOVED:
         print "Obj:",entry[1]," priority:",entry[0]
         
   def isHeapEmpty(self):
-    return self.is_heap_empty
+    if not self.object_finder:
+      return True
+    else:
+      return False
   
 class MyGridBin():
   '''

@@ -6,7 +6,7 @@
 import ConfigParser
 import numpy as np
 import networkx as nx
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import random 
  
 class GenerateInput:
@@ -341,6 +341,9 @@ class GenerateInput:
     '''
     #initialize the max short and long edge values
     self.short_edge_adj = nx.Graph()
+    for n in xrange(self.number_of_nodes):
+      self.short_edge_adj.add_node(n)
+      
     expected_edge_per_node =  int(round( 1.0*self.max_no_of_edges/ self.number_of_nodes, 0))
     self.max_long_edge_per_node = int(round(1.0* expected_edge_per_node / (self.short_to_long_edge_ratio+1),0))
     self.max_short_edge_per_node = int(round(1.0*self.max_long_edge_per_node*self.short_to_long_edge_ratio,0))
@@ -366,9 +369,9 @@ class GenerateInput:
   
   def selectGateways(self):
     '''
-    pre-condition: self.adj must be initialized
+    pre-condition: self.adj and self.short_edge_adj must be initialized
     post-condition:
-      i) selects one gateway from each connected component from self.adj graph
+      i) selects one gateway from each connected component from self.short_edge_adj (IMP!!) graph
       ii) selects the rest number of gateways from the rest of the nodes which has degree>0
     Args: None
     Returns: None
@@ -376,7 +379,7 @@ class GenerateInput:
     
     self.gateways = []
 
-    connected_components = nx.connected_components(self.adj)
+    connected_components = nx.connected_components(self.short_edge_adj)
     
     for l in connected_components:
       n = random.choice(l)
@@ -386,11 +389,11 @@ class GenerateInput:
     selection_attempts = 0
     while (num_gateways > len(self.gateways)):
       selection_attempts += 1
-      if selection_attempts > self.adj.number_of_nodes():
+      if selection_attempts > self.short_edge_adj.number_of_nodes():
         break
-      candidate_gateways = random.sample(self.adj.nodes(), num_gateways - len(self.gateways))
+      candidate_gateways = random.sample(self.short_edge_adj.nodes(), num_gateways - len(self.gateways))
       for i in candidate_gateways :     
-        if i not in self.gateways and self.adj.degree(i)>0:  
+        if i not in self.gateways and self.short_edge_adj.degree(i)>0:  
           self.gateways.append(i)
     return
   
@@ -405,7 +408,7 @@ class GenerateInput:
         return True
     return False
   
-  def visualizeGraph(self, g):
+  def visualizeGraph(self, g, show_edges = True):
     '''
     pre-condition: must be called after self.adj and self.gateways are set or initialized
     visualize any graph that is subgraph of self.adj using pyplot
@@ -424,6 +427,10 @@ class GenerateInput:
         
     
     #build edge_colors:
+    edge_list = []
+    if show_edges:
+      edge_list = g.edges()
+      
     edge_colors=[]
     for u,v in g.edges():
       if self.is_short_edge(u, v):
@@ -434,10 +441,9 @@ class GenerateInput:
     nx.draw_networkx(G = g, 
                      pos = node_positions , 
                      with_labels = True, 
+                     edgelist =  edge_list,
                      node_color = node_colors,
                      edge_color = edge_colors)
-    plt.show()
-    return
 
   
   

@@ -91,6 +91,7 @@ class Step_2(TargetHandler):
       iv) for each pair of nodes (u,v) in self.bfs_nodes:
             a) self.bfs_paths[u][v]<- bfs_path (essentially list of nodes) between u and v
             b) self.bfs_path_distance[u][v]<- bfs_path length between u and v 
+              in graph IMPORTANT!!: self.short_edge_adj, graph with only edges=short-link-fso
     '''
     #task (i)
     self.bfs_nodes = []
@@ -130,7 +131,7 @@ class Step_2(TargetHandler):
     
     #task (iv)
     for i_index,i in enumerate(self.bfs_nodes):
-      shortest_paths= nx.single_source_shortest_path(self.adj, i)
+      shortest_paths= nx.single_source_shortest_path(self.short_edge_adj, i)
       reachable_nodes_on_shortest_paths = shortest_paths.keys() 
         #reachable_nodes_on_shortest_paths: all nodes reachable from node i
       reachable_bfs_nodes =  list(set(reachable_nodes_on_shortest_paths) & set(self.bfs_nodes))

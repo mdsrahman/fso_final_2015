@@ -2,6 +2,8 @@
 from my_util import MyHeap
 from my_util import MyGridBin
 from generate_input import GenerateInput
+import networkx as nx
+
 class TargetHandler(GenerateInput):
   '''
   #TODO: complete field description
@@ -232,7 +234,49 @@ class TargetHandler(GenerateInput):
       if total_new_targets_covered>0:
         self.no_of_targets_covered += total_new_targets_covered
         self.node_cover.append(n)
+        
+  def visualizeGraph(self, g, show_edges = True):
+    '''
+    over-ridden to show nodes in self.node_cover in green
+    pre-condition: must be called after self.adj and self.gateways and self.node_cover
+               are set or initialized
+    visualize any graph that is subgraph of self.adj using pyplot
+    Args: g, must be a networkx.Graph object and must be a subgraph of self.adj
+    Returns: None
+    '''
+    #build node positions and node colors:
+    node_positions = {}
+    node_colors = []
+    for n in g.nodes():
+      node_positions[n] = (self.node_x[n], self.node_y[n])
+      if n in self.gateways and n in self.node_cover:
+        node_colors.append('b')
+      elif n in self.node_cover:
+        node_colors.append('g')
+      elif n in self.gateways:
+        node_colors.append('r')
+      else:
+        node_colors.append('w')
+        
+    
+    #build edge_colors:
+    edge_list = []
+    if show_edges:
+      edge_list = g.edges()
       
+    edge_colors=[]
+    for u,v in g.edges():
+      if self.is_short_edge(u, v):
+        edge_colors.append('r')
+      else:
+        edge_colors.append('k')
+        
+    nx.draw_networkx(G = g, 
+                     pos = node_positions , 
+                     with_labels = True, 
+                     edgelist =  edge_list,
+                     node_color = node_colors,
+                     edge_color = edge_colors)
     
   
   

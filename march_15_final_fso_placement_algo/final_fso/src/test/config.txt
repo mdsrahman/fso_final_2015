@@ -21,7 +21,7 @@ max_long_edge_length: 1000.0
 #------params applicable to synthetic graph only------------
 [synthetic]
 no_of_samples: 1
-number_of_nodes: 500
+number_of_nodes: 100
 max_x_coord: 1000
 max_y_coord:  500
 max_no_of_edges: 10000
