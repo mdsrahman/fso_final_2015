@@ -8,7 +8,11 @@ import numpy as np
 import networkx as nx
 #import matplotlib.pyplot as plt
 import random 
+import logging
  
+ 
+
+
 class InputGenerator:
   '''
   description of class-level public fields:
@@ -126,6 +130,7 @@ class InputGenerator:
                         fso links the corresponding nodes, initialized and built up in method 
                         generateEdges(..)
   gateways(list of int): the list of gateway/sink nodes, set at the method selectGateways(..)
+  logger(logging refernce, used for debugging in all the sub-classes and itself)
   ''' 
   
   def __init__(self, configFile):
@@ -173,6 +178,8 @@ class InputGenerator:
     #           End of Class Fields
     #----------------------------------------------------------
     
+    self.logger = logging.getLogger('logger')
+    self.logger.addHandler(logging.StreamHandler())
     
     self.parseConfigFile()
     random.seed(self.seed)
@@ -356,6 +363,7 @@ class InputGenerator:
     '''
     #initialize the max short and long edge values
     self.short_edge_adj = nx.Graph()
+    self.short_edge_adj.graph['name'] =  'Short Edge Adjacency Graph'
     for n in xrange(self.number_of_nodes):
       self.short_edge_adj.add_node(n)
       

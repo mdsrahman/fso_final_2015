@@ -17,10 +17,9 @@ class Step_3(Step_2):
     #--class-fields------
     self.backbone_graph_after_step_2 = None
     self.non_gateway_backbone_nodes = [] 
-    logging.basicConfig(level=logging.INFO) #just for debugging
-    logging.debug("Step_3 initialized")
+    self.logger.debug("Step_3 initialized")
     #---end-of-class fields----
-
+    self.logger.setLevel(logging.INFO)
     
   def getMaxDegreeNodes(self):
     '''
@@ -134,6 +133,7 @@ class Step_3(Step_2):
       x)   if no such u-c found for any node n, then stop the process
     '''
     self.backbone_graph_after_step_2 = nx.Graph(self.backbone_graph)
+    self.backbone_graph_after_step_2.graph['name']='Backbone Graph After Step 2'
     self.non_gateway_backbone_nodes =  list(set(self.backbone_graph.nodes()) - set(self.gateways))
     
     degree_reduced_in_last_iteration = True
@@ -142,23 +142,23 @@ class Step_3(Step_2):
       degree_reduced_in_last_iteration = False
       #task (i)
       max_degree, max_degree_nodes =  self.getMaxDegreeNodes()
-      logging.debug("max_degree:"+str(max_degree))
-      logging.debug("max_degree_nodes:"+str(max_degree_nodes))
+      self.logger.debug("max_degree:"+str(max_degree))
+      self.logger.debug("max_degree_nodes:"+str(max_degree_nodes))
       if not max_degree_nodes:
         break # no nodes with degree>2 found, so terminate processing now
       #task (ii) 
       candidateNodes = self.getCandidateNodes(max_degree)
-      logging.debug("candidateNodes:"+str(candidateNodes))
+      self.logger.debug("candidateNodes:"+str(candidateNodes))
       for n in max_degree_nodes:
         #task (iii)+task (iv)+task(v)
         bfs_successors_n  =  self.getSuccessorInBFSTree(n)
-        logging.debug("bfs_successors_n:"+str(bfs_successors_n))
+        self.logger.debug("bfs_successors_n:"+str(bfs_successors_n))
         #task (vi)
         for u in bfs_successors_n:
         #task (vii)
           for v in candidateNodes:
             n_u_v_connectionValidity = self.isValidForConnection(n, u, v)
-            logging.debug("n,u,v,n_u_v_connectionValidity"
+            self.logger.debug("n,u,v,n_u_v_connectionValidity"
                           +str(n)+" "
                           +str(u)+" "
                           +str(v)+" "

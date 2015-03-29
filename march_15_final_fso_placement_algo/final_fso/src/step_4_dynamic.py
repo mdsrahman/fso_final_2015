@@ -2,6 +2,7 @@
 from step_3 import Step_3
 import networkx as nx
 import networkx.algorithms.flow as flow
+import logging
 
 class Step_4_dynamic(Step_3):
   '''
@@ -16,27 +17,29 @@ class Step_4_dynamic(Step_3):
                                     in run_Step_4_dynamic() method
   '''
   def __init__(self,configFile):
-    Step_3.__init__(configFile)
+    Step_3.__init__(self,configFile)
     #---class fields----
     self.max_extra_nodes_for_step_4 = None
     self.new_nodes_for_step_4 = None
     self.dynamic_graph =  None
     #----end of class fields----
-    
+    self.logger.setLevel(logging.INFO) #just for debugging
+    self.logger.debug("Step_4 constructor")
     
   def initDynamicGraph(self):
     '''
     creates an initial dynamic graph from backbone_graph
     '''
     self.dynamic_graph = nx.Graph()
-    
+    self.dynamic_graph.graph['name'] = 'Dynamic Graph'
     self.dynamic_graph.add_nodes_from(self.backbone_graph.nodes())
     
     for u in self.dynamic_graph.nodes():
       for v in self.dynamic_graph.nodes():
         if u!=v and self.adj.has_edge(u, v):
           self.dynamic_graph.add_edge(u,v)
-  
+    self.logger.debug("dynamic graph initialized")
+    
   def updateDynamicGraph(self, node_list):
     '''Args: node_list: list of nodes to be added to the dynamic graph
       adds all the nodes n in the node_list and then all edges between n and all other nodes of
@@ -150,6 +153,7 @@ class Step_4_dynamic(Step_3):
     sink_potentials = {}
     max_flow_g = nx.DiGraph(g)
     max_flow_g.remove_node('snk')
+    
     for n in max_flow_g.nodes():
       if n in self.gateways:
         sink_potentials[n]=float('inf')
@@ -159,7 +163,7 @@ class Step_4_dynamic(Step_3):
         max_flow_g.remove_edge('src', n)
         max_flow_g.remove_edge(n, 'src')
         
-        residual_max_flow_g = flow.shortest_augmenting_path(G=max_flow_g, s=n, t='snk')
+        residual_max_flow_g = flow.shortest_augmenting_path(G=max_flow_g, s='src', t=n)
         sink_potentials[n] = residual_max_flow_g.graph['flow_value']
         
         max_flow_g.add_edge('src', n, capacity =  backup_capacity_src_to_n, flow=0.0)
@@ -239,14 +243,17 @@ class Step_4_dynamic(Step_3):
     available_nodes = list(self.new_nodes_for_step_4)
     max_allowed_nodes =  self.backbone_graph.number_of_nodes()+self.max_extra_nodes_for_step_4
     #task (iv)
+    self.logger.debug("max_allowed_nodes:"+str(max_allowed_nodes)) 
     while available_nodes and self.dynamic_graph.number_of_nodes()<max_allowed_nodes:
       #task (1) and (2)
+      self.logger.debug("dynamic graph current nodes:"+str(self.dynamic_graph.number_of_nodes()))
+      self.logger.debug("available nodes:"+str(available_nodes)) 
       residual_graph = self.generateResidualGraph(self.dynamic_graph)
       #task (3)
       source_potentials = self.getSourcePotentialOfAllNodes(residual_graph)
       sink_potentials = self.getSinkPotentialOfAllNodes(residual_graph)
       max_path_benefit = -float('inf')
-      max_beneficial_path = []
+      max_beneficial_new_nodes = []
       for u in self.dynamic_graph.nodes():
         #task (4).a
         new_nodes_on_shortest_path_from_u = \
@@ -257,16 +264,23 @@ class Step_4_dynamic(Step_3):
           #task (4).b
           new_nodes_on_path_u_v = new_nodes_on_shortest_path_from_u[v]
           count_of_new_nodes_on_path_u_v = len(new_nodes_on_path_u_v)
+          self.logger.debug("\tu,v:"+str(u)+" "+str(v))
+          self.logger.debug("\tsource_potentials[u]:"+str(source_potentials[u]))
+          self.logger.debug("\tsink_potentials[v]:"+str(sink_potentials[v]))
+          self.logger.debug("\tnew_nodes_on_path_u_v:"+str(new_nodes_on_path_u_v))
           if count_of_new_nodes_on_path_u_v>0:
             path_benefit_u_v = \
              min( source_potentials[u], sink_potentials[v])/(1.0*count_of_new_nodes_on_path_u_v)
             if path_benefit_u_v>max_path_benefit:
               max_path_benefit = path_benefit_u_v
-              max_beneficial_path = list(new_nodes_on_path_u_v)
-      if max_beneficial_path: #at least this list contains one node, so has been set in the loops above
+              max_beneficial_new_nodes = list(new_nodes_on_path_u_v)
+              self.logger.debug("new max_path_benefit:"+str(max_path_benefit))
+              self.logger.debug("new max_beneficial_new_nodes:"+str(max_beneficial_new_nodes))
+      if max_beneficial_new_nodes: #at least this list contains one node, so has been set in the loops above
         #task (5)
-        self.updateDynamicGraph(max_beneficial_path)
-        available_nodes = list( set(available_nodes) - set(max_beneficial_path) )
+        self.updateDynamicGraph(max_beneficial_new_nodes)
+        self.logger.info("New Nodes added to dynamic graph:"+str(max_beneficial_new_nodes))
+        available_nodes = list( set(available_nodes) - set(max_beneficial_new_nodes) ) 
       else:
         break #couldn't add any new node in the last iteration, so processing is over
         
