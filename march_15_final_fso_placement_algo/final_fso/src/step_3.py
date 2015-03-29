@@ -1,17 +1,24 @@
 from final_fso.src.step_2 import Step_2
 import networkx as nx
 
+import logging
+
 class Step_3(Step_2):
   '''
   class to reduce node degrees in the backbone graph
   ---------------class-fields---------------------------------------------
   backbone_graph_after_step_2(networkx.Graph() obj): a backup version of backbone
                             graph before degree reduction, set in runStep_3() method
+  self.non_gateway_backbone_nodes(list of int): non-gateway nodes in self.backbone_graph so far,
+                            initialized in runStep_3() method and used by getMaxDegreeNodes() method
   '''
   def __init__(self,configFile):
     Step_2.__init__(self, configFile) #constructor for super-class must top everything
     #--class-fields------
     self.backbone_graph_after_step_2 = None
+    self.non_gateway_backbone_nodes = [] 
+    logging.basicConfig(level=logging.INFO) #just for debugging
+    logging.debug("Step_3 initialized")
     #---end-of-class fields----
 
     
@@ -20,14 +27,14 @@ class Step_3(Step_2):
     Args: None
     Processing: Returns the nodes in self.backbone_graph with maximum degrees (>2)
       i) find the dict  node_degrees of self.backbone_graph
-      ii) find the max_degree from values of node_degrees
+      ii) find the max_degree from values of node_degrees of non-gateway nodes (IMP!!)
       iii) if max_degree <=2: return max_degree, empty list
       iv) append all non-gateway nodes (node_degree keys) having degree=max_degree to maxDegreeNodes list
       v) return max_degree, maxDegreeNodes list
     '''
     max_degree_nodes = []
-    node_degrees =  self.backbone_graph.degree()
-    max_degree = max(node_degrees)
+    node_degrees =  self.backbone_graph.degree(self.non_gateway_backbone_nodes)
+    max_degree = max(node_degrees.values())
     if max_degree<=2:
       return max_degree, max_degree_nodes
     
@@ -112,6 +119,7 @@ class Step_3(Step_2):
     '''
     processing:
     only in self.backbone_graph:
+      ia) intialize non_gate_way_backbone_nodes
       i) check every  non-gateway node n with max_degree d> 2,
       ii)  find a list of nodes cnodes with degree at most d-2:
       iii)    run bfs starting at every gateway g
@@ -125,32 +133,41 @@ class Step_3(Step_2):
       ix)        continue to step (i) if step (viii) worked this iteration
       x)   if no such u-c found for any node n, then stop the process
     '''
-    #backup backbone graph for verification/debugging
-    print "DEBUG:running step 3..." #TODO:remove debug message
     self.backbone_graph_after_step_2 = nx.Graph(self.backbone_graph)
+    self.non_gateway_backbone_nodes =  list(set(self.backbone_graph.nodes()) - set(self.gateways))
+    
     degree_reduced_in_last_iteration = True
     
     while degree_reduced_in_last_iteration:
       degree_reduced_in_last_iteration = False
       #task (i)
       max_degree, max_degree_nodes =  self.getMaxDegreeNodes()
+      logging.debug("max_degree:"+str(max_degree))
+      logging.debug("max_degree_nodes:"+str(max_degree_nodes))
       if not max_degree_nodes:
         break # no nodes with degree>2 found, so terminate processing now
       #task (ii) 
       candidateNodes = self.getCandidateNodes(max_degree)
-      
+      logging.debug("candidateNodes:"+str(candidateNodes))
       for n in max_degree_nodes:
         #task (iii)+task (iv)+task(v)
         bfs_successors_n  =  self.getSuccessorInBFSTree(n)
+        logging.debug("bfs_successors_n:"+str(bfs_successors_n))
         #task (vi)
         for u in bfs_successors_n:
         #task (vii)
           for v in candidateNodes:
-            if self.isValidForConnection(n, u, v):
+            n_u_v_connectionValidity = self.isValidForConnection(n, u, v)
+            logging.debug("n,u,v,n_u_v_connectionValidity"
+                          +str(n)+" "
+                          +str(u)+" "
+                          +str(v)+" "
+                          +str(n_u_v_connectionValidity))
+            if n_u_v_connectionValidity:
               #task (viii)
               self.backbone_graph.remove_edge(n, u)
               self.backbone_graph.add_edge(u, v)
-              print "DEBUG:n,u,v",n,u,v #TODO:remove debug message
+              
               degree_reduced_in_last_iteration = True
               break # no more searching in the candidateNodes list
           if degree_reduced_in_last_iteration:

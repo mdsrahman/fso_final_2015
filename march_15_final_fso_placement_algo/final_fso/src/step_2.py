@@ -8,7 +8,7 @@ class Step_2(Step_1):
   '''
   description of the class fields
   backbone_graph(networkx.Graph obj): background graph generated after running the BFS,
-                          initialized and set in runBFS() method
+                          initialized and set in runStep_2() method
                           
   bfs_nodes(list of int): each element is node index n, 0 <= n <self.number_of_nodes,
                         these list includes all the gateway nodes plus the target-covering 
@@ -32,7 +32,7 @@ class Step_2(Step_1):
                         IMPORTANT: never push (u,v) with ZERO BFS-PATH length, it is interpreted 
                                   as non-existent path, 
                                   so check priority>0 before every bfs_heap.push() method call
-  remaining_bfs_node_cover(list of int): initialized, popped and emptied  in self.runBFS() method
+  remaining_bfs_node_cover(list of int): initialized, popped and emptied  in self.runStep_2() method
                           initially all the nodes from self.node_cover, but gradually popped for
                           each node visited in the BFS
   '''
@@ -51,10 +51,6 @@ class Step_2(Step_1):
     #---end of class fields----- 
     
 
-  def runStep_2(self):
-    '''runs all the tasks in step 2
-    '''
-    self.runBFS()
     
   def getBFSPath(self, u, v):
     '''
@@ -147,7 +143,7 @@ class Step_2(Step_1):
         self.bfs_paths[i_index][j_index] = list(shortest_paths[j])
         
 
-  def runBFS(self):
+  def runStep_2(self):
     '''
     processing:
       i) call self.buildBFSPaths() to set self.bfs_paths and self.bfs_distance
