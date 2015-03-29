@@ -86,7 +86,9 @@ class InputGenerator:
   
   short_to_long_edge_ratio(float): >=0 and <=1, ratio between total short and long
                                   edges in each synthetic graph 
-                                  #TODO: re-check the description
+  ratio_of_max_added_nodes_in_step_4(float): >=0, ratio of the maximum no. of nodes to be added in
+                                  step 4 (both dynamic and static) to the existing nodes in 
+                                  backbone_graph built after step 3
   
   **-----------------------------------------------------------------------------**
         the following class-fields get values internally
@@ -145,6 +147,7 @@ class InputGenerator:
     self.output_statistics_file = None
     self.graph_output_folder = None
     
+    self.ratio_of_max_added_nodes_in_step_4 = None
       #-----the following are initialized only for synthetic graphs------
     self.no_of_samples = None
     self.number_of_nodes = None
@@ -206,7 +209,7 @@ class InputGenerator:
     self.max_long_edge_length = self.config.getfloat('global','max_long_edge_length')
     self.output_statistics_file =  self.config.get('global','output_statistics_file')
     self.graph_output_folder =  self.config.get('global','graph_output_folder')
-    
+    self.ratio_of_max_added_nodes_in_step_4 =  self.config.getfloat('global','ratio_of_max_added_nodes_in_step_4')
     if self.graphType=='synthetic':
       self.no_of_samples = self.config.getint('synthetic','no_of_samples')
       self.number_of_nodes = self.config.getint('synthetic','number_of_nodes')
