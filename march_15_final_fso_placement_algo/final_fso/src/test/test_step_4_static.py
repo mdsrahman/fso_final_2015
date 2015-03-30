@@ -1,7 +1,8 @@
 import unittest
 from final_fso.src.step_4_static import Step_4_static
 import matplotlib.pyplot as plt
-
+import logging
+import networkx as nx
 
 class TestStep_4_static(unittest.TestCase):
   def setUp(self):
@@ -16,7 +17,10 @@ class TestStep_4_static(unittest.TestCase):
     '''
     selective calls to methods...
     '''
+    #self.s4_static.logger.setLevel(logging.DEBUG)
     self.s4_static.runInputGenerator()
+
+    #self.s4_static.logger.setLevel(logging.INFO)
     self.s4_static.runStep_1()
     self.s4_static.runStep_2()
     self.s4_static.runStep_3()
@@ -25,6 +29,7 @@ class TestStep_4_static(unittest.TestCase):
     self.s4_static.fso_per_node = 2
     #self.s4_static.logger.setLevel(logging.DEBUG)
     self.s4_static.runStep_4_static()
+    print "No. of gateways:" ,len(self.s4_static.gateways)
     
     graphs = [self.s4_static.adj, 
               self.s4_static.short_edge_adj, 

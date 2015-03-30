@@ -131,6 +131,8 @@ class InputGenerator:
                         generateEdges(..)
   gateways(list of int): the list of gateway/sink nodes, set at the method selectGateways(..)
   logger(logging refernce, used for debugging in all the sub-classes and itself)
+  self.no_of_connected_components(int): total connected components in self.adj 
+                                        value set in selectGateways(), used for debugging and stat
   ''' 
   
   def __init__(self, configFile):
@@ -174,6 +176,7 @@ class InputGenerator:
     self.adj = None
     self.short_edge_adj = None
     self.gateways = None
+    self.no_of_connected_components = None
     #----------------------------------------------------------
     #           End of Class Fields
     #----------------------------------------------------------
@@ -402,13 +405,23 @@ class InputGenerator:
     
     self.gateways = []
 
-    connected_components = nx.connected_components(self.short_edge_adj)
+    connected_components = nx.connected_components(self.short_edge_adj) 
+        #IMP! finding connected components for short-edge-graph
+    self.no_of_connected_components = 0
     
     for l in connected_components:
+      self.no_of_connected_components += 1
       n = random.choice(l)
       self.gateways.append(n)
       
-    num_gateways = int(round(1.0 * self.gateway_to_node_ratio*self.number_of_nodes,0)) 
+    num_gateways = int(round(1.0 * self.gateway_to_node_ratio*self.number_of_nodes,0))
+     
+    self.logger.debug("No. of connected components:"+str(self.no_of_connected_components))
+    self.logger.debug("no. of gateways as permitted by the config ratio:"+str(num_gateways))
+    
+    if num_gateways<1:
+      num_gateways =  1
+      
     selection_attempts = 0
     while (num_gateways > len(self.gateways)):
       selection_attempts += 1
@@ -418,6 +431,7 @@ class InputGenerator:
       for i in candidate_gateways :     
         if i not in self.gateways and self.short_edge_adj.degree(i)>0:  
           self.gateways.append(i)
+    self.logger.debug("total gateways:"+str(len(self.gateways)))
     return
   
   def isShortEdge(self,n1,n2):
