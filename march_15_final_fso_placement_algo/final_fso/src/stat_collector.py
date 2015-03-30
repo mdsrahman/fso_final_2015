@@ -28,6 +28,7 @@ class StatCollector(ILPSolver):
       v) save all the experiment stats in the self.output_statistics_file file (append mode)
       vi) save all the graphs with proper title in the self.graph_output_folder folder
     '''
+    self.logger.info("in runStatCollector...")
     
     
     
