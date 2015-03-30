@@ -63,10 +63,10 @@ class Step_4_static(Step_4_dynamic):
       if len(p)<3: #has to be with at least one new node 
         return  False
       
-      if not(p[0] in self.gateways or self.static.degree(p[0]) <= self.fso_per_node - 1):
+      if not(p[0] in self.gateways or self.static_graph.degree(p[0]) <= self.fso_per_node - 1):
         return False
       
-      if not(p[-1] in self.gateways or self.static.degree(p[-1]) <= self.fso_per_node - 1):
+      if not(p[-1] in self.gateways or self.static_graph.degree(p[-1]) <= self.fso_per_node - 1):
         return  False
       
       for i in p[1:-1]: #all intermediate nodes
@@ -165,7 +165,7 @@ class Step_4_static(Step_4_dynamic):
     available_nodes = list(self.new_nodes_for_step_4)
     max_allowed_nodes =  self.backbone_graph.number_of_nodes()+self.max_extra_nodes_for_step_4
     #task (iii)
-    while available_nodes and self.dynamic_graph.number_of_nodes()<max_allowed_nodes:
+    while available_nodes and self.static_graph.number_of_nodes()<max_allowed_nodes:
       #task (1) and (2)
       residual_graph = self.generateResidualGraph(self.static_graph)
       #task (3)
@@ -185,14 +185,22 @@ class Step_4_static(Step_4_dynamic):
           if u==v:
             continue
           count_of_new_nodes_on_path_u_v =  count_of_new_nodes_on_paths[v]
+          self.logger.debug("u,v,shortest_path:"+str(u)+" "+str(v)+" "+str(shortest_paths[v]))
+          self.logger.debug("\tcount_of_new_nodes_on_path_u_v:"+str(count_of_new_nodes_on_path_u_v))
           if count_of_new_nodes_on_path_u_v >0:
             path_benefit_u_v = \
-             min( source_potentials[u], sink_potentials[v])/(1.0*count_of_new_nodes_on_path_u_v)
+              min( source_potentials[u], sink_potentials[v])/(1.0*count_of_new_nodes_on_path_u_v)
+            self.logger.debug("\tsource_potentials[u]:"+str(source_potentials[u]))
+            self.logger.debug("\t:sink_potentials[v]"+str(sink_potentials[v]))
+            self.logger.debug("\tcount_of_new_nodes_on_path_u_v:"+str(count_of_new_nodes_on_path_u_v))
             if path_benefit_u_v>max_path_benefit:
               max_path_benefit = path_benefit_u_v
               max_beneficial_path = list(shortest_paths[v])
+              self.logger.debug("max_path_benefit changed to:"+str(max_path_benefit))
+              self.logger.debug("max_beneficial_path changed to:"+str(max_beneficial_path))
       #task (5)
       if max_beneficial_path:
+        self.logger.info("Adding path to static graph:"+str(max_beneficial_path))
         self.static_graph.add_path(max_beneficial_path)
         available_nodes = list( set(available_nodes) - set(max_beneficial_path) ) 
       else:

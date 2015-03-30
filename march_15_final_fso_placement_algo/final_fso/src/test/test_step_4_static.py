@@ -23,6 +23,8 @@ class TestStep_4_static(unittest.TestCase):
     self.s4_static.runStep_3()
     #self.s4_static.logger.setLevel(logging.DEBUG)
     self.s4_static.runStep_4_dynamic()
+    self.s4_static.fso_per_node =  20
+    #self.s4_static.logger.setLevel(logging.DEBUG)
     self.s4_static.runStep_4_static()
     
     graphs = [self.s4_static.adj, 
@@ -33,7 +35,6 @@ class TestStep_4_static(unittest.TestCase):
               self.s4_static.static_graph]
     
     for i in xrange(len(graphs)):
-      print "DEBUG:i",i
       plt_graph = graphs[i]
       plt_title = graphs[i].graph['name']
       plt.figure(i+1)
