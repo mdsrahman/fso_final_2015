@@ -211,9 +211,12 @@ class Step_4_dynamic(Step_3):
         2) add all edges between pairs of nodes in self.dynamic_graph according to self.adj  
       
       ii) compute the max. number of nodes to be added in step 4, i.e. self.max_extra_nodes_for_step_4
-          using ratio_of_max_added_nodes_in_step_4 and hence max_no_of_node for dynamic graph
-      iii) create pool of nodes i.e. new_nodes_for_step_4, that exist in self.adj but not in self.backbone_graph 
-      iv) while (new_nodes_for_step_4 is non-empty) and 
+          using ratio_of_max_added_nodes_in_step_4 and hence max_no_of_node for dynamic graph and
+          static graph
+      iii) create pool of nodes i.e. available_nodes from new_nodes_for_step_4, 
+          that exist in self.adj but not in self.backbone_graph 
+          IMP: available nodes will be reduced in size as the processing goes on
+      iv) while (available_nodes is non-empty) and 
           (number of nodes in dynamic graph < max_no_of_node for dynamic graph)
           1. create a new flow-graph, adding super-source and super-sink and unit capacity to each
             link from the existing dynamic graph
@@ -252,7 +255,7 @@ class Step_4_dynamic(Step_3):
       #task (3)
       source_potentials = self.getSourcePotentialOfAllNodes(residual_graph)
       sink_potentials = self.getSinkPotentialOfAllNodes(residual_graph)
-      max_path_benefit = -float('inf')
+      max_path_benefit = 0
       max_beneficial_new_nodes = []
       for u in self.dynamic_graph.nodes():
         #task (4).a
