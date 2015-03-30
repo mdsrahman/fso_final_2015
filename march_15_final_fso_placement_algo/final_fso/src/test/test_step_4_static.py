@@ -1,8 +1,7 @@
 import unittest
 from final_fso.src.step_4_static import Step_4_static
 import matplotlib.pyplot as plt
-import networkx as nx
-import logging
+
 
 class TestStep_4_static(unittest.TestCase):
   def setUp(self):
