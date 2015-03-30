@@ -18,18 +18,18 @@ graph_output_folder: ./output/
 max_short_edge_length: 100.0
 max_long_edge_length: 1000.0
 
-percent_of_pattern_nodes_in_avg_flow_calculation: 5
-number_of_pattern_in_avg_flow_calculation: 100
+percent_of_pattern_nodes_in_avg_flow_calculation: 10
+number_of_pattern_in_avg_flow_calculation: 200
 
 ratio_of_max_added_nodes_in_step_4: 0.2
 
 #------params applicable to synthetic graph only------------
 [synthetic]
 no_of_samples: 1
-number_of_nodes: 100
-max_x_coord: 200
-max_y_coord:  200
-max_no_of_edges: 1000
+number_of_nodes: 1000
+max_x_coord: 2000
+max_y_coord:  2000
+max_no_of_edges: 10000
 short_to_long_edge_ratio: 1.5
 
 

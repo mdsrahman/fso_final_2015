@@ -21,7 +21,8 @@ class StatCollector(ILPSolver):
     
     self.path_to_java_code_for_avg_calc = './java/tm.jar'
     self.dynamic_graph_spec_file_path = './java/temp_dynamic_spec.txt'
-    self.java_code_output_file_path = './java/temp_java_output.txt'
+    self.java_code_stat_file_path = './java/temp_java_stat.txt'
+    self.java_code_stdout_file_path = './java/temp_java_stdout.txt'
     #---end of class fields------
   def createDynamicGraphSpecOutputFile(self):
     '''
@@ -70,15 +71,18 @@ class StatCollector(ILPSolver):
        the upper-bound and avg-flow and save those as floats
     '''
     self.createDynamicGraphSpecOutputFile()
-  
-    subprocess.call(['java','-jar',
-                     self.path_to_java_code_for_avg_calc,
-                     self.dynamic_graph_spec_file_path,
-                     self.java_code_output_file_path,
-                     str(self.percent_of_pattern_nodes_in_avg_flow_calculation),
-                     str(self.number_of_pattern_in_avg_flow_calculation) 
-                     ]) 
-    with open(self.java_code_output_file_path,'r') as f:
+    #open the file for streaing java stdout
+    with  open(self.java_code_stdout_file_path, 'w') as f_java_stdout:
+      subprocess.call(['java','-jar',
+                       self.path_to_java_code_for_avg_calc,
+                       self.dynamic_graph_spec_file_path,
+                       self.java_code_stat_file_path,
+                       str(self.percent_of_pattern_nodes_in_avg_flow_calculation),
+                       str(self.number_of_pattern_in_avg_flow_calculation) 
+                       ],
+                      stdout = f_java_stdout)
+
+    with open(self.java_code_stat_file_path,'r') as f:
       for line in f:
         vals = line.split(',')
         self.dynamic_upperbound_flow = float(vals[0])
@@ -182,7 +186,7 @@ class StatCollector(ILPSolver):
     self.logger.info("in runStatCollector...")
     
     self.getStaticAvgFlow()
-    
+    self.logger.info("Running java code for dynamic avg flow calculation...")
     self.callJavaCodeToGetDynamicAvgFlow()
     
     

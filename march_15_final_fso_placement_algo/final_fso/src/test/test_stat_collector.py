@@ -38,7 +38,8 @@ class TestStatCollector(unittest.TestCase):
     #need to reset the relative path as python code is called at './src/test' rather than at './src'
     self.stat_collector.path_to_java_code_for_avg_calc = '../java/tm.jar'
     self.stat_collector.dynamic_graph_spec_file_path = '../java/temp_dynamic_spec.txt'
-    self.stat_collector.java_code_output_file_path =  '../java/temp_java_output.txt'
+    self.stat_collector.java_code_stat_file_path = '../java/temp_java_stat.txt'
+    self.stat_collector.java_code_stdout_file_path = '../java/temp_java_stdout.txt' 
      
      
     self.stat_collector.runStatCollector()
