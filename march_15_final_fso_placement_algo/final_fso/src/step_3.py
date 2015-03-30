@@ -32,6 +32,9 @@ class Step_3(Step_2):
       v) return max_degree, maxDegreeNodes list
     '''
     max_degree_nodes = []
+    if not self.non_gateway_backbone_nodes:
+      return -1, max_degree_nodes #there is no non-gateway nodes, so list is empty
+    
     node_degrees =  self.backbone_graph.degree(self.non_gateway_backbone_nodes)
     max_degree = max(node_degrees.values())
     if max_degree<=2:
@@ -145,7 +148,7 @@ class Step_3(Step_2):
       self.logger.debug("max_degree:"+str(max_degree))
       self.logger.debug("max_degree_nodes:"+str(max_degree_nodes))
       if not max_degree_nodes:
-        break # no nodes with degree>2 found, so terminate processing now
+        break # no nodes with degree>2 or no non-gateway nodes found, so terminate processing now
       #task (ii) 
       candidateNodes = self.getCandidateNodes(max_degree)
       self.logger.debug("candidateNodes:"+str(candidateNodes))

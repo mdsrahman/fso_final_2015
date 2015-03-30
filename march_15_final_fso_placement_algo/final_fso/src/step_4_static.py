@@ -20,6 +20,9 @@ class Step_4_static(Step_4_dynamic):
     self.fso_per_node, in that case, the field self.fso_per_node is updated and 
     and info-log message is displayed
     '''
+    if not self.non_gateway_backbone_nodes:
+      return #there is no non-gateway nodes in the graph, so no need to update fso_per_node
+             # as specified in the config file
     non_gateway_degrees =  self.backbone_graph.degree(self.non_gateway_backbone_nodes)
     max_non_gateway_degree = max(non_gateway_degrees.values())
     if max_non_gateway_degree > self.fso_per_node:
