@@ -93,7 +93,11 @@ class InputGenerator:
   ratio_of_max_added_nodes_in_step_4(float): >=0, ratio of the maximum no. of nodes to be added in
                                   step 4 (both dynamic and static) to the existing nodes in 
                                   backbone_graph built after step 3
-  
+  percent_of_pattern_nodes_in_avg_flow_calculation(int): <=0 and <=100, as the name implied
+                          used in the subclass related to stat-collection
+  number_of_pattern_in_avg_flow_calculation(int): <=0 and <=number_of_nodes, as the name
+                          implies, this number of iterations are used for avg. flow calculations
+                          involving the pattern nodes in the subclass related to stat-collection
   **-----------------------------------------------------------------------------**
         the following class-fields get values internally
   **-----------------------------------------------------------------------------**  
@@ -177,6 +181,8 @@ class InputGenerator:
     self.short_edge_adj = None
     self.gateways = None
     self.no_of_connected_components = None
+    self.percent_of_pattern_nodes_in_avg_flow_calculation =  None
+    self.number_of_pattern_in_avg_flow_calculation =  None
     #----------------------------------------------------------
     #           End of Class Fields
     #----------------------------------------------------------
@@ -220,6 +226,10 @@ class InputGenerator:
     self.output_statistics_file =  self.config.get('global','output_statistics_file')
     self.graph_output_folder =  self.config.get('global','graph_output_folder')
     self.ratio_of_max_added_nodes_in_step_4 =  self.config.getfloat('global','ratio_of_max_added_nodes_in_step_4')
+    self.percent_of_pattern_nodes_in_avg_flow_calculation = \
+        self.config.getint('global','percent_of_pattern_nodes_in_avg_flow_calculation')
+    self.number_of_pattern_in_avg_flow_calculation = \
+        self.config.getint('global','number_of_pattern_in_avg_flow_calculation')
     if self.graphType=='synthetic':
       self.no_of_samples = self.config.getint('synthetic','no_of_samples')
       self.number_of_nodes = self.config.getint('synthetic','number_of_nodes')
