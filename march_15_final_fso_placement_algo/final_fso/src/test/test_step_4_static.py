@@ -23,7 +23,7 @@ class TestStep_4_static(unittest.TestCase):
     self.s4_static.runStep_3()
     #self.s4_static.logger.setLevel(logging.DEBUG)
     self.s4_static.runStep_4_dynamic()
-    self.s4_static.fso_per_node =  20
+    self.s4_static.fso_per_node = 2
     #self.s4_static.logger.setLevel(logging.DEBUG)
     self.s4_static.runStep_4_static()
     

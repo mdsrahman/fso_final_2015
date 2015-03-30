@@ -115,7 +115,8 @@ class Step_4_static(Step_4_dynamic):
           for u in shortest_path_to_n:
             if u in new_nodes:
               count_of_new_nodes_on_paths[n]+=1
-
+          if count_of_new_nodes_on_paths[n]>0:
+            shortest_paths[n] =  list(shortest_path_to_n)
     return count_of_new_nodes_on_paths, shortest_paths
    
   def runStep_4_static(self):
@@ -184,6 +185,9 @@ class Step_4_static(Step_4_dynamic):
         for v in self.static_graph.nodes():
           if u==v:
             continue
+          if v not in self.gateways and self.static_graph.degree(v) > self.fso_per_node-1:
+            continue
+        
           count_of_new_nodes_on_path_u_v =  count_of_new_nodes_on_paths[v]
           self.logger.debug("u,v,shortest_path:"+str(u)+" "+str(v)+" "+str(shortest_paths[v]))
           self.logger.debug("\tcount_of_new_nodes_on_path_u_v:"+str(count_of_new_nodes_on_path_u_v))
@@ -191,8 +195,8 @@ class Step_4_static(Step_4_dynamic):
             path_benefit_u_v = \
               min( source_potentials[u], sink_potentials[v])/(1.0*count_of_new_nodes_on_path_u_v)
             self.logger.debug("\tsource_potentials[u]:"+str(source_potentials[u]))
-            self.logger.debug("\t:sink_potentials[v]"+str(sink_potentials[v]))
-            self.logger.debug("\tcount_of_new_nodes_on_path_u_v:"+str(count_of_new_nodes_on_path_u_v))
+            self.logger.debug("\tsink_potentials[v]:"+str(sink_potentials[v]))
+            self.logger.debug("\tpath_benefit_u_v:"+str(path_benefit_u_v))
             if path_benefit_u_v>max_path_benefit:
               max_path_benefit = path_benefit_u_v
               max_beneficial_path = list(shortest_paths[v])
