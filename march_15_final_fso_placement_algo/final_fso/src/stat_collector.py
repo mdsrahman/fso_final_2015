@@ -157,7 +157,7 @@ class StatCollector(ILPSolver):
       pattern_nodes = random.sample(candidate_pattern_nodes, number_of_pattern_nodes)
       max_flow_val = self.getMaxFlowForSourceNodes(self.static_graph, pattern_nodes)
       pattern_node_degrees =  self.static_graph.degree(pattern_nodes)
-      upper_bound_flow = 2*sum(pattern_node_degrees.values()) #IMP:2*unidirectional links....
+      upper_bound_flow = sum(pattern_node_degrees.values()) #IMP:2*unidirectional links....
       
       static_max_flow_vals.append(max_flow_val)
       static_upper_bound_vals.append(upper_bound_flow)

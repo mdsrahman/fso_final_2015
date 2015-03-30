@@ -50,6 +50,7 @@ class Step_1(InputGenerator):
   def runStep_1(self):
     '''runs all the tasks for step 1
     '''
+    
     self.binNodes()
     self.buildNodeHeap()
     self.heuristicTargetCover()
@@ -61,8 +62,8 @@ class Step_1(InputGenerator):
     Args: None
     Returns: None
     '''
-    self.node_bin = MyGridBin(x_interval = self.max_short_edge_length,
-                              y_interval = self.max_short_edge_length,
+    self.node_bin = MyGridBin(x_interval = self.coverage_radius,
+                              y_interval = self.coverage_radius,
                               max_x = self.max_x_coord,
                               max_y = self.max_y_coord)
     
@@ -104,22 +105,22 @@ class Step_1(InputGenerator):
     n_x = self.node_x[n]
     n_y = self.node_y[n]
     
-    n_min_tx =  int(max(0, n_x - self.max_short_edge_length) // self.target_spacing)
-    n_max_tx =  int(min(self.max_x_coord, n_x + self.max_short_edge_length) // self.target_spacing)
+    n_min_tx =  int(max(0, n_x - self.coverage_radius) // self.target_spacing)
+    n_max_tx =  int(min(self.max_x_coord, n_x + self.coverage_radius) // self.target_spacing)
     
-    n_min_ty =  int(max(0, n_y - self.max_short_edge_length) // self.target_spacing)
-    n_max_ty =  int(min(self.max_y_coord, n_y + self.max_short_edge_length) // self.target_spacing)
+    n_min_ty =  int(max(0, n_y - self.coverage_radius) // self.target_spacing)
+    n_max_ty =  int(min(self.max_y_coord, n_y + self.coverage_radius) // self.target_spacing)
     
     covered_target_grid_index = []
     for i in xrange(n_min_tx, n_max_tx+1):
       for j in xrange(n_min_ty, n_max_ty+1):
         '''
-        check for rigorous coverge for targets lying at the extremities
+        check for rigorous coverage for targets lying at the extremities
         '''
         if i in [n_min_tx,n_max_tx] or j in [n_min_ty,n_max_ty]:
           tx = (i + 0.5)*self.target_spacing
           ty = (j + 0.5)*self.target_spacing
-          if self.isWithinDistance(n_x, n_y, tx, ty, self.max_short_edge_length):
+          if self.isWithinDistance(n_x, n_y, tx, ty, self.coverage_radius):
             covered_target_grid_index.append((i,j))
         else: #otherwise add it to the list anyway
           covered_target_grid_index.append((i,j))
@@ -139,13 +140,13 @@ class Step_1(InputGenerator):
       i) find the x,y coordinate of node n
       ii) find the x,y cooridinate of target at grid (ti,tj)
           here the x<- (ti+0.5)*self.target_spacing, similarly for y
-      iii) if the above two points are within range of self.max_short_edge_length, then True
+      iii) if the above two points are within range of self.coverage_radius, then True
     '''
     n_x = self.node_x[n]
     n_y = self.node_y[n]
     t_x =  (ti+0.5)*self.target_spacing
     t_y =  (tj+0.5)*self.target_spacing
-    return self.isWithinDistance(n_x, n_y, t_x, t_y, self.max_short_edge_length) 
+    return self.isWithinDistance(n_x, n_y, t_x, t_y, self.coverage_radius) 
   
   def buildNodeHeap(self):
     '''
@@ -179,14 +180,17 @@ class Step_1(InputGenerator):
       self.node_target_count[n] = number_of_targets_covered
       if self.node_target_count[n]>0:
         self.node_hp.push(n, -self.node_target_count[n])
+    self.logger.debug("completed binning nodes")
     return
   
   def heuristicTargetCover(self):
     '''
     pre-condition: must be called after calling buildNodeHeap() method 
     processing:
+      First add all the gateway nodes to node_cover and update the affected node keys accordingly
       while either node heap node_hp is not empty AND all the targets are not covered:
-          i) pop node n form heap
+          i) pop node n form heap, if gateway node, then continue 
+          (gateways have been handled previously)
           ii) find the targets covered by this node n calling getTargetsCoveredByNode() method
           iii) find all the nearby nodes binned by node_bin
           iv) for each target, 
@@ -197,17 +201,63 @@ class Step_1(InputGenerator):
                   based on the number of new targets covered by this node n
             e) and finally, if at least one new target is covered, add that node to the node_cover
     '''
+    #STEP: add only gateway nodes-------------------------------------------------------
+    '''
+    processing:
+      for all gateway node n:
+      add n to covered_node
+       find targets covered by n
+         for each target t:
+            if t is yet uncovered:
+               change it to covered
+               find all nodes covering t, decrement their hash-key
+    '''
+    for n in self.gateways:
+      self.node_cover.append(n)
+      n_x = self.node_x[n]
+      n_y = self.node_y[n]
+      #get the list of targets
+      target_grid_coord_list = self.getTargetsCoveredByNode(n)
+      
+      #get potential nodes covering targets in the above list
+      nbr_nodes = self.node_bin.get(n_x, n_y, self.coverage_radius)
+      if n in nbr_nodes:
+        nbr_nodes.remove(n)
+        
+      affected_nbr_nodes = set()
+      
+      for target_grid_coord in target_grid_coord_list:
+        ti,tj = target_grid_coord #target_grid_coord is a tuple i.e. (tx,ty)
+        if not self.covered_target[ti][tj]:
+          #if gateway is covering this target, 
+            #update the target's status and count of total covered targets
+          self.covered_target[ti][tj] = True
+          self.no_of_targets_covered += 1
+          for nbr in nbr_nodes:
+            if self.isCoveredByNode(nbr, ti, tj):
+              self.node_target_count[nbr] -= 1
+              affected_nbr_nodes.add(nbr)
+              
+      while affected_nbr_nodes:
+        pushback_node = affected_nbr_nodes.pop()
+        if self.node_target_count[pushback_node]>0: 
+                #no need to push those node that does not cover any new targets
+          self.node_hp.push(pushback_node, -self.node_target_count[pushback_node])  
+        
+      
+    #STEP: add only non-gateway nodes-------------------------------------------------------
     while not self.node_hp.isHeapEmpty() and self.no_of_targets_covered < self.total_targets:
       n = self.node_hp.pop()
       if n is None: #safety
         break
-      
+      if n in self.gateways: #IMP: gateways have been already handled, no need to consider them
+        continue
       total_new_targets_covered = 0
       
       n_x = self.node_x[n]
       n_y = self.node_y[n]
       
-      nbr_nodes = self.node_bin.get(n_x, n_y, self.max_short_edge_length)
+      nbr_nodes = self.node_bin.get(n_x, n_y, self.coverage_radius)
       if n in nbr_nodes:
         nbr_nodes.remove(n)
         
@@ -219,23 +269,23 @@ class Step_1(InputGenerator):
       for target_grid_coord in target_grid_coord_list:
         ti,tj = target_grid_coord #target_grid_coord is a tuple i.e. (tx,ty)
         if not self.covered_target[ti][tj]:
-          #update (a)
+          #task (a)
           self.covered_target[ti][tj] = True
           total_new_targets_covered += 1
-          #update (b)
+          #task (b)
           for nbr in nbr_nodes:
             if self.isCoveredByNode(nbr, ti, tj):
               self.node_target_count[nbr] -= 1
               affected_nbr_nodes.add(nbr)
               
-      #update (c)
+      #task (c)
       while affected_nbr_nodes:
         pushback_node = affected_nbr_nodes.pop()
         if self.node_target_count[pushback_node]>0: 
                 #no need to push those node that does not cover any new targets
           self.node_hp.push(pushback_node, -self.node_target_count[pushback_node])  
         
-      #update (d)+(e)  
+      #task (d)+(e)  
       if total_new_targets_covered>0:
         self.no_of_targets_covered += total_new_targets_covered
         self.node_cover.append(n)

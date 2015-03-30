@@ -9,7 +9,7 @@ import networkx as nx
 #import matplotlib.pyplot as plt
 import random 
 import logging
- 
+import time
  
 
 
@@ -74,7 +74,18 @@ class InputGenerator:
   graph_output_folder: the folder to store all the graphs 
                     like .adj.txt, .bg.txt, .static.txt, .dynamic.txt, .dyn_java.txt etc. 
   
-  -----the following fields are meaningful for ony synthetic graph---------
+  coverage_radius(float): coverage radius of target-covering nodes in meter,
+                           used in subclass step_1 for target-coverage
+  
+  ratio_of_max_added_nodes_in_step_4(float): >=0, ratio of the maximum no. of nodes to be added in
+                                  step 4 (both dynamic and static) to the existing nodes in 
+                                  backbone_graph built after step 3
+  percent_of_pattern_nodes_in_avg_flow_calculation(int): <=0 and <=100, as the name implied
+                          used in the subclass related to stat-collection
+  number_of_pattern_in_avg_flow_calculation(int): <=0 and <=number_of_nodes, as the name
+                          implies, this number of iterations are used for avg. flow calculations
+                          involving the pattern nodes in the subclass related to stat-collection
+  -----the following fields are meaningful for only synthetic graph---------
                   
   no_of_samples(int): >0, number of synthetic random graphs 
                     to be generated for the experiment, 
@@ -90,14 +101,7 @@ class InputGenerator:
   
   short_to_long_edge_ratio(float): >=0 and <=1, ratio between total short and long
                                   edges in each synthetic graph 
-  ratio_of_max_added_nodes_in_step_4(float): >=0, ratio of the maximum no. of nodes to be added in
-                                  step 4 (both dynamic and static) to the existing nodes in 
-                                  backbone_graph built after step 3
-  percent_of_pattern_nodes_in_avg_flow_calculation(int): <=0 and <=100, as the name implied
-                          used in the subclass related to stat-collection
-  number_of_pattern_in_avg_flow_calculation(int): <=0 and <=number_of_nodes, as the name
-                          implies, this number of iterations are used for avg. flow calculations
-                          involving the pattern nodes in the subclass related to stat-collection
+  
   **-----------------------------------------------------------------------------**
         the following class-fields get values internally
   **-----------------------------------------------------------------------------**  
@@ -137,6 +141,8 @@ class InputGenerator:
   logger(logging refernce, used for debugging in all the sub-classes and itself)
   self.no_of_connected_components(int): total connected components in self.adj 
                                         value set in selectGateways(), used for debugging and stat
+  
+  last_time (time_t obj): used in getting elapsed_time() method
   ''' 
   
   def __init__(self, configFile):
@@ -155,6 +161,7 @@ class InputGenerator:
     self.max_short_edge_length = None
     self.max_long_edge_length = None
     self.target_spacing = None
+    self.coverage_radius = None
     self.output_statistics_file = None
     self.graph_output_folder = None
     
@@ -183,6 +190,7 @@ class InputGenerator:
     self.no_of_connected_components = None
     self.percent_of_pattern_nodes_in_avg_flow_calculation =  None
     self.number_of_pattern_in_avg_flow_calculation =  None
+    self.last_time = time.clock()
     #----------------------------------------------------------
     #           End of Class Fields
     #----------------------------------------------------------
@@ -192,8 +200,16 @@ class InputGenerator:
     
     self.parseConfigFile()
     random.seed(self.seed)
-    
-    
+  
+  def getElapsedTime(self):
+    '''
+    return the time difference since the last of call of this method
+    used for performance evaluation of method calls
+    '''
+    e_time =  time.clock() - self.last_time  
+    self.last_time =  time.clock()
+    return e_time
+  
   def parseConfigFile(self):
     '''
     populates class fields with values from configFile(*class-field)
@@ -221,6 +237,7 @@ class InputGenerator:
     self.link_capacity = self.config.getfloat('global','link_capacity')
     self.fso_per_node = self.config.getint('global','fso_per_node')
     self.target_spacing =  self.config.getfloat('global','target_spacing')
+    self.coverage_radius =  self.config.getfloat('global','coverage_radius')
     self.max_short_edge_length =  self.config.getfloat('global','max_short_edge_length')
     self.max_long_edge_length = self.config.getfloat('global','max_long_edge_length')
     self.output_statistics_file =  self.config.get('global','output_statistics_file')
@@ -254,7 +271,10 @@ class InputGenerator:
     '''
     if self.graphType == 'synthetic':
       self.generateSyntheticGraph()
+    self.logger.debug("completed generating sythetic graph:time:"+str(self.getElapsedTime()))
     self.selectGateways()
+    self.logger.debug("completed selecting sinks"+str(self.getElapsedTime()))
+    
   def generateSyntheticGraph(self):
     '''
     Pre-condition: None
