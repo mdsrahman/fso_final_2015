@@ -6,6 +6,7 @@ class Step_4_static(Step_4_dynamic):
   '''
   This class handles all processing related to the static graph
   #-----class-field description------
+  self.static_graph : the static graph, output of this class, built in runStep_4_static method
   ''' 
   def __init__(self,configFile):
     Step_4_dynamic.__init__(self, configFile)
