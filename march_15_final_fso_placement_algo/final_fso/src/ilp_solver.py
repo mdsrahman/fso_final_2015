@@ -1,5 +1,6 @@
 
 from step_4_static import Step_4_static
+import sys
 
 class ILPSolver(Step_4_static):
   '''
@@ -22,4 +23,5 @@ class ILPSolver(Step_4_static):
     ii) call the solver
     iii) save the value
     '''
-    self.logger.info("Skipping Relaxed ILP Solver.....")
+    if not 'pycpx' in sys.modules:
+      self.logger.info("Skipping Relaxed ILP Solver, module:pycpx not found!!.....")

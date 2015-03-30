@@ -22,7 +22,6 @@ class TestStatCollector(unittest.TestCase):
     self.stat_collector.runStep_2()
     self.stat_collector.runStep_3()
     self.stat_collector.runStep_4_dynamic()
-    self.stat_collector.fso_per_node = 2
     self.stat_collector.runStep_4_static()
     self.stat_collector.runILPSolver()
     
@@ -34,7 +33,8 @@ class TestStatCollector(unittest.TestCase):
     self.stat_collector.runStatCollector()
     print "Dynamic Average Flow:",self.stat_collector.dynamic_avg_flow
     print "Dynamic Upperbound Flow:",self.stat_collector.dynamic_upperbound_flow
-  
+    print "Static Average Flow:",self.stat_collector.static_avg_flow
+    print "Static Upperbound Flow:",self.stat_collector.static_upperbound_flow
     
 if __name__=='__main__':
   unittest.main(verbosity = 2)
