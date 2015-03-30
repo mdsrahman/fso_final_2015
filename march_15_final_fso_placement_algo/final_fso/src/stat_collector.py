@@ -3,6 +3,7 @@ from ilp_solver import ILPSolver
 import random
 import networkx as nx
 import networkx.algorithms.flow as flow
+import csv
 
 class StatCollector(ILPSolver):
   '''
@@ -23,6 +24,21 @@ class StatCollector(ILPSolver):
     self.dynamic_graph_spec_file_path = './java/temp_dynamic_spec.txt'
     self.java_code_stat_file_path = './java/temp_java_stat.txt'
     self.java_code_stdout_file_path = './java/temp_java_stdout.txt'
+    
+    self.stat_header=[
+                      'number_of_nodes_in_input_graph',
+                      'number_of_edges_in_input_graph',
+                      'number_of_gateways',
+                      'number_of_nodes_in_static_graph',
+                      'number_of_nodes_in_dynamic_graph',
+                      'number_of_fso_per_node',
+                      'percent_of_pattern_nodes',
+                      'number_of_patterns',
+                      'statc_upperbound_max_flow',
+                      'static_avg_max_flow',
+                      'dynamic_upperbound_max_flow',
+                      'dynamic_avg_max_flow'
+                      ]
     #---end of class fields------
   def createDynamicGraphSpecOutputFile(self):
     '''
@@ -161,7 +177,7 @@ class StatCollector(ILPSolver):
       pattern_nodes = random.sample(candidate_pattern_nodes, number_of_pattern_nodes)
       max_flow_val = self.getMaxFlowForSourceNodes(self.static_graph, pattern_nodes)
       pattern_node_degrees =  self.static_graph.degree(pattern_nodes)
-      upper_bound_flow = sum(pattern_node_degrees.values()) #IMP:2*unidirectional links....
+      upper_bound_flow = sum(pattern_node_degrees.values()) 
       
       static_max_flow_vals.append(max_flow_val)
       static_upper_bound_vals.append(upper_bound_flow)
@@ -169,6 +185,30 @@ class StatCollector(ILPSolver):
     self.static_avg_flow = 1.0*self.link_capacity*sum(static_max_flow_vals)/number_of_iterations
     self.static_upperbound_flow = 1.0*self.link_capacity*sum(static_upper_bound_vals)/number_of_iterations
     
+  def saveStatInFile(self):
+    '''
+    save the statistics in a file
+    the order of the fields are very important
+    ''' 
+    stat_row={}
+    stat_row['number_of_nodes_in_input_graph'] = self.adj.number_of_nodes()
+    stat_row['number_of_edges_in_input_graph'] = self.adj.number_of_edges()
+    stat_row['number_of_gateways'] = len(self.gateways)
+    stat_row['number_of_nodes_in_static_graph'] = self.static_graph.number_of_nodes()
+    stat_row['number_of_nodes_in_dynamic_graph'] = self.dynamic_graph.number_of_nodes()
+    stat_row['number_of_fso_per_node'] = self.fso_per_node
+    stat_row['percent_of_pattern_nodes'] = self.percent_of_pattern_nodes_in_avg_flow_calculation
+    stat_row['number_of_patterns'] = self.number_of_pattern_in_avg_flow_calculation
+    stat_row['statc_upperbound_max_flow'] = self.static_upperbound_flow
+    stat_row['static_avg_max_flow'] = self.static_avg_flow
+    stat_row['dynamic_upperbound_max_flow'] = self.dynamic_upperbound_flow
+    stat_row['dynamic_avg_max_flow'] = self.dynamic_avg_flow
+    
+    
+    f= open(self.output_statistics_file, 'a')
+    writer = csv.DictWriter(f, self.stat_header)
+    writer.writerow(stat_row)
+    f.close()
     
   def runStatCollector(self):
     '''
@@ -188,6 +228,7 @@ class StatCollector(ILPSolver):
     self.getStaticAvgFlow()
     self.logger.info("Running java code for dynamic avg flow calculation...")
     self.callJavaCodeToGetDynamicAvgFlow()
+    self.saveStatInFile()
     
     
     

@@ -41,7 +41,6 @@ class TestStatCollector(unittest.TestCase):
     self.stat_collector.java_code_stat_file_path = '../java/temp_java_stat.txt'
     self.stat_collector.java_code_stdout_file_path = '../java/temp_java_stdout.txt' 
      
-     
     self.stat_collector.runStatCollector()
     print "Dynamic Average Flow:",self.stat_collector.dynamic_avg_flow
     print "Dynamic Upperbound Flow:",self.stat_collector.dynamic_upperbound_flow
@@ -65,7 +64,7 @@ class TestStatCollector(unittest.TestCase):
       
       plt.xticks( xrange(0,int(self.stat_collector.max_x_coord)+1,int(self.stat_collector.target_spacing)) )
       plt.yticks( xrange(0,int(self.stat_collector.max_y_coord)+1,int(self.stat_collector.target_spacing)) )
-      plt.axis([0, self.stat_collector.max_x_coord, 0, self.stat_collector.max_y_coord])
+      plt.axis([-10, self.stat_collector.max_x_coord+10, -10, self.stat_collector.max_y_coord+10])
       plt.grid(True)
       plt.title(plt_title)
       
