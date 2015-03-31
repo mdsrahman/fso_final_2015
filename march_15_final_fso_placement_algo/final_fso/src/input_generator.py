@@ -4,7 +4,7 @@
 # ii) generates all input graph whether synthetic or from the map file i.e osm file
 
 import ConfigParser
-import numpy as np
+#import numpy as np
 import networkx as nx
 #import matplotlib.pyplot as plt
 import random 
@@ -288,11 +288,13 @@ class InputGenerator:
     '''
     #task (i)
     self.generateNodePositions()
+    self.logger.debug("Completed generating node positions")
     #task (ii)
     self.adj = nx.Graph()
     self.adj.graph['name'] = 'Adjacency Graph'
     for i in xrange(self.number_of_nodes):
       self.adj.add_node(i) 
+    self.logger.debug("Completed adding all nodes to Adjacency Graph")
     #task (iii)
     self.generateEdges()
     return
@@ -405,21 +407,43 @@ class InputGenerator:
     self.max_short_edge_per_node = int(round(1.0*self.max_long_edge_per_node*self.short_to_long_edge_ratio,0))
     
     #initialize the long and short edge counter per node
-    self.short_edge_counter = np.zeros(self.number_of_nodes, dtype = int)
-    self.long_edge_counter = np.zeros(self.number_of_nodes, dtype = int)
+    #self.short_edge_counter = np.zeros(self.number_of_nodes, dtype = int)
+    #self.long_edge_counter = np.zeros(self.number_of_nodes, dtype = int)
+    self.short_edge_counter = []
+    self.long_edge_counter = []
+    
+    for i in xrange(self.number_of_nodes):
+      self.short_edge_counter.append(0)
+      self.long_edge_counter.append(0)
     
     #now consider pairs of nodes and assign edges both long and short between them
+    total_edges_added = 0
+
     for n1 in xrange(self.number_of_nodes - 1):
+      if n1%100==0:
+        self.logger.debug("n1:elapsed_time:"+str(n1)+":"+str(self.getElapsedTime()))
+      if self.short_edge_counter[n1]>= self.max_short_edge_per_node and\
+         self.long_edge_counter[n1] >= self.max_long_edge_per_node:
+        continue
+      
       for n2 in xrange(n1+1, self.number_of_nodes):
+        if self.short_edge_counter[n2]>= self.max_short_edge_per_node and\
+           self.long_edge_counter[n2] >= self.max_long_edge_per_node:
+          continue
+        
         distance_sq =  self.getDistanceSquare(n1, n2) 
         if distance_sq  <= self.max_short_edge_length**2:
-          if self.hasRoomForShortEdge(n1) and self.hasRoomForShortEdge(n2):
+          if self.short_edge_counter[n1] < self.max_short_edge_per_node and\
+             self.short_edge_counter[n2] < self.max_short_edge_per_node:
             self.addEdge(n1, n2, 'short')
             self.short_edge_adj.add_edge(n1,n2)
+            total_edges_added += 1
         elif distance_sq  <= self.max_long_edge_length**2:
-          if self.hasRoomForLongEdge(n1) and self.hasRoomForLongEdge(n2):
+          if self.long_edge_counter[n1] < self.max_long_edge_per_node and\
+              self.long_edge_counter[n2] < self.max_long_edge_per_node:
             self.addEdge(n1, n2, 'long')
-        if self.adj.number_of_edges() == self.max_no_of_edges:
+            total_edges_added += 1
+        if total_edges_added >= self.max_no_of_edges:
           return
     return
   

@@ -9,8 +9,8 @@ experiment_name: Test
 gateway_to_node_ratio: 0.01
 link_capacity: 1000.0
 fso_per_node: 4
-target_spacing:10
-coverage_radius:300
+target_spacing: 10
+coverage_radius: 300
 
 output_statistics_file: ./synthetic_graph_stat.txt
 graph_output_folder: ./output/
@@ -19,17 +19,17 @@ max_short_edge_length: 100.0
 max_long_edge_length: 1000.0
 
 percent_of_pattern_nodes_in_avg_flow_calculation: 10
-number_of_pattern_in_avg_flow_calculation: 100
+number_of_pattern_in_avg_flow_calculation: 200
 
 ratio_of_max_added_nodes_in_step_4: 0.2
 
 #------params applicable to synthetic graph only------------
 [synthetic]
 no_of_samples: 1
-number_of_nodes: 50
-max_x_coord: 1000
-max_y_coord:  1000
-max_no_of_edges: 1000
+number_of_nodes: 5000
+max_x_coord: 10000
+max_y_coord: 5000
+max_no_of_edges: 500000
 short_to_long_edge_ratio: 1.5
 
 

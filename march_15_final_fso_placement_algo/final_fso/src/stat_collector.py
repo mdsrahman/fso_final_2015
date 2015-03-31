@@ -54,9 +54,13 @@ class StatCollector(ILPSolver):
       
       #---FSONodes:
       f.write("FSONodes:\n")
+      gateway_degree_in_static_graph = self.static_graph.degree(self.gateways)
       nodes = self.dynamic_graph.nodes() 
       for n in nodes:
-        for fso in range(1, self.fso_per_node+1):
+        no_of_fso_for_n = self.fso_per_node
+        if n in self.gateways:
+          no_of_fso_for_n =  gateway_degree_in_static_graph[n]
+        for fso in range(1, no_of_fso_for_n+1):
           f.write(str(n)+"_fso"+str(fso)+"\n")
       f.write('\n')   
       
@@ -64,8 +68,14 @@ class StatCollector(ILPSolver):
       f.write("FSOLinks:\n")   
       edges = self.dynamic_graph.edges()
       for u,v in edges:
-        for fso1 in range(1, self.fso_per_node+1):
-          for fso2 in range(1, self.fso_per_node+1):  
+        no_of_fso_for_u = self.fso_per_node
+        if u in self.gateways:
+          no_of_fso_for_u = gateway_degree_in_static_graph[u]
+        for fso1 in range(1, no_of_fso_for_u+1):
+          no_of_fso_for_v = self.fso_per_node
+          if v in self.gateways:
+            no_of_fso_for_v = gateway_degree_in_static_graph[v]
+          for fso2 in range(1, no_of_fso_for_v+1):  
             #"0_0_fso2To2_0_fso1 10Gbps"
             f_text = str(u)+"_fso"+str(fso1)+"To"\
                     +str(v)+"_fso"+str(fso2)+" "+str(self.link_capacity)+"Mbps\n" 
@@ -157,6 +167,10 @@ class StatCollector(ILPSolver):
     '''  
     #task (i)
     candidate_pattern_nodes = list( set(self.static_graph.nodes()) - set(self.gateways))
+    if not candidate_pattern_nodes: #no non-gateway nodes in the static graph, so this avg finding is mute
+      self.static_avg_flow = 0.0
+      self.static_upperbound_flow = 0.0
+      self.logger.info("No non-gateway node found in static graph, avg and upperbound max flows set to 0!!")
     number_of_candidate_pattern_nodes = len(candidate_pattern_nodes)
     number_of_pattern_nodes = \
       int(round(number_of_candidate_pattern_nodes * self.percent_of_pattern_nodes_in_avg_flow_calculation/100*0, 0))

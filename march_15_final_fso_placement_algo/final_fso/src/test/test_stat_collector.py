@@ -30,8 +30,11 @@ class TestStatCollector(unittest.TestCase):
     #--------------------------------------------------------------------
     
     self.stat_collector.runStep_2()
+    print "step 2 complete"
     self.stat_collector.runStep_3()
+    print "step 3 complete"
     self.stat_collector.runStep_4_dynamic()
+    print "step 4 complete"
     self.stat_collector.runStep_4_static()
     self.stat_collector.runILPSolver()
      

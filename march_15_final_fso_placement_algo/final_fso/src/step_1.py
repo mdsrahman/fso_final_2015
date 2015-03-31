@@ -52,8 +52,11 @@ class Step_1(InputGenerator):
     '''
     
     self.binNodes()
+    self.logger.debug("Completed binning nodes")
     self.buildNodeHeap()
+    self.logger.debug("Completed building node heap")
     self.heuristicTargetCover()
+    self.logger.debug("Completed heuristic set cover and hence step 1")
     
   def binNodes(self):
     '''
@@ -180,7 +183,6 @@ class Step_1(InputGenerator):
       self.node_target_count[n] = number_of_targets_covered
       if self.node_target_count[n]>0:
         self.node_hp.push(n, -self.node_target_count[n])
-    self.logger.debug("completed binning nodes")
     return
   
   def heuristicTargetCover(self):
@@ -244,7 +246,7 @@ class Step_1(InputGenerator):
                 #no need to push those node that does not cover any new targets
           self.node_hp.push(pushback_node, -self.node_target_count[pushback_node])  
         
-      
+    self.logger.debug("completed processing targets covered by gateway nodes") 
     #STEP: add only non-gateway nodes-------------------------------------------------------
     while not self.node_hp.isHeapEmpty() and self.no_of_targets_covered < self.total_targets:
       n = self.node_hp.pop()

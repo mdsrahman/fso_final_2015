@@ -32,12 +32,12 @@ class Step_4_dynamic(Step_3):
     '''
     self.dynamic_graph = nx.Graph()
     self.dynamic_graph.graph['name'] = 'Dynamic Graph'
+    
     self.dynamic_graph.add_nodes_from(self.backbone_graph.nodes())
     
-    for u in self.dynamic_graph.nodes():
-      for v in self.dynamic_graph.nodes():
-        if u!=v and self.adj.has_edge(u, v):
-          self.dynamic_graph.add_edge(u,v)
+    for u,v in self.adj.edges():
+      if self.dynamic_graph.has_node(u) and self.dynamic_graph.has_node(v):
+        self.dynamic_graph.add_edge(u,v)
     self.logger.debug("dynamic graph initialized")
     
   def updateDynamicGraph(self, node_list):
@@ -192,13 +192,14 @@ class Step_4_dynamic(Step_3):
     new_nodes_on_shortest_paths = {}
     
     for n in existing_nodes:
-      new_nodes_on_path = []
-      if n in reachable_nodes:
-        shortest_path_to_n = shortest_path_from_source[n]
-        for u in shortest_path_to_n:
-          if u in new_nodes:
-            new_nodes_on_path.append(u)
-      new_nodes_on_shortest_paths[n] =  new_nodes_on_path
+      new_nodes_on_shortest_paths[n] = []
+      
+    reachable_existing_nodes = list(set(existing_nodes) & set(reachable_nodes))
+    
+    for n in reachable_existing_nodes :
+      shortest_path_to_n = shortest_path_from_source[n]
+      new_nodes_on_path_to_n =  set(new_nodes) & set(shortest_path_to_n)
+      new_nodes_on_shortest_paths[n] =  list(new_nodes_on_path_to_n)
       
     return new_nodes_on_shortest_paths
   
@@ -244,33 +245,41 @@ class Step_4_dynamic(Step_3):
     self.initMaxAllowedNodesForStep_4()
     #task (ii)+(iii)
     available_nodes = list(self.new_nodes_for_step_4)
-    max_allowed_nodes =  self.backbone_graph.number_of_nodes()+self.max_extra_nodes_for_step_4
+    no_of_nodes_added_in_step_4 = 0
     #task (iv)
-    self.logger.debug("max_allowed_nodes:"+str(max_allowed_nodes)) 
-    while available_nodes and self.dynamic_graph.number_of_nodes()<max_allowed_nodes:
-      #task (1) and (2)
-      self.logger.debug("dynamic graph current nodes:"+str(self.dynamic_graph.number_of_nodes()))
-      self.logger.debug("available nodes:"+str(available_nodes)) 
+    while available_nodes and no_of_nodes_added_in_step_4<self.max_extra_nodes_for_step_4:
+      self.logger.info("no_of_nodes_added_in_step_4:"+str(no_of_nodes_added_in_step_4)
+                       +":elapsed time:"+str(self.getElapsedTime()))
+      #task (1) and (2)  
       residual_graph = self.generateResidualGraph(self.dynamic_graph)
       #task (3)
       source_potentials = self.getSourcePotentialOfAllNodes(residual_graph)
       sink_potentials = self.getSinkPotentialOfAllNodes(residual_graph)
+      
       max_path_benefit = 0
       max_beneficial_new_nodes = []
+      
+      debug_processed_node = 0
+      debug_total_node = self.dynamic_graph.number_of_nodes()
+      
       for u in self.dynamic_graph.nodes():
         #task (4).a
+        debug_processed_node += 1
+        if debug_processed_node%100==0:
+          self.logger.info("processing node/total_node:"+str(debug_processed_node)+"/"+str(debug_total_node))
+        if source_potentials[u]<=0:
+          continue
         new_nodes_on_shortest_path_from_u = \
             self.getNewNodesOnShortestPaths(u, self.dynamic_graph.nodes(), available_nodes)
         for v in self.dynamic_graph.nodes():
           if u==v:
             continue
+          if sink_potentials[v]<=0:
+            continue
           #task (4).b
           new_nodes_on_path_u_v = new_nodes_on_shortest_path_from_u[v]
           count_of_new_nodes_on_path_u_v = len(new_nodes_on_path_u_v)
-          self.logger.debug("\tu,v:"+str(u)+" "+str(v))
-          self.logger.debug("\tsource_potentials[u]:"+str(source_potentials[u]))
-          self.logger.debug("\tsink_potentials[v]:"+str(sink_potentials[v]))
-          self.logger.debug("\tnew_nodes_on_path_u_v:"+str(new_nodes_on_path_u_v))
+
           if count_of_new_nodes_on_path_u_v>0:
             path_benefit_u_v = \
              min( source_potentials[u], sink_potentials[v])/(1.0*count_of_new_nodes_on_path_u_v)
@@ -282,6 +291,7 @@ class Step_4_dynamic(Step_3):
       if max_beneficial_new_nodes: #at least this list contains one node, so has been set in the loops above
         #task (5)
         self.updateDynamicGraph(max_beneficial_new_nodes)
+        no_of_nodes_added_in_step_4 += len(max_beneficial_new_nodes)
         self.logger.info("New Nodes added to dynamic graph:"+str(max_beneficial_new_nodes))
         available_nodes = list( set(available_nodes) - set(max_beneficial_new_nodes) ) 
       else:
