@@ -26,9 +26,9 @@ ratio_of_max_added_nodes_in_step_4: 0.2
 #------params applicable to synthetic graph only------------
 [synthetic]
 no_of_samples: 1
-number_of_nodes: 5000
-max_x_coord: 10000
-max_y_coord: 5000
+number_of_nodes: 500
+max_x_coord: 1000
+max_y_coord: 500
 max_no_of_edges: 500000
 short_to_long_edge_ratio: 1.5
 

@@ -167,9 +167,9 @@ class Step_4_static(Step_4_dynamic):
     
     #task (ii)
     available_nodes = list(self.new_nodes_for_step_4)
-    max_allowed_nodes =  self.backbone_graph.number_of_nodes()+self.max_extra_nodes_for_step_4
+    no_of_nodes_added_in_step_4 = 0
     #task (iii)
-    while available_nodes and self.static_graph.number_of_nodes()<max_allowed_nodes:
+    while available_nodes and no_of_nodes_added_in_step_4<self.max_extra_nodes_for_step_4:
       #task (1) and (2)
       residual_graph = self.generateResidualGraph(self.static_graph)
       #task (3)
@@ -177,6 +177,7 @@ class Step_4_static(Step_4_dynamic):
       sink_potentials = self.getSinkPotentialOfAllNodes(residual_graph)
       
       max_path_benefit = 0
+      max_beneficial_path_new_node_count = 0
       max_beneficial_path = []
       
       for u in self.static_graph.nodes():
@@ -203,12 +204,14 @@ class Step_4_static(Step_4_dynamic):
             if path_benefit_u_v>max_path_benefit:
               max_path_benefit = path_benefit_u_v
               max_beneficial_path = list(shortest_paths[v])
+              max_beneficial_path_new_node_count =  count_of_new_nodes_on_path_u_v
               self.logger.debug("max_path_benefit changed to:"+str(max_path_benefit))
               self.logger.debug("max_beneficial_path changed to:"+str(max_beneficial_path))
       #task (5)
       if max_beneficial_path:
         self.logger.info("Adding path to static graph:"+str(max_beneficial_path))
         self.static_graph.add_path(max_beneficial_path)
+        no_of_nodes_added_in_step_4 += max_beneficial_path_new_node_count
         available_nodes = list( set(available_nodes) - set(max_beneficial_path) ) 
       else:
         break #couldn't add any new node in the last iteration, so processing is over
