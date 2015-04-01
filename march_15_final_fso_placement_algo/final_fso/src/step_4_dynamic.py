@@ -259,14 +259,14 @@ class Step_4_dynamic(Step_3):
       max_path_benefit = 0
       max_beneficial_new_nodes = []
       
-      debug_processed_node = 0
+      #debug_processed_node = 0
       debug_total_node = self.dynamic_graph.number_of_nodes()
       
       for u in self.dynamic_graph.nodes():
         #task (4).a
-        debug_processed_node += 1
-        if debug_processed_node%100==0:
-          self.logger.info("processing node/total_node:"+str(debug_processed_node)+"/"+str(debug_total_node))
+#         debug_processed_node += 1
+#         if debug_processed_node%100==0:
+#           self.logger.info("processing node/total_node:"+str(debug_processed_node)+"/"+str(debug_total_node))
         if source_potentials[u]<=0:
           continue
         new_nodes_on_shortest_path_from_u = \

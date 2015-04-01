@@ -11,50 +11,10 @@ class TestStatCollector(unittest.TestCase):
     #self.gi.generateNodePositions()
     print "Test for StatCollector class.." 
   
-  
-
-  def test_StatCollectorMethods(self):
-    '''
-    selective calls to methods...
-    '''
-    self.stat_collector.logger.setLevel(logging.DEBUG)
-    self.stat_collector.runInputGenerator()
-    
-    self.stat_collector.runStep_1()
-    self.stat_collector.logger.setLevel(logging.INFO)
-    
-    #------------------------------------------------------------------
+  def visualizeAllGraphs(self):
     covering_node_graph = nx.Graph()
     covering_node_graph.graph['name'] = 'Target-covering nodes only graph'
     covering_node_graph.add_nodes_from(self.stat_collector.node_cover)
-    #--------------------------------------------------------------------
-    #print "node covers:",self.stat_collector.node_cover
-    #non_gate_way_node_cover = set(self.stat_collector.node_cover) - set(self.stat_collector.gateways)
-    #print "non gateway node covers:",non_gate_way_node_cover
-    self.stat_collector.runStep_2()
-    print "step 2 complete"
-    self.stat_collector.logger.setLevel(logging.DEBUG)
-    self.stat_collector.runStep_3()
-    self.stat_collector.logger.setLevel(logging.INFO)
-    print "step 3 complete"
-    self.stat_collector.runStep_4_dynamic()
-    print "step 4-dynamic complete"
-    self.stat_collector.logger.setLevel(logging.DEBUG)
-    self.stat_collector.runStep_4_static()
-    self.stat_collector.logger.setLevel(logging.INFO)
-    print "step 4-static complete"
-    self.stat_collector.runILPSolver()
-     
-    #need to reset the relative path as python code is called at './src/test' rather than at './src'
-    self.stat_collector.path_to_java_code_for_avg_calc = '../java/tm.jar'
-    self.stat_collector.dynamic_graph_spec_file_path = '../java/temp_dynamic_spec.txt'
-    self.stat_collector.java_code_stat_file_path = '../java/temp_java_stat.txt'
-    self.stat_collector.java_code_stdout_file_path = '../java/temp_java_stdout.txt' 
-    
-    self.stat_collector.printSummaryAfterSavingStat = True #will now print on screen summary
-    self.stat_collector.runStatCollector()
-    
-    
     
     graphs = [self.stat_collector.adj, 
               self.stat_collector.short_edge_adj, 
@@ -79,6 +39,62 @@ class TestStatCollector(unittest.TestCase):
       self.stat_collector.visualizeGraph(plt_graph)
     
     plt.show()
+
+  def test_StatCollectorMethods(self):
+    '''
+    selective calls to methods...
+    '''
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runInputGenerator()
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    print "Input Generator Complete"
+    
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runStep_1()
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    print "step 1 complete"
+    
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runStep_2()
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    print "step 2 complete"
+    
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runStep_3()
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    print "step 3 complete"
+    
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runStep_4_dynamic()
+    print "step 4-dynamic complete"
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runStep_4_static()
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    print "step 4-static complete"
+    
+    self.stat_collector.runILPSolver()
+     
+    
+    
+    #need to reset the relative path as python code is called at './src/test' rather than at './src'
+    self.stat_collector.path_to_java_code_for_avg_calc = '../java/tm.jar'
+    self.stat_collector.dynamic_graph_spec_file_path = '../java/temp_dynamic_spec.txt'
+    self.stat_collector.java_code_stat_file_path = '../java/temp_java_stat.txt'
+    self.stat_collector.java_code_stdout_file_path = '../java/temp_java_stdout.txt' 
+    
+    self.stat_collector.printSummaryAfterSavingStat = True #will now print on screen summary
+    
+    #self.stat_collector.logger.setLevel(logging.DEBUG)
+    self.stat_collector.runStatCollector()
+    #self.stat_collector.logger.setLevel(logging.INFO)
+    
+    #----------------------------------
+    self.visualizeAllGraphs()
+    #----------------------------------
+    
+    
 if __name__=='__main__':
   unittest.main(verbosity = 2)
   

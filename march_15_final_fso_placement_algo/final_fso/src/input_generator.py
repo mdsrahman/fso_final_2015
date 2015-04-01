@@ -170,10 +170,12 @@ class InputGenerator:
       #-----the following are initialized only for synthetic graphs------
     self.no_of_samples = None
     self.number_of_nodes = None
+    self.max_short_edge_per_node = None
+    self.max_long_edge_per_node = None
     self.max_no_of_edges = None
-    self.short_to_long_edge_ratio = None
     self.max_x_coord = None
     self.max_y_coord = None
+    
       #-----the following are initialized only for map files------
     #TODO: Declare the param variables for map input
     
@@ -181,8 +183,8 @@ class InputGenerator:
     self.config = None
     self.node_x = None
     self.node_y = None
-    self.max_short_edge_per_node = None
-    self.max_long_edge_per_node = None
+    #self.max_short_edge_per_node = None
+    #self.max_long_edge_per_node = None
     self.short_edge_counter =  None
     self.long_edge_counter = None
     self.adj = None
@@ -252,8 +254,9 @@ class InputGenerator:
     if self.graphType=='synthetic':
       self.no_of_samples = self.config.getint('synthetic','no_of_samples')
       self.number_of_nodes = self.config.getint('synthetic','number_of_nodes')
+      self.max_short_edge_per_node = self.config.getint('synthetic','max_short_edge_per_node')
+      self.max_long_edge_per_node = self.config.getint('synthetic','max_long_edge_per_node')
       self.max_no_of_edges = self.config.getint('synthetic','max_no_of_edges')
-      self.short_to_long_edge_ratio = self.config.getfloat('synthetic','short_to_long_edge_ratio')
       self.max_x_coord = self.config.getfloat('synthetic','max_x_coord')
       self.max_y_coord = self.config.getfloat('synthetic','max_y_coord')
     
@@ -404,10 +407,10 @@ class InputGenerator:
     for n in xrange(self.number_of_nodes):
       self.short_edge_adj.add_node(n)
       
-    expected_edge_per_node =  int(round( 1.0*self.max_no_of_edges/ self.number_of_nodes, 0))
-    self.max_long_edge_per_node = int(round(1.0* expected_edge_per_node / (self.short_to_long_edge_ratio+1),0))
-    self.max_short_edge_per_node = int(round(1.0*self.max_long_edge_per_node*self.short_to_long_edge_ratio,0))
-    
+#     expected_edge_per_node =  int(round( 1.0*self.max_no_of_edges/ self.number_of_nodes, 0))
+#     self.max_long_edge_per_node = int(round(1.0* expected_edge_per_node / (self.short_to_long_edge_ratio+1),0))
+#     self.max_short_edge_per_node = int(round(1.0*self.max_long_edge_per_node*self.short_to_long_edge_ratio,0))
+#     
     #initialize the long and short edge counter per node
     #self.short_edge_counter = np.zeros(self.number_of_nodes, dtype = int)
     #self.long_edge_counter = np.zeros(self.number_of_nodes, dtype = int)

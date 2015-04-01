@@ -53,7 +53,7 @@ class Step_4_static(Step_4_dynamic):
     else:
         Returns False
     '''
-    self.logger.debug("@hasRoomForNewEdgeInStaticGraph: n:"+str(n))
+    #self.logger.debug("@hasRoomForNewEdgeInStaticGraph: n:"+str(n))
     if n in self.gateways:
       if self.static_graph.degree(n)<=self.fso_per_gateway - no_of_new_edges:
         return True
