@@ -32,6 +32,7 @@ class StatCollector(ILPSolver):
                       'number_of_nodes_in_static_graph',
                       'number_of_nodes_in_dynamic_graph',
                       'number_of_fso_per_node',
+                      'number_of_fso_per_gateway',
                       'percent_of_pattern_nodes',
                       'number_of_patterns',
                       'statc_upperbound_max_flow',
@@ -107,6 +108,7 @@ class StatCollector(ILPSolver):
                        str(self.percent_of_pattern_nodes_in_avg_flow_calculation),
                        str(self.number_of_pattern_in_avg_flow_calculation) 
                        ],
+                      #stdout = None) #TODO: change back to stdout=None if any slower for file
                       stdout = f_java_stdout)
 
     with open(self.java_code_stat_file_path,'r') as f:
@@ -212,6 +214,7 @@ class StatCollector(ILPSolver):
     stat_row['number_of_nodes_in_static_graph'] = self.static_graph.number_of_nodes()
     stat_row['number_of_nodes_in_dynamic_graph'] = self.dynamic_graph.number_of_nodes()
     stat_row['number_of_fso_per_node'] = self.fso_per_node
+    stat_row['number_of_fso_per_gateway'] = self.fso_per_gateway
     stat_row['percent_of_pattern_nodes'] = self.percent_of_pattern_nodes_in_avg_flow_calculation
     stat_row['number_of_patterns'] = self.number_of_pattern_in_avg_flow_calculation
     stat_row['statc_upperbound_max_flow'] = self.static_upperbound_flow
@@ -232,6 +235,7 @@ class StatCollector(ILPSolver):
       print "Number of Nodes in Static Graph:",stat_row['number_of_nodes_in_static_graph']
       print "Number of Nodes in Dynamic Graph:",stat_row['number_of_nodes_in_dynamic_graph']
       print "Number of FSO-per-node:",stat_row['number_of_fso_per_node']
+      print "Number of FSO-per-gateway:",stat_row['number_of_fso_per_gateway']
       print "Percent of total nodes used in patterns for avg. max. flow calculation:",stat_row['percent_of_pattern_nodes']
       print "Number of patterns used in avg. max. flow calculation:",stat_row['number_of_patterns']
       print "Static upperbound max. flow:",stat_row['statc_upperbound_max_flow']

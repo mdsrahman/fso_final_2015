@@ -248,7 +248,7 @@ class Step_4_dynamic(Step_3):
     no_of_nodes_added_in_step_4 = 0
     #task (iv)
     while available_nodes and no_of_nodes_added_in_step_4<self.max_extra_nodes_for_step_4:
-      self.logger.info("no_of_nodes_added_in_step_4:"+str(no_of_nodes_added_in_step_4)
+      self.logger.debug("no_of_nodes_added_in_step_4:"+str(no_of_nodes_added_in_step_4)
                        +":elapsed time:"+str(self.getElapsedTime()))
       #task (1) and (2)  
       residual_graph = self.generateResidualGraph(self.dynamic_graph)

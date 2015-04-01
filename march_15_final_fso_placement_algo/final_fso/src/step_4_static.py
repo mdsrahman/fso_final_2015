@@ -36,7 +36,13 @@ class Step_4_static(Step_4_dynamic):
     non_gateway_degrees =  self.backbone_graph.degree(self.non_gateway_backbone_nodes)
     max_non_gateway_degree = max(non_gateway_degrees.values())
     if max_non_gateway_degree > self.fso_per_node:
+      non_gateway_node_with_max_degree = []
+      for n,d in non_gateway_degrees.iteritems():
+        if d==max_non_gateway_degree:
+          non_gateway_node_with_max_degree.append(n)
+    
       self.logger.info("Max. Degree of non-gateway nodes exceed fso_per_node specified in config")
+      self.logger.info("Non gateway nodes with max. degree:"+str(non_gateway_node_with_max_degree))
       self.logger.info("resetting fso_per_node from "
                        +str(self.fso_per_node)
                        +" to "
