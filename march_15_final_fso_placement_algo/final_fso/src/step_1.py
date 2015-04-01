@@ -21,6 +21,7 @@ class Step_1(InputGenerator):
                       popped from node_hp, initialized in buildNodeHeap() method
   node_cover(list of int): list of target-covering nodes, set in the method heuristicTargetCover(),
                           in essence, the output of this whole class
+                          might include gateways as well
   '''
 
 

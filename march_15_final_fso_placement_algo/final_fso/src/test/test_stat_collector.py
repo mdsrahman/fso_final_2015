@@ -28,14 +28,21 @@ class TestStatCollector(unittest.TestCase):
     covering_node_graph.graph['name'] = 'Target-covering nodes only graph'
     covering_node_graph.add_nodes_from(self.stat_collector.node_cover)
     #--------------------------------------------------------------------
-    
+    #print "node covers:",self.stat_collector.node_cover
+    #non_gate_way_node_cover = set(self.stat_collector.node_cover) - set(self.stat_collector.gateways)
+    #print "non gateway node covers:",non_gate_way_node_cover
     self.stat_collector.runStep_2()
     print "step 2 complete"
+    self.stat_collector.logger.setLevel(logging.DEBUG)
     self.stat_collector.runStep_3()
+    self.stat_collector.logger.setLevel(logging.INFO)
     print "step 3 complete"
     self.stat_collector.runStep_4_dynamic()
-    print "step 4 complete"
+    print "step 4-dynamic complete"
+    self.stat_collector.logger.setLevel(logging.DEBUG)
     self.stat_collector.runStep_4_static()
+    self.stat_collector.logger.setLevel(logging.INFO)
+    print "step 4-static complete"
     self.stat_collector.runILPSolver()
      
     #need to reset the relative path as python code is called at './src/test' rather than at './src'
@@ -43,12 +50,10 @@ class TestStatCollector(unittest.TestCase):
     self.stat_collector.dynamic_graph_spec_file_path = '../java/temp_dynamic_spec.txt'
     self.stat_collector.java_code_stat_file_path = '../java/temp_java_stat.txt'
     self.stat_collector.java_code_stdout_file_path = '../java/temp_java_stdout.txt' 
-     
+    
+    self.stat_collector.printSummaryAfterSavingStat = True #will now print on screen summary
     self.stat_collector.runStatCollector()
-    print "Dynamic Average Flow:",self.stat_collector.dynamic_avg_flow
-    print "Dynamic Upperbound Flow:",self.stat_collector.dynamic_upperbound_flow
-    print "Static Average Flow:",self.stat_collector.static_avg_flow
-    print "Static Upperbound Flow:",self.stat_collector.static_upperbound_flow
+    
     
     
     graphs = [self.stat_collector.adj, 

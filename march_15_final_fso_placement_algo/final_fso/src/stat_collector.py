@@ -39,6 +39,7 @@ class StatCollector(ILPSolver):
                       'dynamic_upperbound_max_flow',
                       'dynamic_avg_max_flow'
                       ]
+    self.printSummaryAfterSavingStat = False
     #---end of class fields------
   def createDynamicGraphSpecOutputFile(self):
     '''
@@ -223,7 +224,25 @@ class StatCollector(ILPSolver):
     writer = csv.DictWriter(f, self.stat_header)
     writer.writerow(stat_row)
     f.close()
-    
+    if self.printSummaryAfterSavingStat:
+      print"--------------Stat-Summary--------------"
+      print "Number of Nodes in Input Graph:",stat_row['number_of_nodes_in_input_graph']
+      print "Number of Edges in Input Graph:",stat_row['number_of_edges_in_input_graph']
+      print "Number of Gateways in Input Graph:",stat_row['number_of_gateways']
+      print "Number of Nodes in Static Graph:",stat_row['number_of_nodes_in_static_graph']
+      print "Number of Nodes in Dynamic Graph:",stat_row['number_of_nodes_in_dynamic_graph']
+      print "Number of FSO-per-node:",stat_row['number_of_fso_per_node']
+      print "Percent of total nodes used in patterns for avg. max. flow calculation:",stat_row['percent_of_pattern_nodes']
+      print "Number of patterns used in avg. max. flow calculation:",stat_row['number_of_patterns']
+      print "Static upperbound max. flow:",stat_row['statc_upperbound_max_flow']
+      print "Static avg. max. flow:",stat_row['static_avg_max_flow']
+      print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",\
+            1.0*stat_row['static_avg_max_flow']/stat_row['statc_upperbound_max_flow']
+      print "Dynamic upperbound max. flow:",stat_row['dynamic_upperbound_max_flow']
+      print "Dynamic avg. max. flow:",stat_row['dynamic_avg_max_flow'] 
+      print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",\
+            1.0*stat_row['dynamic_avg_max_flow']/stat_row['dynamic_upperbound_max_flow']
+      print "==============End of stat-summary==========="
   def runStatCollector(self):
     '''
     all the processing related to this class are done here

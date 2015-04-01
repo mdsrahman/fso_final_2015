@@ -20,9 +20,19 @@ class Step_4_static(Step_4_dynamic):
     self.fso_per_node, in that case, the field self.fso_per_node is updated and 
     and info-log message is displayed
     '''
+    gateway_node_degrees =  self.backbone_graph.degree(self.gateways)
+    max_gateway_node_degree = max(gateway_node_degrees.values())
+    if max_gateway_node_degree > self.fso_per_gateway:
+      self.logger.info("Max. Degree of gateway nodes exceed fso_per_gateway specified in config")
+      self.logger.info("resetting fso_per_gateway from "
+                       +str(self.fso_per_gateway)
+                       +" to "
+                       +str(max_gateway_node_degree))
+      self.fso_per_node = max_gateway_node_degree
+    
     if not self.non_gateway_backbone_nodes:
       return #there is no non-gateway nodes in the graph, so no need to update fso_per_node
-             # as specified in the config file
+
     non_gateway_degrees =  self.backbone_graph.degree(self.non_gateway_backbone_nodes)
     max_non_gateway_degree = max(non_gateway_degrees.values())
     if max_non_gateway_degree > self.fso_per_node:
@@ -32,6 +42,25 @@ class Step_4_static(Step_4_dynamic):
                        +" to "
                        +str(max_non_gateway_degree))
       self.fso_per_node = max_non_gateway_degree
+  
+  def hasRoomForNewEdgeInStaticGraph(self,n, no_of_new_edges = 1):
+    '''
+    Args:n: must be a node of static graph
+         no_of_new_edges: no. of new edges to connect to this node n
+    if n is a gateway and degree of n in backbone_graph<fso_per_gateway
+      or n is a non-gatway and degree of n in backbone_graph<fso_per_node:
+        Returns True
+    else:
+        Returns False
+    '''
+    self.logger.debug("@hasRoomForNewEdgeInStaticGraph: n:"+str(n))
+    if n in self.gateways:
+      if self.static_graph.degree(n)<=self.fso_per_gateway - no_of_new_edges:
+        return True
+    else:
+      if self.static_graph.degree(n)<=self.fso_per_node - no_of_new_edges:
+        return True
+    return False
   
   def initStaticGraph(self):
     '''
@@ -49,33 +78,31 @@ class Step_4_static(Step_4_dynamic):
     self.static_graph = nx.Graph(self.backbone_graph)
     self.static_graph.graph['name'] = 'Static graph'
     
-    for u in self.static_graph.nodes():
-      for v in self.static_graph.nodes():
-        if u!=v and self.adj.has_edge(u, v):
-          if (u in self.gateways or self.static_graph.degree(u)<self.fso_per_node) and \
-             (v in self.gateways or self.static_graph.degree(v)<self.fso_per_node):
-            self.static_graph.add_edge(u,v)
+    for u,v in self.adj.edges():
+      if not self.backbone_graph.has_edge(u, v) and \
+         self.backbone_graph.has_node(u) and \
+         self.backbone_graph.has_node(v): #new edge
+        if self.hasRoomForNewEdgeInStaticGraph(u) and\
+           self.hasRoomForNewEdgeInStaticGraph(v):
+          self.static_graph.add_edge(u,v)
   
   def isPathValidForStaticGraph(self,p): 
       ''' 
       for path p:
-      i) src (p[0]) and dest (p[1]) node are either gateways or each has degree<= fso_per_node - 1
-      ii) all intermediate node n on the path, such that n is in static_graph but not gateway:
-            degree of n <= fso_per_node  - 2  
+      the first node and last node must have room for one new edge
+      all intermediate node that are in static graph must have degree permitting two new edges 
       '''
       if len(p)<3: #has to be with at least one new node 
         return  False
       
-      if not(p[0] in self.gateways or self.static_graph.degree(p[0]) <= self.fso_per_node - 1):
+      if not self.hasRoomForNewEdgeInStaticGraph(p[0]):
         return False
-      
-      if not(p[-1] in self.gateways or self.static_graph.degree(p[-1]) <= self.fso_per_node - 1):
-        return  False
+      if not self.hasRoomForNewEdgeInStaticGraph(p[-1]):
+        return False
       
       for i in p[1:-1]: #all intermediate nodes
         if self.static_graph.has_node(i) and \
-        (i not in self.gateways) and \
-        self.static_graph.degree(i)>self.fso_per_node - 2:
+        not self.hasRoomForNewEdgeInStaticGraph(i,2):
           return False
         
       return True

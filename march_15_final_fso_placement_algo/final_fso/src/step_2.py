@@ -178,13 +178,16 @@ class Step_2(Step_1):
     
     for g in self.gateways:
       for n in self.bfs_nodes:
+        if n in self.gateways:
+          continue #no point in finding shortest path between set of gateways
         bfs_distance_gn = self.getBFSPathDistance(g, n)
         if g!=n and bfs_distance_gn>0: 
             #don't push (g,g) pairs i.e loop-edge and don't push non-path/zero-len-path pairs
           self.bfs_heap.push((g,n), bfs_distance_gn )
     
     #task (iv)
-    self.remaining_bfs_node_cover = list(self.node_cover)
+    self.remaining_bfs_node_cover = list(set(self.node_cover) - set(self.gateways)) 
+          #IMP: only non-gateway node-covers should be covered
     
     #task (v)
     while not self.bfs_heap.isHeapEmpty() and self.remaining_bfs_node_cover:

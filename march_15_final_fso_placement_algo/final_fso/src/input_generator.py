@@ -40,10 +40,10 @@ class InputGenerator:
                               selected as gateways from the total nodes
   link_capacity(float): >0, capacity of the fso-links in Mbps
   
-  fso_per_node(float): >0, maximum number of fso-links (pairs of up and down-links) per node, 
+  fso_per_node(int): >0, maximum number of fso-links (pairs of up and down-links) per node, 
                       is the max. node degree in the undirected static graph,
                     also, the number of directed fso-link (up or down link) is twice this number
-                      
+  fso_per_gateway(int): >0, same as fso_per_node above, except applies to gateways only               
   max_x_coord(float): >0, maximum value of x-coordinate in the rectangular map area,
                     if graphType(*class-field) is 'map', it is retrieved from the
                     latitude/longitude of the buildings in the input osm-file,
@@ -158,6 +158,7 @@ class InputGenerator:
     self.gateway_to_node_ratio = None
     self.link_capacity = None
     self.fso_per_node = None
+    self.fso_per_gateway =  None
     self.max_short_edge_length = None
     self.max_long_edge_length = None
     self.target_spacing = None
@@ -236,6 +237,7 @@ class InputGenerator:
     self.gateway_to_node_ratio = self.config.getfloat('global','gateway_to_node_ratio')
     self.link_capacity = self.config.getfloat('global','link_capacity')
     self.fso_per_node = self.config.getint('global','fso_per_node')
+    self.fso_per_gateway = self.config.getint('global','fso_per_gateway')
     self.target_spacing =  self.config.getfloat('global','target_spacing')
     self.coverage_radius =  self.config.getfloat('global','coverage_radius')
     self.max_short_edge_length =  self.config.getfloat('global','max_short_edge_length')
