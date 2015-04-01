@@ -170,20 +170,24 @@ class StatCollector(ILPSolver):
     '''  
     #task (i)
     candidate_pattern_nodes = list( set(self.static_graph.nodes()) - set(self.gateways))
+    self.logger.debug("candidate_pattern_nodes:"+str(candidate_pattern_nodes))
     if not candidate_pattern_nodes: #no non-gateway nodes in the static graph, so this avg finding is mute
       self.static_avg_flow = 0.0
       self.static_upperbound_flow = 0.0
       self.logger.info("No non-gateway node found in static graph, avg and upperbound max flows set to 0!!")
+      return
     number_of_candidate_pattern_nodes = len(candidate_pattern_nodes)
     number_of_pattern_nodes = \
-      int(round(number_of_candidate_pattern_nodes * self.percent_of_pattern_nodes_in_avg_flow_calculation/100*0, 0))
-    
+      int(round(1.0*number_of_candidate_pattern_nodes * self.percent_of_pattern_nodes_in_avg_flow_calculation/100.0, 0))
+    self.logger.debug("number_of_pattern_nodes:"+str(number_of_pattern_nodes))
+    self.logger.debug("number_of_candidate_pattern_nodes:"+str(number_of_candidate_pattern_nodes))
     if number_of_pattern_nodes<1: #check if the ratio was too low
       number_of_pattern_nodes = 1
     
     number_of_iterations = self.number_of_pattern_in_avg_flow_calculation
     
     if number_of_pattern_nodes>= number_of_candidate_pattern_nodes:
+      self.logger.debug("number_of_pattern_nodes>= number_of_candidate_pattern_nodes!!")
       number_of_iterations =  1
       number_of_pattern_nodes = number_of_candidate_pattern_nodes
       
@@ -198,7 +202,10 @@ class StatCollector(ILPSolver):
       
       static_max_flow_vals.append(max_flow_val)
       static_upper_bound_vals.append(upper_bound_flow)
-    
+      self.logger.debug("\tmax_flow_val:"+str(max_flow_val))
+      self.logger.debug("\tupper_bound_flow:"+str(upper_bound_flow))
+      self.logger.debug("\tpattern_node_degrees:"+str(pattern_node_degrees))
+      
     self.static_avg_flow = 1.0*self.link_capacity*sum(static_max_flow_vals)/number_of_iterations
     self.static_upperbound_flow = 1.0*self.link_capacity*sum(static_upper_bound_vals)/number_of_iterations
     

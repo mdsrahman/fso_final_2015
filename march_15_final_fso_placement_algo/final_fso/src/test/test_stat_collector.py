@@ -91,7 +91,7 @@ class TestStatCollector(unittest.TestCase):
     #self.stat_collector.logger.setLevel(logging.INFO)
     
     #----------------------------------
-    #self.visualizeAllGraphs()
+    self.visualizeAllGraphs()
     #----------------------------------
     
     
