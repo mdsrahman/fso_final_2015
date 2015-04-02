@@ -19,7 +19,8 @@ class StatCollector(ILPSolver):
     self.dynamic_avg_flow = None
     self.static_upperbound_flow = None
     self.static_avg_flow = None
-    
+    self.total_gateway_capacity_static = None
+    self.total_gateway_capacity_dynamic = None
     self.path_to_java_code_for_avg_calc = './java/tm.jar'
     self.dynamic_graph_spec_file_path = './java/temp_dynamic_spec.txt'
     self.java_code_stat_file_path = './java/temp_java_stat.txt'
@@ -36,8 +37,10 @@ class StatCollector(ILPSolver):
                       'percent_of_pattern_nodes',
                       'number_of_patterns',
                       'statc_upperbound_max_flow',
+                      'total_gateway_capacity_static',
                       'static_avg_max_flow',
                       'dynamic_upperbound_max_flow',
+                      'total_gateway_capacity_dynamic',
                       'dynamic_avg_max_flow'
                       ]
     self.printSummaryAfterSavingStat = False
@@ -61,7 +64,8 @@ class StatCollector(ILPSolver):
       for n in nodes:
         no_of_fso_for_n = self.fso_per_node
         if n in self.gateways:
-          no_of_fso_for_n =  gateway_degree_in_static_graph[n]
+          #no_of_fso_for_n =  gateway_degree_in_static_graph[n]
+          no_of_fso_for_n = min(self.fso_per_gateway, self.dynamic_graph.degree(n))
         for fso in range(1, no_of_fso_for_n+1):
           f.write(str(n)+"_fso"+str(fso)+"\n")
       f.write('\n')   
@@ -224,9 +228,13 @@ class StatCollector(ILPSolver):
     stat_row['number_of_fso_per_gateway'] = self.fso_per_gateway
     stat_row['percent_of_pattern_nodes'] = self.percent_of_pattern_nodes_in_avg_flow_calculation
     stat_row['number_of_patterns'] = self.number_of_pattern_in_avg_flow_calculation
+    
     stat_row['statc_upperbound_max_flow'] = self.static_upperbound_flow
+    stat_row['total_gateway_capacity_static'] = self.total_gateway_capacity_static
     stat_row['static_avg_max_flow'] = self.static_avg_flow
+    
     stat_row['dynamic_upperbound_max_flow'] = self.dynamic_upperbound_flow
+    stat_row['total_gateway_capacity_dynamic'] = self.total_gateway_capacity_dynamic
     stat_row['dynamic_avg_max_flow'] = self.dynamic_avg_flow
     
     
@@ -245,15 +253,38 @@ class StatCollector(ILPSolver):
       print "Number of FSO-per-gateway:",stat_row['number_of_fso_per_gateway']
       print "Percent of total nodes used in patterns for avg. max. flow calculation:",stat_row['percent_of_pattern_nodes']
       print "Number of patterns used in avg. max. flow calculation:",stat_row['number_of_patterns']
+      print "Static:.................."
       print "Static upperbound max. flow:",stat_row['statc_upperbound_max_flow']
-      print "Static avg. max. flow:",stat_row['static_avg_max_flow']
+      print "Static total gateway capacity:",stat_row['total_gateway_capacity_static']
+      print "Static avg. max. flow:",stat_row['static_avg_max_flow'], "!!"
       print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",\
             1.0*stat_row['static_avg_max_flow']/stat_row['statc_upperbound_max_flow']
+      print "Ratio of avg. max. flow to total gateway capacity for Static graph:",\
+            1.0*stat_row['static_avg_max_flow']/stat_row['total_gateway_capacity_static']
+      print "Dynamic:.................."
       print "Dynamic upperbound max. flow:",stat_row['dynamic_upperbound_max_flow']
-      print "Dynamic avg. max. flow:",stat_row['dynamic_avg_max_flow'] 
-      print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",\
-            1.0*stat_row['dynamic_avg_max_flow']/stat_row['dynamic_upperbound_max_flow']
+      print "Dynamic total gateway capacity:",stat_row['total_gateway_capacity_dynamic']
+      print "Dynamic avg. max. flow:",stat_row['dynamic_avg_max_flow'], "!!"
+      print "Ratio of avg. max. flow to upperbound max. flow for Dynamic graph:",
+      if stat_row['dynamic_upperbound_max_flow']>0:
+        print 1.0*stat_row['dynamic_avg_max_flow']/stat_row['dynamic_upperbound_max_flow']
+      else:
+        print "N/A"
+      print "Ratio of avg. max. flow to total gateway capacity for Dynamic graph:",\
+            1.0*stat_row['dynamic_avg_max_flow']/stat_row['total_gateway_capacity_dynamic']
       print "==============End of stat-summary==========="
+  
+  def setTotalGatewayCapacities(self):
+    '''
+    computes the sum of degrees of gateway nodes in both static and dynamic graph
+    and store the total capacities
+    '''
+    static_gateway_degrees = sum(self.static_graph.degree(self.gateways).values())
+    self.total_gateway_capacity_static =  1.0*self.link_capacity*static_gateway_degrees
+    #dynamic_gateway_degrees = sum(self.dynamic_graph.degree(self.gateways).values())
+    self.total_gateway_capacity_dynamic = 1.0*self.link_capacity*\
+            self.fso_per_gateway*len(self.gateways)
+    
   def runStatCollector(self):
     '''
     all the processing related to this class are done here
@@ -267,11 +298,15 @@ class StatCollector(ILPSolver):
       v) save all the experiment stats in the self.output_statistics_file file (append mode)
       vi) save all the graphs with proper title in the self.graph_output_folder folder
     '''
-    self.logger.info("in runStatCollector...")
+    self.logger.info("in runStatCollector method...")
     
     self.getStaticAvgFlow()
+    
+    self.setTotalGatewayCapacities()
+    
     self.logger.info("Running java code for dynamic avg flow calculation...")
     self.callJavaCodeToGetDynamicAvgFlow()
+    
     self.saveStatInFile()
     
     
