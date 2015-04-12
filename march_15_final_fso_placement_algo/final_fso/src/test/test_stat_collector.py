@@ -40,6 +40,24 @@ class TestStatCollector(unittest.TestCase):
     
     plt.show()
 
+  def getNodesNotConnectedToGatewaysInDynamicGraph(self):
+    '''
+    returns the list of nodes not directly connected to the gateways
+    must be called after self.adj has been set/built
+    '''
+    list_of_nodes = []
+    for n in self.stat_collector.dynamic_graph.nodes():
+      if n not in self.stat_collector.gateways:
+        isConnectedToGateways = False
+        for g in self.stat_collector.gateways:
+          if n==g or self.stat_collector.dynamic_graph.has_edge(n, g):
+            isConnectedToGateways = True
+            break
+        if not isConnectedToGateways:
+          list_of_nodes.append(n)
+    return list_of_nodes
+      
+    
   def test_StatCollectorMethods(self):
     '''
     selective calls to methods...
@@ -90,6 +108,8 @@ class TestStatCollector(unittest.TestCase):
     self.stat_collector.runStatCollector()
     #self.stat_collector.logger.setLevel(logging.INFO)
     
+    print "Non-gateway nodes not connected to the gateway in the dynamic graph:",
+    print self.getNodesNotConnectedToGatewaysInDynamicGraph()
     #----------------------------------
     self.visualizeAllGraphs()
     #----------------------------------

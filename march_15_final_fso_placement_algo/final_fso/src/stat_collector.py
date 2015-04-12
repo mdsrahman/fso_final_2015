@@ -64,8 +64,8 @@ class StatCollector(ILPSolver):
       for n in nodes:
         no_of_fso_for_n = self.fso_per_node
         if n in self.gateways:
-          #no_of_fso_for_n =  gateway_degree_in_static_graph[n]
-          no_of_fso_for_n = min(self.fso_per_gateway, self.dynamic_graph.degree(n))
+          no_of_fso_for_n =  self.fso_per_gateway #!!!TODO: change back to following if needed
+          #no_of_fso_for_n = min(self.fso_per_gateway, gateway_degree_in_static_graph[n])
         for fso in range(1, no_of_fso_for_n+1):
           f.write(str(n)+"_fso"+str(fso)+"\n")
       f.write('\n')   
@@ -76,11 +76,13 @@ class StatCollector(ILPSolver):
       for u,v in edges:
         no_of_fso_for_u = self.fso_per_node
         if u in self.gateways:
-          no_of_fso_for_u = gateway_degree_in_static_graph[u]
+          no_of_fso_for_u = self.fso_per_gateway #!!!TODO: change back to following if needed
+          #no_of_fso_for_u = min(self.fso_per_gateway, gateway_degree_in_static_graph[u])
         for fso1 in range(1, no_of_fso_for_u+1):
           no_of_fso_for_v = self.fso_per_node
-          if v in self.gateways:
-            no_of_fso_for_v = gateway_degree_in_static_graph[v]
+          if v in self.gateways: 
+            no_of_fso_for_v = self.fso_per_gateway #!!!TODO: change back to following if needed
+            #no_of_fso_for_v = min(self.fso_per_gateway, gateway_degree_in_static_graph[v])
           for fso2 in range(1, no_of_fso_for_v+1):  
             #"0_0_fso2To2_0_fso1 10Gbps"
             f_text = str(u)+"_fso"+str(fso1)+"To"\
@@ -112,8 +114,8 @@ class StatCollector(ILPSolver):
                        str(self.percent_of_pattern_nodes_in_avg_flow_calculation),
                        str(self.number_of_pattern_in_avg_flow_calculation) 
                        ],
-                      #stdout = None) #TODO: change back to stdout=None if any slower for file
-                      stdout = f_java_stdout)
+                      stdout = None) #TODO: change back to stdout=None if any slower for file
+                      #stdout = f_java_stdout)
 
     with open(self.java_code_stat_file_path,'r') as f:
       for line in f:
