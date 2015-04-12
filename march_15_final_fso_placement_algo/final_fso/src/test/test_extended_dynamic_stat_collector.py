@@ -7,7 +7,8 @@ import networkx as nx
 class TestStatCollector(unittest.TestCase):
   def setUp(self):
     unittest.TestCase.setUp(self)
-    self.ext_stat_collector = ExtendedDynamicStatCollector('./config.txt')
+    configFileName = './config.txt'
+    self.ext_stat_collector = ExtendedDynamicStatCollector(configFileName)
     #self.gi.generateNodePositions()
     print "Test for ExtDynamicStatCollector class.." 
   
@@ -59,71 +60,9 @@ class TestStatCollector(unittest.TestCase):
       
     
   def test_StatCollectorMethods(self):
-    '''
-    selective calls to methods...
-    '''
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runInputGenerator()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    print "Input Generator Complete"
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runStep_1()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    print "step 1 complete"
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runStep_2()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    print "step 2 complete"
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runStep_3()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    print "step 3 complete"
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runStep_4_dynamic()
-    print "step 4-dynamic complete"
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runStep_4_static()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    print "step 4-static complete"
-    
-    self.ext_stat_collector.runILPSolver()
-     
-    
-    
-    #need to reset the relative path as python code is called at './src/test' rather than at './src'
-    self.ext_stat_collector.path_to_java_code_for_avg_calc = '../java/tm.jar'
-    self.ext_stat_collector.dynamic_graph_spec_file_path = '../java/temp_dynamic_spec.txt'
-    self.ext_stat_collector.java_code_stat_file_path = '../java/temp_java_stat.txt'
-    self.ext_stat_collector.java_code_stdout_file_path = '../java/temp_java_stdout.txt' 
-    
-    self.ext_stat_collector.printSummaryAfterSavingStat = True #will now print on screen summary
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runStatCollector()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    
-    #self.ext_stat_collector.logger.setLevel(logging.DEBUG)
-    self.ext_stat_collector.runExtendedDynamicStatCollector()
-    print "Ext dyn avg:",self.ext_stat_collector.ext_dynamic_avg_flow*self.ext_stat_collector.link_capacity," !!"
-    print "Ext static avg:",self.ext_stat_collector.ext_static_avg_flow*self.ext_stat_collector.link_capacity," !!"
-
-#     plt.figure(8)
-#     self.ext_stat_collector.visualizeGraph(self.ext_stat_collector.cur_dynamic_graph)
-#     plt.figure(9)
-#     self.ext_stat_collector.visualizeGraph(self.ext_stat_collector.eq_dynamic_graph)
-    #plt.show()
-    #self.ext_stat_collector.logger.setLevel(logging.INFO)
-    
-    #print "Non-gateway nodes not connected to the gateway in the dynamic graph:",
-    #print self.getNodesNotConnectedToGatewaysInDynamicGraph()
+    self.ext_stat_collector.runAll()
     #----------------------------------
-    self.visualizeAllGraphs()
+    #self.visualizeAllGraphs()
     #----------------------------------
     
     

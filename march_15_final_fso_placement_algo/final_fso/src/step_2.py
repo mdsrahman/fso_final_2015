@@ -50,7 +50,18 @@ class Step_2(Step_1):
     self.remaining_bfs_node_cover = None
     #---end of class fields----- 
     
-
+  def reset(self):
+    Step_1.reset(self)
+        #super class initializer must be called at the top
+        
+    #---class fields------------   
+    self.backbone_graph = None
+    self.bfs_nodes = None
+    self.bfs_node_index = None
+    self.bfs_paths =  None
+    self.bfs_path_distance = None
+    self.bfs_heap = None
+    self.remaining_bfs_node_cover = None
     
   def getBFSPath(self, u, v):
     '''

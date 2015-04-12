@@ -21,6 +21,15 @@ class Step_3(Step_2):
     self.logger.debug("Step_3 initialized")
     #---end-of-class fields----
     self.logger.setLevel(logging.INFO)
+  
+  def reset(self):
+    Step_2.reset(self) 
+    #--class-fields------
+    self.backbone_graph_after_step_2 = None
+    self.non_gateway_backbone_nodes = [] 
+    self.logger.debug("Step_3 initialized")
+    #---end-of-class fields----
+    self.logger.setLevel(logging.INFO) 
     
   def getMaxDegreeNodes(self):
     '''

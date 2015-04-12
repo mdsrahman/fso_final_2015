@@ -46,8 +46,19 @@ class Step_1(InputGenerator):
     self.node_cover = []
     #---end of class fields
     
+  def reset(self): 
+    self.node_bin = None
+    self.node_hp = None
     
-  
+    self.max_tx = int(self.max_x_coord // self.target_spacing)
+    self.max_ty = int(self.max_y_coord // self.target_spacing)
+    self.total_targets = (self.max_tx+1)*(self.max_ty+1)
+    
+    self.no_of_targets_covered = 0
+    self.node_target_count = None
+    self.covered_target = None
+    self.node_cover = []
+    
   def runStep_1(self):
     '''runs all the tasks for step 1
     '''

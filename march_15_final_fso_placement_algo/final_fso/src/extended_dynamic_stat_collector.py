@@ -2,11 +2,61 @@ from stat_collector import StatCollector
 import networkx as nx
 import random
 import networkx.algorithms.flow as flow
+import csv
+from matplotlib import pyplot as plt
 
 class ExtendedDynamicStatCollector(StatCollector):
   def __init__(self, configFile):
     StatCollector.__init__(self, configFile)
     self.weigh_increment = 5
+    self.current_run_no = 0
+    self.static_graph_spec_file_path = None
+  
+  def reset(self):
+    StatCollector.reset(self)
+    self.weigh_increment = 5
+    self.current_run_no = 0
+    self.static_graph_spec_file_path = None
+    
+  def createStaticGraphSpecOutputFile(self):
+    '''
+    save the static graph according to TM's spec 
+    must set self.static_graph_spec_file_path correctly before calling
+    '''
+    with open(self.static_graph_spec_file_path, 'w') as f:
+      f.write("trafficSources:\n")
+      for n in self.static_graph.nodes():
+        f.write(str(n)+"\n")
+      f.write('\n')
+      
+      
+      #---FSONodes:
+      f.write("FSONodes:\n")
+      gateway_degree_in_static_graph = self.static_graph.degree()
+      static_nodes = self.static_graph.nodes() 
+      for n in static_nodes:
+        for fso in range(1, gateway_degree_in_static_graph[n]+1):
+          f.write(str(n)+"_fso"+str(fso)+"\n")
+      f.write('\n')   
+      
+      #---FSOLinks:---
+      f.write("FSOLinks:\n")   
+      edges = self.static_graph.edges()
+      for u,v in edges:
+        for fso1 in range(1, gateway_degree_in_static_graph[u]+1):
+          for fso2 in range(1, gateway_degree_in_static_graph[v]+1):  
+            f_text = str(u)+"_fso"+str(fso1)+"To"\
+                    +str(v)+"_fso"+str(fso2)+" "+str(self.link_capacity)+"Mbps\n" 
+            f.write(f_text)
+            f_text = str(v)+"_fso"+str(fso2)+"To"\
+                    +str(u)+"_fso"+str(fso1)+" "+str(self.link_capacity)+"Mbps\n" 
+            f.write(f_text)
+      f.write('\n')   
+      #------gateways--:
+      static_gateways =  list(set(self.gateways) & set(static_nodes))
+      f.write('gateways:\n')
+      for n in static_gateways:
+        f.write(str(n)+"\n")
   
   def getEquivalendDynamicGraph(self, in_patternNodes):
     '''
@@ -207,7 +257,7 @@ class ExtendedDynamicStatCollector(StatCollector):
       
       
       
-  def runExtendedDynamicStatCollector(self):
+  def computeExtDynamicAvgFlow(self):
     '''
     runs this stat colletor
     processing:
@@ -219,7 +269,8 @@ class ExtendedDynamicStatCollector(StatCollector):
       for all iterations, find the avg max flow using the saved values
     '''
     max_flow_list_dyn = []
-    max_flow_list_stat = []
+    upperbound_flow_list_dyn = []
+    
     candidate_pattern_nodes = list(set(self.dynamic_graph.nodes()) - set(self.gateways))
     if not candidate_pattern_nodes: #no non-gateway nodes in the static graph, so this avg finding is mute
       self.ext_dynamic_avg_flow = 0.0
@@ -231,22 +282,24 @@ class ExtendedDynamicStatCollector(StatCollector):
     if number_of_pattern_nodes<1: #check if the ratio was too low
       number_of_pattern_nodes = 1
     
-    eq_static_graph = None
-    for i in xrange(self.number_of_pattern_in_avg_flow_calculation):
+    number_of_iterations = self.number_of_pattern_in_avg_flow_calculation
+    
+    if number_of_pattern_nodes>= number_of_candidate_pattern_nodes:
+      self.logger.debug("number_of_pattern_nodes>= number_of_candidate_pattern_nodes!!")
+      number_of_iterations =  1
+      number_of_pattern_nodes = number_of_candidate_pattern_nodes
+    
+    for i in xrange(number_of_iterations):
       pattern_nodes = random.sample(candidate_pattern_nodes, number_of_pattern_nodes)
       #self.logger.debug("pattern nodes:"+str(pattern_nodes))
-      eq_dyamic_graph, self.cur_dynamic_graph, remaining_pattern_nodes = self.getEquivalendDynamicGraph(pattern_nodes)
+      eq_dyamic_graph, self.cur_dynamic_graph, remaining_pattern_nodes = \
+            self.getEquivalendDynamicGraph(pattern_nodes)
       #self.logger.debug("un-connectable pattern nodes:"+str(remaining_pattern_nodes))
       
         
       for u,v in eq_dyamic_graph.edges():
         eq_dyamic_graph[u][v]['capacity'] =  1.0
-        
-      if i==0:
-        eq_static_graph = nx.DiGraph(eq_dyamic_graph)
-      
-      eq_flow_comp_static_graph = nx.DiGraph(eq_static_graph)
-            #add source node 
+
       eq_dyamic_graph.add_node('src')
       for n in pattern_nodes:
         eq_dyamic_graph.add_edge('src',n, capacity = float('inf'))
@@ -254,24 +307,177 @@ class ExtendedDynamicStatCollector(StatCollector):
       eq_dyamic_graph.add_node('snk')
       for g in self.gateways:
         eq_dyamic_graph.add_edge(g, 'snk', capacity = float('inf'))
-      
-      
-      eq_flow_comp_static_graph.add_node('src')
-      for n in pattern_nodes:
-        eq_flow_comp_static_graph.add_edge('src',n, capacity = float('inf'))
-      
-      eq_flow_comp_static_graph.add_node('snk')
-      for g in self.gateways:
-        eq_flow_comp_static_graph.add_edge(g, 'snk', capacity = float('inf'))
-      
         
       residual_max_flow_dyn = flow.shortest_augmenting_path(G=eq_dyamic_graph, s='src', t='snk')
       max_flow_list_dyn.append(residual_max_flow_dyn.graph['flow_value'])
+
+      pattern_nodes_included_in_eq_dynamic_graph =\
+              list(set(pattern_nodes) - set(remaining_pattern_nodes))
+      pattern_node_degrees = self.dynamic_graph.degree(pattern_nodes_included_in_eq_dynamic_graph)
       
-      residual_max_flow_stat = flow.shortest_augmenting_path(G=eq_flow_comp_static_graph, s='src', t='snk')
-      max_flow_list_stat.append(residual_max_flow_stat.graph['flow_value'])
+      upper_bound_flow_dyn = 0
+      for n,d in pattern_node_degrees.iteritems():
+        upper_bound_flow_dyn += min(self.fso_per_node, d)
+
+      upperbound_flow_list_dyn.append(upper_bound_flow_dyn)
       
-    self.ext_dynamic_avg_flow = 1.0*sum(max_flow_list_dyn)/len(max_flow_list_dyn)
-    self.ext_static_avg_flow = 1.0*sum(max_flow_list_stat)/len(max_flow_list_stat)
+    self.ext_dynamic_avg_flow =\
+        1.0*self.link_capacity*sum(max_flow_list_dyn)/len(max_flow_list_dyn)
+    self.ext_dynamic_upperbound_flow =\
+        1.0*self.link_capacity*sum(upperbound_flow_list_dyn)/len(upperbound_flow_list_dyn)
+  
+  def saveStatInFile(self): #overriding parent method
+    '''
+    overriding the method in stat_collector,
+    everything same except now saving shaifur's avg. dyn flow and upper. dyn flow insteadm of TM's
+    save the statistics in a file
+    the order of the fields are very important
+    ''' 
+    stat_row={}
+    stat_row['number_of_nodes_in_input_graph'] = self.adj.number_of_nodes()
+    stat_row['number_of_edges_in_input_graph'] = self.adj.number_of_edges()
+    stat_row['number_of_gateways'] = len(self.gateways)
+    stat_row['number_of_nodes_in_static_graph'] = self.static_graph.number_of_nodes()
+    stat_row['number_of_nodes_in_dynamic_graph'] = self.dynamic_graph.number_of_nodes()
+    stat_row['number_of_fso_per_node'] = self.fso_per_node
+    stat_row['number_of_fso_per_gateway'] = self.fso_per_gateway
+    stat_row['percent_of_pattern_nodes'] = self.percent_of_pattern_nodes_in_avg_flow_calculation
+    stat_row['number_of_patterns'] = self.number_of_pattern_in_avg_flow_calculation
+    
+    stat_row['statc_upperbound_max_flow'] = self.static_upperbound_flow
+    stat_row['total_gateway_capacity_static'] = self.total_gateway_capacity_static
+    stat_row['static_avg_max_flow'] = self.static_avg_flow
+    
+    #the following stats are changed now
+    stat_row['dynamic_upperbound_max_flow'] = self.ext_dynamic_upperbound_flow
+    stat_row['total_gateway_capacity_dynamic'] = self.total_gateway_capacity_dynamic
+    stat_row['dynamic_avg_max_flow'] = self.ext_dynamic_avg_flow
+    
+    
+    f= open(self.output_statistics_file, 'ab')
+    writer = csv.DictWriter(f, self.stat_header)
+    writer.writerow(stat_row)
+    f.close()
+    if self.printSummaryAfterSavingStat:
+      print"--------------Stat-Summary--------------"
+      print "Experiment Name:",self.experiment_name," run#:",self.current_run_no
+      print "Number of Nodes in Input Graph:",stat_row['number_of_nodes_in_input_graph']
+      print "Number of Edges in Input Graph:",stat_row['number_of_edges_in_input_graph']
+      print "Number of Gateways in Input Graph:",stat_row['number_of_gateways']
+      print "Number of Nodes in Static Graph:",stat_row['number_of_nodes_in_static_graph']
+      print "Number of Nodes in Dynamic Graph:",stat_row['number_of_nodes_in_dynamic_graph']
+      print "Number of FSO-per-node:",stat_row['number_of_fso_per_node']
+      print "Number of FSO-per-gateway:",stat_row['number_of_fso_per_gateway']
+      print "Percent of total nodes used in patterns for avg. max. flow calculation:",stat_row['percent_of_pattern_nodes']
+      print "Number of patterns used in avg. max. flow calculation:",stat_row['number_of_patterns']
+      print "Static:.................."
+      print "Static upperbound max. flow:",stat_row['statc_upperbound_max_flow']
+      print "Static total gateway capacity:",stat_row['total_gateway_capacity_static']
+      print "Static avg. max. flow:",stat_row['static_avg_max_flow'], "!!"
+      print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",\
+            1.0*stat_row['static_avg_max_flow']/stat_row['statc_upperbound_max_flow']
+      print "Ratio of avg. max. flow to total gateway capacity for Static graph:",\
+            1.0*stat_row['static_avg_max_flow']/stat_row['total_gateway_capacity_static']
+      print "Dynamic:.................."
+      print "Dynamic upperbound max. flow:",stat_row['dynamic_upperbound_max_flow']
+      print "Dynamic total gateway capacity:",stat_row['total_gateway_capacity_dynamic']
+      print "Dynamic avg. max. flow:",stat_row['dynamic_avg_max_flow'], "!!"
+      print "Ratio of avg. max. flow to upperbound max. flow for Dynamic graph:",
+      if stat_row['dynamic_upperbound_max_flow']>0:
+        print 1.0*stat_row['dynamic_avg_max_flow']/stat_row['dynamic_upperbound_max_flow']
+      else:
+        print "N/A"
+      print "Ratio of avg. max. flow to total gateway capacity for Dynamic graph:",\
+            1.0*stat_row['dynamic_avg_max_flow']/stat_row['total_gateway_capacity_dynamic']
+      print "==============End of stat-summary==========="
+  
+  def runExtendedDynamicStatCollector(self):
+    self.logger.info("in runExtendedDynamicStatCollector method...")
+    
+    self.getStaticAvgFlow()
+    self.setTotalGatewayCapacities()
+    #instead of java folder dump this file into graph output folder
+    self.dynamic_graph_spec_file_path =\
+     self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_dyn.txt"
+    
+    self.static_graph_spec_file_path =\
+     self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_stat.txt" 
+     
+    self.createDynamicGraphSpecOutputFile()
+    self.createStaticGraphSpecOutputFile()
+    self.computeExtDynamicAvgFlow()
+    self.saveStatInFile()
+  
+  def plotStat(self, in_plot_keys, ylabel): 
+    '''
+    opens the current self.output_statistics_file and plots the required plotType
+    processing:
+      i) opens the file and stores the columns
+      ii) make the plots for the required files
+      iii) show the plot as output or save it in a file
+    '''
+    stat_header_keys =  self.stat_header
+    x=[]
+    y={}
+    plot_keys = list( set(self.stat_header) & set(in_plot_keys) )
+    
+    for k in plot_keys:
+        y[k]= []
+        
+    counter = 0
+    with open(self.output_statistics_file) as csvfile:
+      reader = csv.DictReader(csvfile, fieldnames=self.stat_header)
+      for row in reader:
+        counter += 1
+        x.append(counter)
+        for k in plot_keys:
+          y[k].append(row[k])
+        
+    fig, ax = plt.subplots()
+    for k in plot_keys:
+      #print "x:", x
+      #print "y[k]:", y[k]
+      ls = '-'
+      if k.find('upper') >-1:
+        print k
+        ls = '--'
+      ax.plot(x,y[k], label= k, ls= ls, lw=0.9, marker = 's')
+    
+    legend = ax.legend(loc='upper left')
+    ax.grid(True)
+    plt.xlabel('Sample No')
+    plt.ylabel(ylabel)
+    plt.xticks(xrange(0,len(x)+2))
+    plt.show()
+    
+  def runAll(self):
+    
+    for i in xrange(1, self.no_of_runs+1):
+      self.current_run_no = i
+      self.fso_per_node = self.backup_fso_per_node 
+      self.fso_per_gateway = self.backup_fso_per_gateway 
+      self.runInputGenerator()
+      self.runStep_1()
+      self.runStep_2()
+      self.runStep_3()
+      self.runStep_4_dynamic()
+      self.runStep_4_static()
+      self.runILPSolver()
+      self.printSummaryAfterSavingStat = True #will now print on screen summary
+      self.runExtendedDynamicStatCollector()
+      self.reset()
+    
+    plot_keys = [
+                 'static_avg_max_flow',
+                 'dynamic_avg_max_flow',
+                 'statc_upperbound_max_flow',
+                 'dynamic_upperbound_max_flow'
+                 ]
+    self.plotStat( plot_keys, 'Flow Value (Mbps)' )
+    
+    
+    
+    
+    
     
     

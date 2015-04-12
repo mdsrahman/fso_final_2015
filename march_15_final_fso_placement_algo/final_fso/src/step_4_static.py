@@ -13,6 +13,12 @@ class Step_4_static(Step_4_dynamic):
     #---class fields------
     self.static_graph = None
     #---end of class fields
+  
+  def reset(self):
+    Step_4_dynamic.reset(self)
+    #---class fields------
+    self.static_graph = None
+    #---end of class fields
   def checkFSOPerNode(self):
     '''
     It can so happen that the existing degree of a non-gateway node in backbone graph

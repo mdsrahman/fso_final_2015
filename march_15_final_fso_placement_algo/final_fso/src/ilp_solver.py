@@ -16,6 +16,9 @@ class ILPSolver(Step_4_static):
     
     #---end of class fields----
   
+  def reset(self):
+    Step_4_static.reset(self)
+    
   def runILPSolver(self):
     '''
     this class processes all the steps related to Relaxed ILP problem formulation

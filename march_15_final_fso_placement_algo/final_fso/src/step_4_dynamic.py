@@ -25,6 +25,16 @@ class Step_4_dynamic(Step_3):
     #----end of class fields----
     self.logger.setLevel(logging.INFO) #just for debugging
     self.logger.debug("Step_4 constructor")
+  
+  def reset(self):
+    Step_3.reset(self)
+    #---class fields----
+    self.max_extra_nodes_for_step_4 = None
+    self.new_nodes_for_step_4 = None
+    self.dynamic_graph =  None
+    #----end of class fields----
+    self.logger.setLevel(logging.INFO) #just for debugging
+
     
   def initDynamicGraph(self):
     '''

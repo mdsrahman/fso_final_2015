@@ -25,7 +25,7 @@ class StatCollector(ILPSolver):
     self.dynamic_graph_spec_file_path = './java/temp_dynamic_spec.txt'
     self.java_code_stat_file_path = './java/temp_java_stat.txt'
     self.java_code_stdout_file_path = './java/temp_java_stdout.txt'
-    
+    self.skipJavaCodeCall = False
     self.stat_header=[
                       'number_of_nodes_in_input_graph',
                       'number_of_edges_in_input_graph',
@@ -45,6 +45,23 @@ class StatCollector(ILPSolver):
                       ]
     self.printSummaryAfterSavingStat = False
     #---end of class fields------
+  
+  
+  def reset(self):
+    ILPSolver.reset(self)
+    #---class fields-------
+    self.dynamic_upperbound_flow = None
+    self.dynamic_avg_flow = None
+    self.static_upperbound_flow = None
+    self.static_avg_flow = None
+    self.total_gateway_capacity_static = None
+    self.total_gateway_capacity_dynamic = None
+    self.path_to_java_code_for_avg_calc = './java/tm.jar'
+    self.dynamic_graph_spec_file_path = './java/temp_dynamic_spec.txt'
+    self.java_code_stat_file_path = './java/temp_java_stat.txt'
+    self.java_code_stdout_file_path = './java/temp_java_stdout.txt'
+    self.skipJavaCodeCall = False
+
   def createDynamicGraphSpecOutputFile(self):
     '''
     creates the temporary dynamic spec file and save the self.dynamic_graph according
@@ -93,8 +110,9 @@ class StatCollector(ILPSolver):
             f.write(f_text)
       f.write('\n')   
       #------gateways--:
+      dynamic_gateways =  list(set(self.gateways) & set(nodes))
       f.write('gateways:\n')
-      for n in self.gateways:
+      for n in dynamic_gateways:
         f.write(str(n)+"\n")
         
   def callJavaCodeToGetDynamicAvgFlow(self):
@@ -106,22 +124,23 @@ class StatCollector(ILPSolver):
     '''
     self.createDynamicGraphSpecOutputFile()
     #open the file for streaing java stdout
-    with  open(self.java_code_stdout_file_path, 'w') as f_java_stdout:
-      subprocess.call(['java','-jar',
-                       self.path_to_java_code_for_avg_calc,
-                       self.dynamic_graph_spec_file_path,
-                       self.java_code_stat_file_path,
-                       str(self.percent_of_pattern_nodes_in_avg_flow_calculation),
-                       str(self.number_of_pattern_in_avg_flow_calculation) 
-                       ],
-                      stdout = None) #TODO: change back to stdout=None if any slower for file
-                      #stdout = f_java_stdout)
-
-    with open(self.java_code_stat_file_path,'r') as f:
-      for line in f:
-        vals = line.split(',')
-        self.dynamic_upperbound_flow = float(vals[0])
-        self.dynamic_avg_flow = float(vals[1])
+    if not self.skipJavaCodeCall:
+      with  open(self.java_code_stdout_file_path, 'w') as f_java_stdout:
+        subprocess.call(['java','-jar',
+                         self.path_to_java_code_for_avg_calc,
+                         self.dynamic_graph_spec_file_path,
+                         self.java_code_stat_file_path,
+                         str(self.percent_of_pattern_nodes_in_avg_flow_calculation),
+                         str(self.number_of_pattern_in_avg_flow_calculation) 
+                         ],
+                        stdout = None) #TODO: change back to stdout=None if any slower for file
+                        #stdout = f_java_stdout)
+  
+      with open(self.java_code_stat_file_path,'r') as f:
+        for line in f:
+          vals = line.split(',')
+          self.dynamic_upperbound_flow = float(vals[0])
+          self.dynamic_avg_flow = float(vals[1])
   
   def getMaxFlowForSourceNodes(self, g, sourceList):
     '''
@@ -308,7 +327,6 @@ class StatCollector(ILPSolver):
     
     self.logger.info("Running java code for dynamic avg flow calculation...")
     self.callJavaCodeToGetDynamicAvgFlow()
-    
     self.saveStatInFile()
     
     
