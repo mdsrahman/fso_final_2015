@@ -51,17 +51,23 @@ class ExtendedDynamicStatCollector(StatCollector):
       
       
       #---FSONodes:
+      current_fso = {}
       f.write("FSONodes:\n")
       gateway_degree_in_static_graph = self.static_graph.degree()
       static_nodes = self.static_graph.nodes() 
       for n in static_nodes:
         for fso in range(1, gateway_degree_in_static_graph[n]+1):
           f.write(str(n)+"_fso"+str(fso)+"\n")
+          current_fso[n]=0
       f.write('\n')   
       
       #---FSOLinks:---
       f.write("FSOLinks:\n")   
       edges = self.static_graph.edges()
+      #for u,v in self.static_graph.edges():
+      #TODO: implement the code here
+      
+      '''
       for u,v in edges:
         for fso1 in range(1, gateway_degree_in_static_graph[u]+1):
           for fso2 in range(1, gateway_degree_in_static_graph[v]+1):  
@@ -70,7 +76,7 @@ class ExtendedDynamicStatCollector(StatCollector):
             f.write(f_text)
             f_text = str(v)+"_fso"+str(fso2)+"To"\
                     +str(u)+"_fso"+str(fso1)+" "+str(self.link_capacity)+"Mbps\n" 
-            f.write(f_text)
+            f.write(f_text)'''
       f.write('\n')   
       #------gateways--:
       static_gateways =  list(set(self.gateways) & set(static_nodes))
@@ -376,6 +382,7 @@ class ExtendedDynamicStatCollector(StatCollector):
     
     #the following were added for computation of eq static graph
     stat_row['Static_eq_fso_per_node'] = self.static_fso_per_node
+    #self.logger.info("value-check inside SaveStatInFile:self.static_fso_per_gateway"+str(self.static_fso_per_gateway))
     stat_row['Static_eq_fso_per_gateway'] = self.static_fso_per_gateway
     stat_row['Static_eq_avg_max_flow'] = self.static_eq_avg_max_flow
     stat_row['Static_eq_avg_upperbound_flow'] = self.static_eq_avg_upperbound_flow
@@ -434,8 +441,8 @@ class ExtendedDynamicStatCollector(StatCollector):
     self.static_graph_spec_file_path =\
      self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_stat.txt" 
      
-    self.createDynamicGraphSpecOutputFile()
-    self.createStaticGraphSpecOutputFile()
+    #self.createDynamicGraphSpecOutputFile()
+    #self.createStaticGraphSpecOutputFile()
     self.computeExtDynamicAvgFlow()
     self.findFlowEquivalentStaticGraph()
     self.saveStatInFile()
@@ -508,8 +515,9 @@ class ExtendedDynamicStatCollector(StatCollector):
     self.static_eq_avg_max_flow = self.static_avg_flow
     self.static_eq_avg_upperbound_flow = self.static_upperbound_flow
     self.static_fso_per_node = self.fso_per_node
+    #self.logger.info("value check: fso_per_gatway"+str(self.fso_per_gateway))
     self.static_fso_per_gateway = self.fso_per_gateway
-    
+    #self.logger.info("value check: static_fso_per_gatway"+str(self.static_fso_per_gateway))
     
     edge_added_in_prev_iterations = True
     debug_iter_counter = 0
@@ -517,7 +525,8 @@ class ExtendedDynamicStatCollector(StatCollector):
       edge_added_in_prev_iterations = False
       debug_iter_counter += 1
       #task (i)
-      self.static_fso_per_gateway =+ 1
+      self.static_fso_per_gateway += 1
+      #self.logger.info("value check: static_fso_per_gatway"+str(self.static_fso_per_gateway))
       self.static_fso_per_node += 1
       #task (ii)
       max_allowed_degree = {}
@@ -541,6 +550,7 @@ class ExtendedDynamicStatCollector(StatCollector):
             edge_added_in_prev_iterations = True
       
       #task (iii)
+      #self.logger.info("value check inside findFlowEquivalentStaticGraph():self.static_fso_per_gateway:"+str(self.static_fso_per_gateway))
       if edge_added_in_prev_iterations:
         self.static_eq_avg_max_flow, self.static_eq_avg_upperbound_flow = \
           self.getAverageAndUpperboundFlow(self.static_eq_dynamic, 
