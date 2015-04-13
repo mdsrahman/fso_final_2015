@@ -60,6 +60,7 @@ class TestStatCollector(unittest.TestCase):
       
     
   def test_StatCollectorMethods(self):
+    self.ext_stat_collector.onlyGeneratePlot = False
     self.ext_stat_collector.runAll()
     #----------------------------------
     #self.visualizeAllGraphs()

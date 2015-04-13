@@ -5,16 +5,16 @@
 [global]
 graphType: synthetic 
 seed: 101593
-experiment_name: plot_test
-no_of_runs: 10
+experiment_name: static_eq_test
+no_of_runs: 1
 gateway_to_node_ratio: 0.01
 link_capacity: 1000.0
 fso_per_node: 2
 fso_per_gateway: 10
 target_spacing: 5.0
-coverage_radius: 200.0
+coverage_radius: 50.0
 
-output_statistics_file: ./output/plot_test_stat.txt
+output_statistics_file: ./output/static_eq_test.txt
 graph_output_folder: ./output/graphs
 
 max_short_edge_length: 100.0
@@ -31,8 +31,8 @@ no_of_samples: 1
 number_of_nodes: 500
 max_x_coord: 500
 max_y_coord: 500
-max_long_edge_per_node: 20
-max_short_edge_per_node: 20
+max_long_edge_per_node: 500
+max_short_edge_per_node: 500
 max_no_of_edges: 1000000
 
 

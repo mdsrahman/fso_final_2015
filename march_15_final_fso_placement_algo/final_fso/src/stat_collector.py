@@ -231,8 +231,8 @@ class StatCollector(ILPSolver):
       self.logger.debug("\tupper_bound_flow:"+str(upper_bound_flow))
       self.logger.debug("\tpattern_node_degrees:"+str(pattern_node_degrees))
       
-    self.static_avg_flow = 1.0*self.link_capacity*sum(static_max_flow_vals)/number_of_iterations
-    self.static_upperbound_flow = 1.0*self.link_capacity*sum(static_upper_bound_vals)/number_of_iterations
+    self.static_avg_flow = 1.0*self.link_capacity*sum(static_max_flow_vals)/len(static_max_flow_vals)
+    self.static_upperbound_flow = 1.0*self.link_capacity*sum(static_upper_bound_vals)/len(static_upper_bound_vals)
     
   def saveStatInFile(self):
     '''

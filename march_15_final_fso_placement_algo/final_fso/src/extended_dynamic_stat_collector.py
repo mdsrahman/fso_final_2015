@@ -4,6 +4,7 @@ import random
 import networkx.algorithms.flow as flow
 import csv
 from matplotlib import pyplot as plt
+import logging
 
 class ExtendedDynamicStatCollector(StatCollector):
   def __init__(self, configFile):
@@ -11,12 +12,31 @@ class ExtendedDynamicStatCollector(StatCollector):
     self.weigh_increment = 5
     self.current_run_no = 0
     self.static_graph_spec_file_path = None
-  
+    self.onlyGeneratePlot = False
+    
+    self.static_fso_per_node = None
+    self.static_fso_per_gateway = None
+    self.static_eq_dynamic = None
+    self.static_eq_avg_max_flow = None
+    self.static_eq_avg_upperbound_flow = None
+    
+    self.stat_header.append('Static_eq_fso_per_node')
+    self.stat_header.append('Static_eq_fso_per_gateway')
+    self.stat_header.append('Static_eq_avg_max_flow')
+    self.stat_header.append('Static_eq_avg_upperbound_flow')
+    
   def reset(self):
     StatCollector.reset(self)
     self.weigh_increment = 5
     self.current_run_no = 0
     self.static_graph_spec_file_path = None
+    
+    self.static_fso_per_node = None
+    self.static_fso_per_gateway = None
+    self.static_eq_dynamic = None
+    self.static_eq_avg_max_flow = None
+    self.static_eq_avg_upperbound_flow = None
+    
     
   def createStaticGraphSpecOutputFile(self):
     '''
@@ -254,7 +274,8 @@ class ExtendedDynamicStatCollector(StatCollector):
     cur_dynamic_graph.remove_node('src')
     cur_dynamic_graph.remove_node('snk')
     return eq_dynamic_graph, cur_dynamic_graph, patternNodes
-      
+  
+     
       
       
   def computeExtDynamicAvgFlow(self):
@@ -353,6 +374,11 @@ class ExtendedDynamicStatCollector(StatCollector):
     stat_row['total_gateway_capacity_dynamic'] = self.total_gateway_capacity_dynamic
     stat_row['dynamic_avg_max_flow'] = self.ext_dynamic_avg_flow
     
+    #the following were added for computation of eq static graph
+    stat_row['Static_eq_fso_per_node'] = self.static_fso_per_node
+    stat_row['Static_eq_fso_per_gateway'] = self.static_fso_per_gateway
+    stat_row['Static_eq_avg_max_flow'] = self.static_eq_avg_max_flow
+    stat_row['Static_eq_avg_upperbound_flow'] = self.static_eq_avg_upperbound_flow
     
     f= open(self.output_statistics_file, 'ab')
     writer = csv.DictWriter(f, self.stat_header)
@@ -389,6 +415,11 @@ class ExtendedDynamicStatCollector(StatCollector):
         print "N/A"
       print "Ratio of avg. max. flow to total gateway capacity for Dynamic graph:",\
             1.0*stat_row['dynamic_avg_max_flow']/stat_row['total_gateway_capacity_dynamic']
+      
+      print "Static equivalent fso-per-node:",stat_row['Static_eq_fso_per_node'] 
+      print "Static equivalent fso-per-gateway:", stat_row['Static_eq_fso_per_gateway']
+      print "Static equivalent avg max. flow:",stat_row['Static_eq_avg_max_flow']
+      print "Static equivalent avg upperboud flow:",stat_row['Static_eq_avg_upperbound_flow'] 
       print "==============End of stat-summary==========="
   
   def runExtendedDynamicStatCollector(self):
@@ -406,8 +437,115 @@ class ExtendedDynamicStatCollector(StatCollector):
     self.createDynamicGraphSpecOutputFile()
     self.createStaticGraphSpecOutputFile()
     self.computeExtDynamicAvgFlow()
+    self.findFlowEquivalentStaticGraph()
     self.saveStatInFile()
+    
   
+  def getAverageAndUpperboundFlow(self, g, no_of_pattern_nodes, no_of_iterations):
+    '''
+    returns the avg and upperbound flow of arbitrary graph g
+    follows the spec of number of patterns and iteratios specified in th
+          
+    '''  
+    avg_max_flow_val = 0.0
+    avg_upperbound_flow_val = 0.0
+
+    candidate_pattern_nodes = list( set(g.nodes()) - set(self.gateways))
+    if not candidate_pattern_nodes: 
+              #no non-gateway nodes in the static graph, so this avg finding is mute
+      return avg_max_flow_val, avg_upperbound_flow_val
+    
+    number_of_candidate_pattern_nodes = len(candidate_pattern_nodes)
+    number_of_pattern_nodes = \
+      int(round(1.0*number_of_candidate_pattern_nodes * no_of_pattern_nodes/100.0, 0))
+      
+    if number_of_pattern_nodes<1: #check if the ratio was too low
+      number_of_pattern_nodes = 1
+    
+    number_of_iterations = no_of_iterations
+    
+    if number_of_pattern_nodes>= number_of_candidate_pattern_nodes:
+      number_of_iterations =  1
+      number_of_pattern_nodes = number_of_candidate_pattern_nodes
+      
+    max_flow_vals = []
+    upperbound_flow_vals = []
+    
+    for i in xrange(number_of_iterations):
+      pattern_nodes = random.sample(candidate_pattern_nodes, number_of_pattern_nodes)
+      max_flow_val = self.getMaxFlowForSourceNodes(g, pattern_nodes)
+      pattern_node_degrees =  g.degree(pattern_nodes)
+      upper_bound_flow = sum(pattern_node_degrees.values()) 
+      
+      max_flow_vals.append(max_flow_val)
+      upperbound_flow_vals.append(upper_bound_flow)
+      
+    avg_max_flow_val = 1.0*self.link_capacity*sum(max_flow_vals)/len(max_flow_vals)
+    avg_upperbound_flow_val = 1.0*self.link_capacity*sum(upperbound_flow_vals)/len(upperbound_flow_vals)
+    if avg_upperbound_flow_val is None:
+      avg_upperbound_flow_val = 0.0
+    return avg_max_flow_val, avg_upperbound_flow_val
+  
+  
+  
+  
+  
+  def findFlowEquivalentStaticGraph(self):
+    '''
+     increase the fso-per-node and fso-per-gateway by an increment step
+      upto some max, until the avg flow value for the static graph increases
+    Processing:
+      i) increase the fso-per-node and fso-per-gateway
+      ii) add more edges to the static graph between the existing nodes
+      iii) find the avg. max flow for the static graph
+      iv) if it just exceeds that of dynamic max flow stop and save the current
+      fso-per-node fso-per-gateway
+      v) else continue to step i if no. of iterations<=max_allowed or new edges were added
+      in the last step
+    '''
+    #initialize the variables
+    self.static_eq_dynamic = nx.Graph(self.static_graph)
+    self.static_eq_avg_max_flow = self.static_avg_flow
+    self.static_eq_avg_upperbound_flow = self.static_upperbound_flow
+    self.static_fso_per_node = self.fso_per_node
+    self.static_fso_per_gateway = self.fso_per_gateway
+    
+    
+    edge_added_in_prev_iterations = True
+    debug_iter_counter = 0
+    while edge_added_in_prev_iterations and (self.static_eq_avg_max_flow < self.ext_dynamic_avg_flow):
+      edge_added_in_prev_iterations = False
+      debug_iter_counter += 1
+      #task (i)
+      self.static_fso_per_gateway =+ 1
+      self.static_fso_per_node += 1
+      #task (ii)
+      max_allowed_degree = {}
+      current_degree = self.static_eq_dynamic.degree()
+      for n in self.static_eq_dynamic.nodes():
+        max_allowed_degree[n] = self.static_fso_per_node
+        if n in self.gateways:
+          max_allowed_degree[n] = self.static_fso_per_gateway      
+      for u in self.static_eq_dynamic.nodes():
+        for v in self.static_eq_dynamic.nodes():
+          if current_degree[u]>=max_allowed_degree[u]:
+            break
+          if current_degree[v]>=max_allowed_degree[v]:
+            continue
+          #else, explore the possibility to add edge u-v
+          if not self.static_eq_dynamic.has_edge(u, v) and self.adj.has_edge(u, v):
+            self.static_eq_dynamic.add_edge(u,v)
+            self.logger.debug("Added edge (u,v) to static_eq_dynamic graph:"+str(u)+","+str(v))
+            current_degree[u] += 1
+            current_degree[v] += 1
+            edge_added_in_prev_iterations = True
+      
+      #task (iii)
+      if edge_added_in_prev_iterations:
+        self.static_eq_avg_max_flow, self.static_eq_avg_upperbound_flow = \
+          self.getAverageAndUpperboundFlow(self.static_eq_dynamic, 
+                                           self.percent_of_pattern_nodes_in_avg_flow_calculation, 
+                                           self.number_of_pattern_in_avg_flow_calculation)
   def plotStat(self, in_plot_keys, ylabel): 
     '''
     opens the current self.output_statistics_file and plots the required plotType
@@ -416,7 +554,6 @@ class ExtendedDynamicStatCollector(StatCollector):
       ii) make the plots for the required files
       iii) show the plot as output or save it in a file
     '''
-    stat_header_keys =  self.stat_header
     x=[]
     y={}
     plot_keys = list( set(self.stat_header) & set(in_plot_keys) )
@@ -439,33 +576,34 @@ class ExtendedDynamicStatCollector(StatCollector):
       #print "y[k]:", y[k]
       ls = '-'
       if k.find('upper') >-1:
-        print k
         ls = '--'
       ax.plot(x,y[k], label= k, ls= ls, lw=0.9, marker = 's')
     
-    legend = ax.legend(loc='upper left')
+    legend = ax.legend(loc='upper center')
     ax.grid(True)
     plt.xlabel('Sample No')
     plt.ylabel(ylabel)
     plt.xticks(xrange(0,len(x)+2))
     plt.show()
     
-  def runAll(self):
     
-    for i in xrange(1, self.no_of_runs+1):
-      self.current_run_no = i
-      self.fso_per_node = self.backup_fso_per_node 
-      self.fso_per_gateway = self.backup_fso_per_gateway 
-      self.runInputGenerator()
-      self.runStep_1()
-      self.runStep_2()
-      self.runStep_3()
-      self.runStep_4_dynamic()
-      self.runStep_4_static()
-      self.runILPSolver()
-      self.printSummaryAfterSavingStat = True #will now print on screen summary
-      self.runExtendedDynamicStatCollector()
-      self.reset()
+  def runAll(self):
+    if not self.onlyGeneratePlot:
+      for i in xrange(1, self.no_of_runs+1):
+        self.current_run_no = i
+        self.fso_per_node = self.backup_fso_per_node 
+        self.fso_per_gateway = self.backup_fso_per_gateway 
+        self.runInputGenerator()
+        self.runStep_1()
+        self.runStep_2()
+        self.runStep_3()
+        self.runStep_4_dynamic()
+        self.runStep_4_static()
+        self.runILPSolver()
+        self.printSummaryAfterSavingStat = True #will now print on screen summary
+        self.runExtendedDynamicStatCollector()
+        
+        self.reset()
     
     plot_keys = [
                  'static_avg_max_flow',
