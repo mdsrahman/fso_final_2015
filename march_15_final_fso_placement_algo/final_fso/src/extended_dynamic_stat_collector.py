@@ -584,10 +584,8 @@ class ExtendedDynamicStatCollector(StatCollector):
         x.append(counter)
         for k in plot_keys:
           y[k].append(float(row[k]))
-          print "DEBUG: row:",row[k]
           max_flow_val = max(max_flow_val, float(row[k]))
           min_flow_val = min(min_flow_val, float(row[k]))
-          print "DEBUG: max, min:",max_flow_val,min_flow_val
         y['number_of_fso_per_node'].append(int(row['number_of_fso_per_node']))  
         y['Static_eq_fso_per_node'].append(int(row['Static_eq_fso_per_node']))
     #fig, ax = plt.subplots()
@@ -597,7 +595,7 @@ class ExtendedDynamicStatCollector(StatCollector):
       ls = '-'
       if k.find('upper') >-1:
         ls = '--'
-      plt.plot(x,y[k], label= k, ls= ls, lw=0.9, marker = 's')
+      plt.plot(x,y[k], label= k, ls= ls, lw=1.5, marker = 's')
     
     legend = plt.legend(loc='upper left')
     plt.grid(True)
@@ -631,8 +629,8 @@ class ExtendedDynamicStatCollector(StatCollector):
         y['number_of_fso_per_node'].append(int(row['number_of_fso_per_node']))  
         y['Static_eq_fso_per_node'].append(int(row['Static_eq_fso_per_node']))
 
-    plt.plot(x, y['number_of_fso_per_node'], label= 'Dynamic FSO-per-node', ls='-', lw=1.1, marker = 's')
-    plt.plot(x, y['Static_eq_fso_per_node'], label = 'Static FSO-per-node', ls='-', lw=1.1, marker = 's')
+    plt.plot(x, y['number_of_fso_per_node'], label= 'Dynamic FSO-per-node', ls='-', lw=1.5, marker = 's')
+    plt.plot(x, y['Static_eq_fso_per_node'], label = 'Static FSO-per-node', ls='-', lw=1.5, marker = 's')
     
     legend = plt.legend(loc='upper left')
     plt.grid(True)
