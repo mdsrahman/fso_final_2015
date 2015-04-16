@@ -556,7 +556,7 @@ class ExtendedDynamicStatCollector(StatCollector):
           self.getAverageAndUpperboundFlow(self.static_eq_dynamic, 
                                            self.percent_of_pattern_nodes_in_avg_flow_calculation, 
                                            self.number_of_pattern_in_avg_flow_calculation)
-  def plotStat(self, in_plot_keys, ylabel): 
+  def plotFlowStat(self, in_plot_keys, ylabel): 
     '''
     opens the current self.output_statistics_file and plots the required plotType
     processing:
@@ -571,6 +571,11 @@ class ExtendedDynamicStatCollector(StatCollector):
     for k in plot_keys:
         y[k]= []
         
+    max_flow_val = 0
+    min_flow_val = float('inf')
+    
+    y['number_of_fso_per_node']=[]   
+    y['Static_eq_fso_per_node']=[]
     counter = 0
     with open(self.output_statistics_file) as csvfile:
       reader = csv.DictReader(csvfile, fieldnames=self.stat_header)
@@ -578,25 +583,65 @@ class ExtendedDynamicStatCollector(StatCollector):
         counter += 1
         x.append(counter)
         for k in plot_keys:
-          y[k].append(row[k])
-        
-    fig, ax = plt.subplots()
+          y[k].append(float(row[k]))
+          print "DEBUG: row:",row[k]
+          max_flow_val = max(max_flow_val, float(row[k]))
+          min_flow_val = min(min_flow_val, float(row[k]))
+          print "DEBUG: max, min:",max_flow_val,min_flow_val
+        y['number_of_fso_per_node'].append(int(row['number_of_fso_per_node']))  
+        y['Static_eq_fso_per_node'].append(int(row['Static_eq_fso_per_node']))
+    #fig, ax = plt.subplots()
     for k in plot_keys:
       #print "x:", x
       #print "y[k]:", y[k]
       ls = '-'
       if k.find('upper') >-1:
         ls = '--'
-      ax.plot(x,y[k], label= k, ls= ls, lw=0.9, marker = 's')
+      plt.plot(x,y[k], label= k, ls= ls, lw=0.9, marker = 's')
     
-    legend = ax.legend(loc='upper center')
-    ax.grid(True)
+    legend = plt.legend(loc='upper left')
+    plt.grid(True)
     plt.xlabel('Sample No')
     plt.ylabel(ylabel)
     plt.xticks(xrange(0,len(x)+2))
+    plt.yticks(xrange(int(round(min_flow_val,-3))-2000,int(round(max_flow_val,-3))+ 2000,1000))
     plt.show()
     
+  
+  def plotFSOStat(self): 
+    '''
+    opens the current self.output_statistics_file and plots the required plotType
+    processing:
+      i) opens the file and stores the columns
+      ii) make the plots for the required files
+      iii) show the plot as output or save it in a file
+    '''
+    x=[]
+    y={}
     
+    y['number_of_fso_per_node']=[]   
+    y['Static_eq_fso_per_node']=[]
+    
+    counter = 0
+    with open(self.output_statistics_file) as csvfile:
+      reader = csv.DictReader(csvfile, fieldnames=self.stat_header)
+      for row in reader:
+        counter += 1
+        x.append(counter)
+        y['number_of_fso_per_node'].append(int(row['number_of_fso_per_node']))  
+        y['Static_eq_fso_per_node'].append(int(row['Static_eq_fso_per_node']))
+
+    plt.plot(x, y['number_of_fso_per_node'], label= 'Dynamic FSO-per-node', ls='-', lw=1.1, marker = 's')
+    plt.plot(x, y['Static_eq_fso_per_node'], label = 'Static FSO-per-node', ls='-', lw=1.1, marker = 's')
+    
+    legend = plt.legend(loc='upper left')
+    plt.grid(True)
+    plt.xlabel('Sample No')
+    plt.ylabel('No. of FSO per node')
+    plt.xticks(xrange(0,len(x)+2))
+    plt.yticks(xrange(0, max(y['Static_eq_fso_per_node'])+2))
+    plt.show()
+   
   def runAll(self):
     if not self.onlyGeneratePlot:
       for i in xrange(1, self.no_of_runs+1):
@@ -621,7 +666,8 @@ class ExtendedDynamicStatCollector(StatCollector):
                  'statc_upperbound_max_flow',
                  'dynamic_upperbound_max_flow'
                  ]
-    self.plotStat( plot_keys, 'Flow Value (Mbps)' )
+    self.plotFlowStat( plot_keys, 'Flow Value (Mbps)' )
+    self.plotFSOStat()
     
     
     
