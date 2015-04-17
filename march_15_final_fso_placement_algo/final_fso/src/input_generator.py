@@ -36,7 +36,7 @@ class InputGenerator:
                       dynamic_graph: san_francisco_north.dynamic.txt
                       dynamic_graph_for_java_input: san_francisco_north.dyn_java.txt 
                       
-  no_of_runs(int): no of runs for this experiments
+ 
   gateway_to_node_ratio(float): >0 and <=1, ratio of nodes to be randomly 
                               selected as gateways from the total nodes
   link_capacity(float): >0, capacity of the fso-links in Mbps
@@ -156,7 +156,7 @@ class InputGenerator:
     self.graphType =  None
     self.seed = None
     self.experiment_name = None
-    self.no_of_runs = None
+
     self.gateway_to_node_ratio = None
     self.link_capacity = None
     self.fso_per_node = None
@@ -238,7 +238,7 @@ class InputGenerator:
     self.graphType = self.config.get('global','graphType')
     self.seed = self.config.getint('global','seed')
     self.experiment_name = self.config.get('global','experiment_name')
-    self.no_of_runs = self.config.getint('global','no_of_runs')
+
     self.gateway_to_node_ratio = self.config.getfloat('global','gateway_to_node_ratio')
     self.link_capacity = self.config.getfloat('global','link_capacity')
     self.fso_per_node = self.config.getint('global','fso_per_node')

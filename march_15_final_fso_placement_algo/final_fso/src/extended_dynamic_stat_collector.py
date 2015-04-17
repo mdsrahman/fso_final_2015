@@ -43,6 +43,8 @@ class ExtendedDynamicStatCollector(StatCollector):
     save the static graph according to TM's spec 
     must set self.static_graph_spec_file_path correctly before calling
     '''
+    
+  
     with open(self.static_graph_spec_file_path, 'w') as f:
       f.write("trafficSources:\n")
       for n in self.static_graph.nodes():
@@ -51,33 +53,34 @@ class ExtendedDynamicStatCollector(StatCollector):
       
       
       #---FSONodes:
-      current_fso = {}
-      f.write("FSONodes:\n")
+      fso_counter ={}
       gateway_degree_in_static_graph = self.static_graph.degree()
       static_nodes = self.static_graph.nodes() 
+      
+      f.write("FSONodes:\n")
       for n in static_nodes:
         for fso in range(1, gateway_degree_in_static_graph[n]+1):
           f.write(str(n)+"_fso"+str(fso)+"\n")
-          current_fso[n]=0
+          fso_counter[n]=0
       f.write('\n')   
       
       #---FSOLinks:---
       f.write("FSOLinks:\n")   
       edges = self.static_graph.edges()
-      #for u,v in self.static_graph.edges():
-      #TODO: implement the code here
-      
-      '''
       for u,v in edges:
-        for fso1 in range(1, gateway_degree_in_static_graph[u]+1):
-          for fso2 in range(1, gateway_degree_in_static_graph[v]+1):  
-            f_text = str(u)+"_fso"+str(fso1)+"To"\
-                    +str(v)+"_fso"+str(fso2)+" "+str(self.link_capacity)+"Mbps\n" 
-            f.write(f_text)
-            f_text = str(v)+"_fso"+str(fso2)+"To"\
-                    +str(u)+"_fso"+str(fso1)+" "+str(self.link_capacity)+"Mbps\n" 
-            f.write(f_text)'''
-      f.write('\n')   
+        fso_counter[u] += 1
+        fso_counter[v] += 1
+        fso_u =  fso_counter[u]
+        fso_v = fso_counter[v]
+        
+        f_text = str(u)+"_fso"+str(fso_u)+"To"\
+                    +str(v)+"_fso"+str(fso_v)+" "+str(self.link_capacity)+"Mbps\n" 
+        f.write(f_text)
+        f_text = str(v)+"_fso"+str(fso_v)+"To"\
+                    +str(u)+"_fso"+str(fso_u)+" "+str(self.link_capacity)+"Mbps\n" 
+        f.write(f_text)
+      f.write('\n') 
+  
       #------gateways--:
       static_gateways =  list(set(self.gateways) & set(static_nodes))
       f.write('gateways:\n')
@@ -441,8 +444,8 @@ class ExtendedDynamicStatCollector(StatCollector):
     self.static_graph_spec_file_path =\
      self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_stat.txt" 
      
-    #self.createDynamicGraphSpecOutputFile()
-    #self.createStaticGraphSpecOutputFile()
+    self.createDynamicGraphSpecOutputFile()
+    self.createStaticGraphSpecOutputFile()
     self.computeExtDynamicAvgFlow()
     self.findFlowEquivalentStaticGraph()
     self.saveStatInFile()
@@ -597,12 +600,12 @@ class ExtendedDynamicStatCollector(StatCollector):
         ls = '--'
       plt.plot(x,y[k], label= k, ls= ls, lw=1.5, marker = 's')
     
-    legend = plt.legend(loc='upper left')
+    legend = plt.legend(loc='upper right',bbox_to_anchor=[0.5, 1.2])
     plt.grid(True)
     plt.xlabel('Sample No')
     plt.ylabel(ylabel)
     plt.xticks(xrange(0,len(x)+2))
-    plt.yticks(xrange(int(round(min_flow_val,-3))-2000,int(round(max_flow_val,-3))+ 2000,1000))
+    plt.yticks(xrange(int(round(min_flow_val,-3))-2000,int(round(max_flow_val,-3))+ 2000,10000))
     plt.show()
     
   
@@ -642,7 +645,7 @@ class ExtendedDynamicStatCollector(StatCollector):
    
   def runAll(self):
     if not self.onlyGeneratePlot:
-      for i in xrange(1, self.no_of_runs+1):
+      for i in xrange(1, self.no_of_samples+1):
         self.current_run_no = i
         self.fso_per_node = self.backup_fso_per_node 
         self.fso_per_gateway = self.backup_fso_per_gateway 
