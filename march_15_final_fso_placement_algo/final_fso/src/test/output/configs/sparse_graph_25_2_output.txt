@@ -1,0 +1,504 @@
+Finding files... done.
+Importing test modules ... done.
+
+Test for ExtDynamicStatCollector class..
+New Nodes added to dynamic graph:[641, 570, 381, 169]
+New Nodes added to dynamic graph:[753]
+New Nodes added to dynamic graph:[642]
+New Nodes added to dynamic graph:[867]
+New Nodes added to dynamic graph:[490, 643, 492]
+New Nodes added to dynamic graph:[446]
+New Nodes added to dynamic graph:[274, 451, 165, 167]
+New Nodes added to dynamic graph:[256, 752, 168, 255]
+New Nodes added to dynamic graph:[714, 764, 303]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[15]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[644, 643, 492, 490, 370]
+Adding path to static graph:[644, 643, 492, 446, 447]
+Adding path to static graph:[170, 28, 26, 372, 370]
+Adding path to static graph:[170, 169, 381, 570, 572, 799, 800]
+Adding path to static graph:[172, 169, 381, 417, 658, 659, 644]
+Adding path to static graph:[749, 613, 681, 644]
+Adding path to static graph:[749, 753, 754]
+Adding path to static graph:[749, 865, 866]
+Adding path to static graph:[749, 667, 666, 514, 512, 370]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 1
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4914
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 242
+Number of Nodes in Dynamic Graph: 241
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 171975.0
+Static total gateway capacity: 38000.0
+Static avg. max. flow: 27865.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.162029364733
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.733289473684
+Dynamic:..................
+Dynamic upperbound max. flow: 194575.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 33000.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.169600411153
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.33
+Static equivalent fso-per-node: 5
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 34875.0
+Static equivalent avg upperboud flow: 204800.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[425]
+New Nodes added to dynamic graph:[514, 981, 519]
+New Nodes added to dynamic graph:[372, 6]
+New Nodes added to dynamic graph:[424]
+New Nodes added to dynamic graph:[863, 749, 861]
+New Nodes added to dynamic graph:[420, 423]
+New Nodes added to dynamic graph:[214]
+New Nodes added to dynamic graph:[252]
+New Nodes added to dynamic graph:[211, 357, 518]
+New Nodes added to dynamic graph:[390, 279]
+New Nodes added to dynamic graph:[396, 445]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[393, 68, 83, 618, 620, 147, 684, 256, 281, 287, 365, 574, 374, 746, 957, 469]
+resetting fso_per_node from 2 to 3
+Adding path to static graph:[182, 252, 251, 404, 405, 470]
+Adding path to static graph:[982, 985, 836, 837, 840, 776]
+Adding path to static graph:[982, 981, 519, 518, 481, 445, 443]
+Adding path to static graph:[776, 774, 680, 595, 443]
+Adding path to static graph:[389, 386, 440, 443]
+Adding path to static graph:[389, 524, 471, 470]
+Adding path to static graph:[443, 424, 420, 476]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 2
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4905
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 229
+Number of Nodes in Dynamic Graph: 228
+Number of FSO-per-node: 3
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 135060.0
+Static total gateway capacity: 40000.0
+Static avg. max. flow: 31800.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.235450910706
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.795
+Dynamic:..................
+Dynamic upperbound max. flow: 147355.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 36700.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.24905839639
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.367
+Static equivalent fso-per-node: 4
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 39570.0
+Static equivalent avg upperboud flow: 163460.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[984, 962]
+New Nodes added to dynamic graph:[763, 942]
+New Nodes added to dynamic graph:[959, 919]
+New Nodes added to dynamic graph:[961, 699, 596, 333, 334]
+New Nodes added to dynamic graph:[938, 847]
+New Nodes added to dynamic graph:[974]
+New Nodes added to dynamic graph:[981]
+New Nodes added to dynamic graph:[641, 644]
+New Nodes added to dynamic graph:[712, 657]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[349]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[960, 942, 763, 706]
+Adding path to static graph:[960, 959, 919, 790]
+Adding path to static graph:[960, 961, 847, 938, 937]
+Adding path to static graph:[960, 974, 970]
+Adding path to static graph:[960, 961, 981, 983]
+Adding path to static graph:[652, 644, 641, 706]
+Adding path to static graph:[652, 657, 712, 790]
+Adding path to static graph:[652, 649, 747, 936, 937]
+Adding path to static graph:[652, 650, 795, 853, 952]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 3
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4909
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 200
+Number of Nodes in Dynamic Graph: 200
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 132900.0
+Static total gateway capacity: 27000.0
+Static avg. max. flow: 18140.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.136493604214
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.671851851852
+Dynamic:..................
+Dynamic upperbound max. flow: 143080.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 22655.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.158337992731
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.22655
+Static equivalent fso-per-node: 5
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 23020.0
+Static equivalent avg upperboud flow: 145670.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[273]
+New Nodes added to dynamic graph:[50]
+New Nodes added to dynamic graph:[528, 193, 194, 655, 337]
+New Nodes added to dynamic graph:[136, 298, 133, 374, 669]
+New Nodes added to dynamic graph:[81, 682, 798]
+New Nodes added to dynamic graph:[666]
+New Nodes added to dynamic graph:[137, 339]
+New Nodes added to dynamic graph:[459, 147, 55]
+New Nodes added to dynamic graph:[505, 227]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[232]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[52, 50, 122]
+Adding path to static graph:[52, 133, 136, 298, 374, 669, 670]
+Adding path to static graph:[52, 133, 136, 298, 374, 669, 666, 726]
+Adding path to static graph:[75, 77, 120, 122]
+Adding path to static graph:[75, 327, 418, 419, 410, 599, 657]
+Adding path to static graph:[75, 327, 418, 416, 492, 642, 670]
+Adding path to static graph:[75, 236, 147, 342]
+Adding path to static graph:[122, 123, 126, 411, 410, 599, 657]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 4
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4909
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 240
+Number of Nodes in Dynamic Graph: 241
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 163265.0
+Static total gateway capacity: 39000.0
+Static avg. max. flow: 31925.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.195540991639
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.81858974359
+Dynamic:..................
+Dynamic upperbound max. flow: 181360.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 37000.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.204014115571
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.37
+Static equivalent fso-per-node: 5
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 37000.0
+Static equivalent avg upperboud flow: 188065.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[569]
+New Nodes added to dynamic graph:[348, 666, 892]
+New Nodes added to dynamic graph:[417, 412, 414]
+New Nodes added to dynamic graph:[588, 773, 774, 589]
+New Nodes added to dynamic graph:[876, 990, 926]
+New Nodes added to dynamic graph:[946]
+New Nodes added to dynamic graph:[616, 684, 686]
+New Nodes added to dynamic graph:[753, 756, 615]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[899]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[889, 892, 666, 348, 349, 351]
+Adding path to static graph:[889, 774, 773, 589, 588, 405]
+Adding path to static graph:[889, 929, 926, 876, 990, 988]
+Adding path to static graph:[619, 616, 684, 686, 889]
+Adding path to static graph:[619, 615, 756, 753, 716]
+Adding path to static graph:[619, 615, 736, 811, 813]
+Adding path to static graph:[619, 521, 520, 350, 351]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 5
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4904
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 222
+Number of Nodes in Dynamic Graph: 222
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 152260.0
+Static total gateway capacity: 37000.0
+Static avg. max. flow: 32670.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.214567187705
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.882972972973
+Dynamic:..................
+Dynamic upperbound max. flow: 169080.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 39570.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.234031227821
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.3957
+Static equivalent fso-per-node: 7
+Static equivalent fso-per-gateway: 13
+Static equivalent avg max. flow: 39600.0
+Static equivalent avg upperboud flow: 182855.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[544]
+New Nodes added to dynamic graph:[473, 282, 278]
+New Nodes added to dynamic graph:[976, 514]
+New Nodes added to dynamic graph:[815]
+New Nodes added to dynamic graph:[317, 414]
+New Nodes added to dynamic graph:[390]
+New Nodes added to dynamic graph:[539]
+New Nodes added to dynamic graph:[778, 780, 925, 542]
+New Nodes added to dynamic graph:[190]
+New Nodes added to dynamic graph:[789, 974]
+New Nodes added to dynamic graph:[744, 812, 743]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[449]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[543, 544, 473, 282, 278, 187]
+Adding path to static graph:[543, 539, 537, 401]
+Adding path to static graph:[543, 542, 778, 780, 925, 924]
+Adding path to static graph:[79, 0, 3, 307, 330, 393]
+Adding path to static graph:[79, 78, 76, 526, 524, 401]
+Adding path to static graph:[187, 336, 357, 426, 428, 543]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 6
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4898
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 211
+Number of Nodes in Dynamic Graph: 211
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 142020.0
+Static total gateway capacity: 28000.0
+Static avg. max. flow: 24045.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.169307139839
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.85875
+Dynamic:..................
+Dynamic upperbound max. flow: 153945.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 28785.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.186982363831
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.28785
+Static equivalent fso-per-node: 8
+Static equivalent fso-per-gateway: 14
+Static equivalent avg max. flow: 27785.0
+Static equivalent avg upperboud flow: 161910.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[38]
+New Nodes added to dynamic graph:[35]
+New Nodes added to dynamic graph:[337, 634, 636, 381]
+New Nodes added to dynamic graph:[298, 127]
+New Nodes added to dynamic graph:[37, 359]
+New Nodes added to dynamic graph:[884, 883, 532, 613]
+New Nodes added to dynamic graph:[453, 335]
+New Nodes added to dynamic graph:[104]
+New Nodes added to dynamic graph:[100, 549, 654]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[2, 5, 9, 539, 61, 579, 95, 97, 611, 102, 145, 666, 188, 776, 817, 819, 363, 398, 448, 507]
+resetting fso_per_node from 2 to 3
+Adding path to static graph:[40, 38, 103]
+Adding path to static graph:[103, 162, 159, 302, 301]
+Adding path to static graph:[103, 100, 244, 241, 360]
+Adding path to static graph:[103, 104, 114, 474, 738, 742, 743, 891, 893]
+Adding path to static graph:[103, 125, 127, 298, 532, 613, 884, 959]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 7
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4916
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 201
+Number of Nodes in Dynamic Graph: 202
+Number of FSO-per-node: 3
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 117725.0
+Static total gateway capacity: 30000.0
+Static avg. max. flow: 21820.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.185347207475
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.727333333333
+Dynamic:..................
+Dynamic upperbound max. flow: 131580.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 31230.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.237346101231
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.3123
+Static equivalent fso-per-node: 8
+Static equivalent fso-per-gateway: 15
+Static equivalent avg max. flow: 29390.0
+Static equivalent avg upperboud flow: 155515.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[9, 44]
+New Nodes added to dynamic graph:[21]
+New Nodes added to dynamic graph:[53]
+New Nodes added to dynamic graph:[288, 7, 231]
+New Nodes added to dynamic graph:[232, 466, 469]
+New Nodes added to dynamic graph:[306, 11, 684, 365, 367]
+New Nodes added to dynamic graph:[304]
+New Nodes added to dynamic graph:[76, 635, 972, 77, 633]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[397]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[6, 9, 44, 45]
+Adding path to static graph:[6, 21, 47]
+Adding path to static graph:[6, 53, 50]
+Adding path to static graph:[6, 7, 231, 232, 466, 469, 652]
+Adding path to static graph:[6, 11, 306, 367, 365, 684, 683]
+Adding path to static graph:[6, 11, 306, 304, 303]
+Adding path to static graph:[6, 7, 76, 77, 633, 635, 972, 969]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 8
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4902
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 216
+Number of Nodes in Dynamic Graph: 217
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 147010.0
+Static total gateway capacity: 31000.0
+Static avg. max. flow: 22435.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.152608666077
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.723709677419
+Dynamic:..................
+Dynamic upperbound max. flow: 163150.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 27865.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.170793748085
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.27865
+Static equivalent fso-per-node: 5
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 28330.0
+Static equivalent avg upperboud flow: 167200.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[456, 172, 646]
+New Nodes added to dynamic graph:[97, 159]
+New Nodes added to dynamic graph:[282, 99, 187]
+New Nodes added to dynamic graph:[101]
+New Nodes added to dynamic graph:[481, 102, 687]
+New Nodes added to dynamic graph:[672, 832, 395, 232, 233]
+New Nodes added to dynamic graph:[380]
+New Nodes added to dynamic graph:[644, 628]
+New Nodes added to dynamic graph:[313, 311]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[534, 536, 517, 70, 275, 89, 627, 105, 641, 142, 711, 722, 726, 732, 312, 416, 472]
+resetting fso_per_node from 2 to 3
+Adding path to static graph:[98, 97, 159, 162]
+Adding path to static graph:[98, 101, 208]
+Adding path to static graph:[98, 99, 233, 232, 395, 672, 832, 871]
+Adding path to static graph:[645, 646, 670]
+Adding path to static graph:[645, 644, 628, 693]
+Adding path to static graph:[645, 650, 790, 791]
+Adding path to static graph:[645, 643, 659, 658, 870, 871]
+Adding path to static graph:[670, 666, 690, 693]
+Adding path to static graph:[162, 161, 415, 414, 610, 692, 693]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 9
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4912
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 234
+Number of Nodes in Dynamic Graph: 231
+Number of FSO-per-node: 3
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 135540.0
+Static total gateway capacity: 44000.0
+Static avg. max. flow: 34145.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.251918252914
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.776022727273
+Dynamic:..................
+Dynamic upperbound max. flow: 148280.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 44470.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.29990558403
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.4447
+Static equivalent fso-per-node: 4
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 44495.0
+Static equivalent avg upperboud flow: 168835.0
+==============End of stat-summary===========
+New Nodes added to dynamic graph:[988, 717, 894]
+New Nodes added to dynamic graph:[433, 223, 431]
+New Nodes added to dynamic graph:[589, 590, 239]
+New Nodes added to dynamic graph:[887, 587, 989, 262, 487]
+New Nodes added to dynamic graph:[777, 806]
+New Nodes added to dynamic graph:[953]
+New Nodes added to dynamic graph:[584, 585, 364]
+New Nodes added to dynamic graph:[626, 469]
+Max. Degree of non-gateway nodes exceed fso_per_node specified in config
+Non gateway nodes with max. degree:[5]
+resetting fso_per_node from 2 to 4
+Adding path to static graph:[991, 988, 894, 717, 714]
+Adding path to static graph:[991, 989, 887, 587, 485, 487, 262, 261]
+Adding path to static graph:[991, 988, 806, 777, 779]
+Adding path to static graph:[991, 989, 953, 845]
+Adding path to static graph:[714, 728, 689, 364, 367, 235]
+Adding path to static graph:[714, 715, 599, 494, 497, 466]
+Adding path to static graph:[221, 219, 262, 261]
+Adding path to static graph:[221, 223, 231, 479, 476, 466]
+Skipping Relaxed ILP Solver, module:pycpx not found!!.....
+in runExtendedDynamicStatCollector method...
+--------------Stat-Summary--------------
+Experiment Name: sparse_graph_25_2  run#: 10
+Number of Nodes in Input Graph: 1000
+Number of Edges in Input Graph: 4914
+Number of Gateways in Input Graph: 10
+Number of Nodes in Static Graph: 233
+Number of Nodes in Dynamic Graph: 232
+Number of FSO-per-node: 4
+Number of FSO-per-gateway: 10
+Percent of total nodes used in patterns for avg. max. flow calculation: 25
+Number of patterns used in avg. max. flow calculation: 200
+Static:..................
+Static upperbound max. flow: 163460.0
+Static total gateway capacity: 39000.0
+Static avg. max. flow: 33180.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Static graph: 0.202985439863
+Ratio of avg. max. flow to total gateway capacity for Static graph: 0.850769230769
+Dynamic:..................
+Dynamic upperbound max. flow: 179630.0
+Dynamic total gateway capacity: 100000.0
+Dynamic avg. max. flow: 35000.0 !!
+Ratio of avg. max. flow to upperbound max. flow for Dynamic graph: 0.194844959083
+Ratio of avg. max. flow to total gateway capacity for Dynamic graph: 0.35
+Static equivalent fso-per-node: 5
+Static equivalent fso-per-gateway: 11
+Static equivalent avg max. flow: 36900.0
+Static equivalent avg upperboud flow: 186920.0
+==============End of stat-summary===========
+----------------------------------------------------------------------
+Ran 1 test in 1859.976s
+
+OK
