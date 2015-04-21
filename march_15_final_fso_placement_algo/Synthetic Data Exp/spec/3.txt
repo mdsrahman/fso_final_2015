@@ -1,0 +1,1039 @@
+trafficSources:
+258
+3
+260
+13
+14
+275
+34
+35
+38
+40
+41
+48
+51
+53
+185
+186
+454
+71
+329
+462
+337
+223
+96
+225
+234
+499
+
+FSONodes:
+258_fso1
+258_fso2
+258_fso3
+258_fso4
+3_fso1
+3_fso2
+3_fso3
+3_fso4
+260_fso1
+260_fso2
+260_fso3
+260_fso4
+13_fso1
+13_fso2
+13_fso3
+13_fso4
+14_fso1
+14_fso2
+14_fso3
+14_fso4
+275_fso1
+275_fso2
+275_fso3
+275_fso4
+34_fso1
+34_fso2
+34_fso3
+34_fso4
+35_fso1
+35_fso2
+35_fso3
+35_fso4
+38_fso1
+38_fso2
+38_fso3
+38_fso4
+40_fso1
+40_fso2
+40_fso3
+40_fso4
+41_fso1
+41_fso2
+41_fso3
+41_fso4
+48_fso1
+48_fso2
+48_fso3
+48_fso4
+51_fso1
+51_fso2
+51_fso3
+51_fso4
+53_fso1
+53_fso2
+53_fso3
+53_fso4
+185_fso1
+185_fso2
+185_fso3
+185_fso4
+186_fso1
+186_fso2
+186_fso3
+186_fso4
+454_fso1
+454_fso2
+454_fso3
+454_fso4
+71_fso1
+71_fso2
+71_fso3
+71_fso4
+329_fso1
+329_fso2
+329_fso3
+329_fso4
+462_fso1
+462_fso2
+462_fso3
+462_fso4
+337_fso1
+337_fso2
+337_fso3
+337_fso4
+223_fso1
+223_fso2
+223_fso3
+223_fso4
+96_fso1
+96_fso2
+96_fso3
+96_fso4
+225_fso1
+225_fso2
+225_fso3
+225_fso4
+234_fso1
+234_fso2
+234_fso3
+234_fso4
+499_fso1
+499_fso2
+499_fso3
+499_fso4
+
+FSOLinks:
+258_fso1To275_fso1 10Gbps
+275_fso1To258_fso1 10Gbps
+258_fso1To275_fso2 10Gbps
+275_fso2To258_fso1 10Gbps
+258_fso1To275_fso3 10Gbps
+275_fso3To258_fso1 10Gbps
+258_fso1To275_fso4 10Gbps
+275_fso4To258_fso1 10Gbps
+258_fso2To275_fso1 10Gbps
+275_fso1To258_fso2 10Gbps
+258_fso2To275_fso2 10Gbps
+275_fso2To258_fso2 10Gbps
+258_fso2To275_fso3 10Gbps
+275_fso3To258_fso2 10Gbps
+258_fso2To275_fso4 10Gbps
+275_fso4To258_fso2 10Gbps
+258_fso3To275_fso1 10Gbps
+275_fso1To258_fso3 10Gbps
+258_fso3To275_fso2 10Gbps
+275_fso2To258_fso3 10Gbps
+258_fso3To275_fso3 10Gbps
+275_fso3To258_fso3 10Gbps
+258_fso3To275_fso4 10Gbps
+275_fso4To258_fso3 10Gbps
+258_fso4To275_fso1 10Gbps
+275_fso1To258_fso4 10Gbps
+258_fso4To275_fso2 10Gbps
+275_fso2To258_fso4 10Gbps
+258_fso4To275_fso3 10Gbps
+275_fso3To258_fso4 10Gbps
+258_fso4To275_fso4 10Gbps
+275_fso4To258_fso4 10Gbps
+258_fso1To260_fso1 10Gbps
+260_fso1To258_fso1 10Gbps
+258_fso1To260_fso2 10Gbps
+260_fso2To258_fso1 10Gbps
+258_fso1To260_fso3 10Gbps
+260_fso3To258_fso1 10Gbps
+258_fso1To260_fso4 10Gbps
+260_fso4To258_fso1 10Gbps
+258_fso2To260_fso1 10Gbps
+260_fso1To258_fso2 10Gbps
+258_fso2To260_fso2 10Gbps
+260_fso2To258_fso2 10Gbps
+258_fso2To260_fso3 10Gbps
+260_fso3To258_fso2 10Gbps
+258_fso2To260_fso4 10Gbps
+260_fso4To258_fso2 10Gbps
+258_fso3To260_fso1 10Gbps
+260_fso1To258_fso3 10Gbps
+258_fso3To260_fso2 10Gbps
+260_fso2To258_fso3 10Gbps
+258_fso3To260_fso3 10Gbps
+260_fso3To258_fso3 10Gbps
+258_fso3To260_fso4 10Gbps
+260_fso4To258_fso3 10Gbps
+258_fso4To260_fso1 10Gbps
+260_fso1To258_fso4 10Gbps
+258_fso4To260_fso2 10Gbps
+260_fso2To258_fso4 10Gbps
+258_fso4To260_fso3 10Gbps
+260_fso3To258_fso4 10Gbps
+258_fso4To260_fso4 10Gbps
+260_fso4To258_fso4 10Gbps
+258_fso1To223_fso1 10Gbps
+223_fso1To258_fso1 10Gbps
+258_fso1To223_fso2 10Gbps
+223_fso2To258_fso1 10Gbps
+258_fso1To223_fso3 10Gbps
+223_fso3To258_fso1 10Gbps
+258_fso1To223_fso4 10Gbps
+223_fso4To258_fso1 10Gbps
+258_fso2To223_fso1 10Gbps
+223_fso1To258_fso2 10Gbps
+258_fso2To223_fso2 10Gbps
+223_fso2To258_fso2 10Gbps
+258_fso2To223_fso3 10Gbps
+223_fso3To258_fso2 10Gbps
+258_fso2To223_fso4 10Gbps
+223_fso4To258_fso2 10Gbps
+258_fso3To223_fso1 10Gbps
+223_fso1To258_fso3 10Gbps
+258_fso3To223_fso2 10Gbps
+223_fso2To258_fso3 10Gbps
+258_fso3To223_fso3 10Gbps
+223_fso3To258_fso3 10Gbps
+258_fso3To223_fso4 10Gbps
+223_fso4To258_fso3 10Gbps
+258_fso4To223_fso1 10Gbps
+223_fso1To258_fso4 10Gbps
+258_fso4To223_fso2 10Gbps
+223_fso2To258_fso4 10Gbps
+258_fso4To223_fso3 10Gbps
+223_fso3To258_fso4 10Gbps
+258_fso4To223_fso4 10Gbps
+223_fso4To258_fso4 10Gbps
+3_fso1To14_fso1 10Gbps
+14_fso1To3_fso1 10Gbps
+3_fso1To14_fso2 10Gbps
+14_fso2To3_fso1 10Gbps
+3_fso1To14_fso3 10Gbps
+14_fso3To3_fso1 10Gbps
+3_fso1To14_fso4 10Gbps
+14_fso4To3_fso1 10Gbps
+3_fso2To14_fso1 10Gbps
+14_fso1To3_fso2 10Gbps
+3_fso2To14_fso2 10Gbps
+14_fso2To3_fso2 10Gbps
+3_fso2To14_fso3 10Gbps
+14_fso3To3_fso2 10Gbps
+3_fso2To14_fso4 10Gbps
+14_fso4To3_fso2 10Gbps
+3_fso3To14_fso1 10Gbps
+14_fso1To3_fso3 10Gbps
+3_fso3To14_fso2 10Gbps
+14_fso2To3_fso3 10Gbps
+3_fso3To14_fso3 10Gbps
+14_fso3To3_fso3 10Gbps
+3_fso3To14_fso4 10Gbps
+14_fso4To3_fso3 10Gbps
+3_fso4To14_fso1 10Gbps
+14_fso1To3_fso4 10Gbps
+3_fso4To14_fso2 10Gbps
+14_fso2To3_fso4 10Gbps
+3_fso4To14_fso3 10Gbps
+14_fso3To3_fso4 10Gbps
+3_fso4To14_fso4 10Gbps
+14_fso4To3_fso4 10Gbps
+260_fso1To234_fso1 10Gbps
+234_fso1To260_fso1 10Gbps
+260_fso1To234_fso2 10Gbps
+234_fso2To260_fso1 10Gbps
+260_fso1To234_fso3 10Gbps
+234_fso3To260_fso1 10Gbps
+260_fso1To234_fso4 10Gbps
+234_fso4To260_fso1 10Gbps
+260_fso2To234_fso1 10Gbps
+234_fso1To260_fso2 10Gbps
+260_fso2To234_fso2 10Gbps
+234_fso2To260_fso2 10Gbps
+260_fso2To234_fso3 10Gbps
+234_fso3To260_fso2 10Gbps
+260_fso2To234_fso4 10Gbps
+234_fso4To260_fso2 10Gbps
+260_fso3To234_fso1 10Gbps
+234_fso1To260_fso3 10Gbps
+260_fso3To234_fso2 10Gbps
+234_fso2To260_fso3 10Gbps
+260_fso3To234_fso3 10Gbps
+234_fso3To260_fso3 10Gbps
+260_fso3To234_fso4 10Gbps
+234_fso4To260_fso3 10Gbps
+260_fso4To234_fso1 10Gbps
+234_fso1To260_fso4 10Gbps
+260_fso4To234_fso2 10Gbps
+234_fso2To260_fso4 10Gbps
+260_fso4To234_fso3 10Gbps
+234_fso3To260_fso4 10Gbps
+260_fso4To234_fso4 10Gbps
+234_fso4To260_fso4 10Gbps
+13_fso1To14_fso1 10Gbps
+14_fso1To13_fso1 10Gbps
+13_fso1To14_fso2 10Gbps
+14_fso2To13_fso1 10Gbps
+13_fso1To14_fso3 10Gbps
+14_fso3To13_fso1 10Gbps
+13_fso1To14_fso4 10Gbps
+14_fso4To13_fso1 10Gbps
+13_fso2To14_fso1 10Gbps
+14_fso1To13_fso2 10Gbps
+13_fso2To14_fso2 10Gbps
+14_fso2To13_fso2 10Gbps
+13_fso2To14_fso3 10Gbps
+14_fso3To13_fso2 10Gbps
+13_fso2To14_fso4 10Gbps
+14_fso4To13_fso2 10Gbps
+13_fso3To14_fso1 10Gbps
+14_fso1To13_fso3 10Gbps
+13_fso3To14_fso2 10Gbps
+14_fso2To13_fso3 10Gbps
+13_fso3To14_fso3 10Gbps
+14_fso3To13_fso3 10Gbps
+13_fso3To14_fso4 10Gbps
+14_fso4To13_fso3 10Gbps
+13_fso4To14_fso1 10Gbps
+14_fso1To13_fso4 10Gbps
+13_fso4To14_fso2 10Gbps
+14_fso2To13_fso4 10Gbps
+13_fso4To14_fso3 10Gbps
+14_fso3To13_fso4 10Gbps
+13_fso4To14_fso4 10Gbps
+14_fso4To13_fso4 10Gbps
+14_fso1To41_fso1 10Gbps
+41_fso1To14_fso1 10Gbps
+14_fso1To41_fso2 10Gbps
+41_fso2To14_fso1 10Gbps
+14_fso1To41_fso3 10Gbps
+41_fso3To14_fso1 10Gbps
+14_fso1To41_fso4 10Gbps
+41_fso4To14_fso1 10Gbps
+14_fso2To41_fso1 10Gbps
+41_fso1To14_fso2 10Gbps
+14_fso2To41_fso2 10Gbps
+41_fso2To14_fso2 10Gbps
+14_fso2To41_fso3 10Gbps
+41_fso3To14_fso2 10Gbps
+14_fso2To41_fso4 10Gbps
+41_fso4To14_fso2 10Gbps
+14_fso3To41_fso1 10Gbps
+41_fso1To14_fso3 10Gbps
+14_fso3To41_fso2 10Gbps
+41_fso2To14_fso3 10Gbps
+14_fso3To41_fso3 10Gbps
+41_fso3To14_fso3 10Gbps
+14_fso3To41_fso4 10Gbps
+41_fso4To14_fso3 10Gbps
+14_fso4To41_fso1 10Gbps
+41_fso1To14_fso4 10Gbps
+14_fso4To41_fso2 10Gbps
+41_fso2To14_fso4 10Gbps
+14_fso4To41_fso3 10Gbps
+41_fso3To14_fso4 10Gbps
+14_fso4To41_fso4 10Gbps
+41_fso4To14_fso4 10Gbps
+34_fso1To40_fso1 10Gbps
+40_fso1To34_fso1 10Gbps
+34_fso1To40_fso2 10Gbps
+40_fso2To34_fso1 10Gbps
+34_fso1To40_fso3 10Gbps
+40_fso3To34_fso1 10Gbps
+34_fso1To40_fso4 10Gbps
+40_fso4To34_fso1 10Gbps
+34_fso2To40_fso1 10Gbps
+40_fso1To34_fso2 10Gbps
+34_fso2To40_fso2 10Gbps
+40_fso2To34_fso2 10Gbps
+34_fso2To40_fso3 10Gbps
+40_fso3To34_fso2 10Gbps
+34_fso2To40_fso4 10Gbps
+40_fso4To34_fso2 10Gbps
+34_fso3To40_fso1 10Gbps
+40_fso1To34_fso3 10Gbps
+34_fso3To40_fso2 10Gbps
+40_fso2To34_fso3 10Gbps
+34_fso3To40_fso3 10Gbps
+40_fso3To34_fso3 10Gbps
+34_fso3To40_fso4 10Gbps
+40_fso4To34_fso3 10Gbps
+34_fso4To40_fso1 10Gbps
+40_fso1To34_fso4 10Gbps
+34_fso4To40_fso2 10Gbps
+40_fso2To34_fso4 10Gbps
+34_fso4To40_fso3 10Gbps
+40_fso3To34_fso4 10Gbps
+34_fso4To40_fso4 10Gbps
+40_fso4To34_fso4 10Gbps
+34_fso1To41_fso1 10Gbps
+41_fso1To34_fso1 10Gbps
+34_fso1To41_fso2 10Gbps
+41_fso2To34_fso1 10Gbps
+34_fso1To41_fso3 10Gbps
+41_fso3To34_fso1 10Gbps
+34_fso1To41_fso4 10Gbps
+41_fso4To34_fso1 10Gbps
+34_fso2To41_fso1 10Gbps
+41_fso1To34_fso2 10Gbps
+34_fso2To41_fso2 10Gbps
+41_fso2To34_fso2 10Gbps
+34_fso2To41_fso3 10Gbps
+41_fso3To34_fso2 10Gbps
+34_fso2To41_fso4 10Gbps
+41_fso4To34_fso2 10Gbps
+34_fso3To41_fso1 10Gbps
+41_fso1To34_fso3 10Gbps
+34_fso3To41_fso2 10Gbps
+41_fso2To34_fso3 10Gbps
+34_fso3To41_fso3 10Gbps
+41_fso3To34_fso3 10Gbps
+34_fso3To41_fso4 10Gbps
+41_fso4To34_fso3 10Gbps
+34_fso4To41_fso1 10Gbps
+41_fso1To34_fso4 10Gbps
+34_fso4To41_fso2 10Gbps
+41_fso2To34_fso4 10Gbps
+34_fso4To41_fso3 10Gbps
+41_fso3To34_fso4 10Gbps
+34_fso4To41_fso4 10Gbps
+41_fso4To34_fso4 10Gbps
+34_fso1To35_fso1 10Gbps
+35_fso1To34_fso1 10Gbps
+34_fso1To35_fso2 10Gbps
+35_fso2To34_fso1 10Gbps
+34_fso1To35_fso3 10Gbps
+35_fso3To34_fso1 10Gbps
+34_fso1To35_fso4 10Gbps
+35_fso4To34_fso1 10Gbps
+34_fso2To35_fso1 10Gbps
+35_fso1To34_fso2 10Gbps
+34_fso2To35_fso2 10Gbps
+35_fso2To34_fso2 10Gbps
+34_fso2To35_fso3 10Gbps
+35_fso3To34_fso2 10Gbps
+34_fso2To35_fso4 10Gbps
+35_fso4To34_fso2 10Gbps
+34_fso3To35_fso1 10Gbps
+35_fso1To34_fso3 10Gbps
+34_fso3To35_fso2 10Gbps
+35_fso2To34_fso3 10Gbps
+34_fso3To35_fso3 10Gbps
+35_fso3To34_fso3 10Gbps
+34_fso3To35_fso4 10Gbps
+35_fso4To34_fso3 10Gbps
+34_fso4To35_fso1 10Gbps
+35_fso1To34_fso4 10Gbps
+34_fso4To35_fso2 10Gbps
+35_fso2To34_fso4 10Gbps
+34_fso4To35_fso3 10Gbps
+35_fso3To34_fso4 10Gbps
+34_fso4To35_fso4 10Gbps
+35_fso4To34_fso4 10Gbps
+34_fso1To38_fso1 10Gbps
+38_fso1To34_fso1 10Gbps
+34_fso1To38_fso2 10Gbps
+38_fso2To34_fso1 10Gbps
+34_fso1To38_fso3 10Gbps
+38_fso3To34_fso1 10Gbps
+34_fso1To38_fso4 10Gbps
+38_fso4To34_fso1 10Gbps
+34_fso2To38_fso1 10Gbps
+38_fso1To34_fso2 10Gbps
+34_fso2To38_fso2 10Gbps
+38_fso2To34_fso2 10Gbps
+34_fso2To38_fso3 10Gbps
+38_fso3To34_fso2 10Gbps
+34_fso2To38_fso4 10Gbps
+38_fso4To34_fso2 10Gbps
+34_fso3To38_fso1 10Gbps
+38_fso1To34_fso3 10Gbps
+34_fso3To38_fso2 10Gbps
+38_fso2To34_fso3 10Gbps
+34_fso3To38_fso3 10Gbps
+38_fso3To34_fso3 10Gbps
+34_fso3To38_fso4 10Gbps
+38_fso4To34_fso3 10Gbps
+34_fso4To38_fso1 10Gbps
+38_fso1To34_fso4 10Gbps
+34_fso4To38_fso2 10Gbps
+38_fso2To34_fso4 10Gbps
+34_fso4To38_fso3 10Gbps
+38_fso3To34_fso4 10Gbps
+34_fso4To38_fso4 10Gbps
+38_fso4To34_fso4 10Gbps
+35_fso1To40_fso1 10Gbps
+40_fso1To35_fso1 10Gbps
+35_fso1To40_fso2 10Gbps
+40_fso2To35_fso1 10Gbps
+35_fso1To40_fso3 10Gbps
+40_fso3To35_fso1 10Gbps
+35_fso1To40_fso4 10Gbps
+40_fso4To35_fso1 10Gbps
+35_fso2To40_fso1 10Gbps
+40_fso1To35_fso2 10Gbps
+35_fso2To40_fso2 10Gbps
+40_fso2To35_fso2 10Gbps
+35_fso2To40_fso3 10Gbps
+40_fso3To35_fso2 10Gbps
+35_fso2To40_fso4 10Gbps
+40_fso4To35_fso2 10Gbps
+35_fso3To40_fso1 10Gbps
+40_fso1To35_fso3 10Gbps
+35_fso3To40_fso2 10Gbps
+40_fso2To35_fso3 10Gbps
+35_fso3To40_fso3 10Gbps
+40_fso3To35_fso3 10Gbps
+35_fso3To40_fso4 10Gbps
+40_fso4To35_fso3 10Gbps
+35_fso4To40_fso1 10Gbps
+40_fso1To35_fso4 10Gbps
+35_fso4To40_fso2 10Gbps
+40_fso2To35_fso4 10Gbps
+35_fso4To40_fso3 10Gbps
+40_fso3To35_fso4 10Gbps
+35_fso4To40_fso4 10Gbps
+40_fso4To35_fso4 10Gbps
+35_fso1To38_fso1 10Gbps
+38_fso1To35_fso1 10Gbps
+35_fso1To38_fso2 10Gbps
+38_fso2To35_fso1 10Gbps
+35_fso1To38_fso3 10Gbps
+38_fso3To35_fso1 10Gbps
+35_fso1To38_fso4 10Gbps
+38_fso4To35_fso1 10Gbps
+35_fso2To38_fso1 10Gbps
+38_fso1To35_fso2 10Gbps
+35_fso2To38_fso2 10Gbps
+38_fso2To35_fso2 10Gbps
+35_fso2To38_fso3 10Gbps
+38_fso3To35_fso2 10Gbps
+35_fso2To38_fso4 10Gbps
+38_fso4To35_fso2 10Gbps
+35_fso3To38_fso1 10Gbps
+38_fso1To35_fso3 10Gbps
+35_fso3To38_fso2 10Gbps
+38_fso2To35_fso3 10Gbps
+35_fso3To38_fso3 10Gbps
+38_fso3To35_fso3 10Gbps
+35_fso3To38_fso4 10Gbps
+38_fso4To35_fso3 10Gbps
+35_fso4To38_fso1 10Gbps
+38_fso1To35_fso4 10Gbps
+35_fso4To38_fso2 10Gbps
+38_fso2To35_fso4 10Gbps
+35_fso4To38_fso3 10Gbps
+38_fso3To35_fso4 10Gbps
+35_fso4To38_fso4 10Gbps
+38_fso4To35_fso4 10Gbps
+38_fso1To40_fso1 10Gbps
+40_fso1To38_fso1 10Gbps
+38_fso1To40_fso2 10Gbps
+40_fso2To38_fso1 10Gbps
+38_fso1To40_fso3 10Gbps
+40_fso3To38_fso1 10Gbps
+38_fso1To40_fso4 10Gbps
+40_fso4To38_fso1 10Gbps
+38_fso2To40_fso1 10Gbps
+40_fso1To38_fso2 10Gbps
+38_fso2To40_fso2 10Gbps
+40_fso2To38_fso2 10Gbps
+38_fso2To40_fso3 10Gbps
+40_fso3To38_fso2 10Gbps
+38_fso2To40_fso4 10Gbps
+40_fso4To38_fso2 10Gbps
+38_fso3To40_fso1 10Gbps
+40_fso1To38_fso3 10Gbps
+38_fso3To40_fso2 10Gbps
+40_fso2To38_fso3 10Gbps
+38_fso3To40_fso3 10Gbps
+40_fso3To38_fso3 10Gbps
+38_fso3To40_fso4 10Gbps
+40_fso4To38_fso3 10Gbps
+38_fso4To40_fso1 10Gbps
+40_fso1To38_fso4 10Gbps
+38_fso4To40_fso2 10Gbps
+40_fso2To38_fso4 10Gbps
+38_fso4To40_fso3 10Gbps
+40_fso3To38_fso4 10Gbps
+38_fso4To40_fso4 10Gbps
+40_fso4To38_fso4 10Gbps
+38_fso1To41_fso1 10Gbps
+41_fso1To38_fso1 10Gbps
+38_fso1To41_fso2 10Gbps
+41_fso2To38_fso1 10Gbps
+38_fso1To41_fso3 10Gbps
+41_fso3To38_fso1 10Gbps
+38_fso1To41_fso4 10Gbps
+41_fso4To38_fso1 10Gbps
+38_fso2To41_fso1 10Gbps
+41_fso1To38_fso2 10Gbps
+38_fso2To41_fso2 10Gbps
+41_fso2To38_fso2 10Gbps
+38_fso2To41_fso3 10Gbps
+41_fso3To38_fso2 10Gbps
+38_fso2To41_fso4 10Gbps
+41_fso4To38_fso2 10Gbps
+38_fso3To41_fso1 10Gbps
+41_fso1To38_fso3 10Gbps
+38_fso3To41_fso2 10Gbps
+41_fso2To38_fso3 10Gbps
+38_fso3To41_fso3 10Gbps
+41_fso3To38_fso3 10Gbps
+38_fso3To41_fso4 10Gbps
+41_fso4To38_fso3 10Gbps
+38_fso4To41_fso1 10Gbps
+41_fso1To38_fso4 10Gbps
+38_fso4To41_fso2 10Gbps
+41_fso2To38_fso4 10Gbps
+38_fso4To41_fso3 10Gbps
+41_fso3To38_fso4 10Gbps
+38_fso4To41_fso4 10Gbps
+41_fso4To38_fso4 10Gbps
+38_fso1To53_fso1 10Gbps
+53_fso1To38_fso1 10Gbps
+38_fso1To53_fso2 10Gbps
+53_fso2To38_fso1 10Gbps
+38_fso1To53_fso3 10Gbps
+53_fso3To38_fso1 10Gbps
+38_fso1To53_fso4 10Gbps
+53_fso4To38_fso1 10Gbps
+38_fso2To53_fso1 10Gbps
+53_fso1To38_fso2 10Gbps
+38_fso2To53_fso2 10Gbps
+53_fso2To38_fso2 10Gbps
+38_fso2To53_fso3 10Gbps
+53_fso3To38_fso2 10Gbps
+38_fso2To53_fso4 10Gbps
+53_fso4To38_fso2 10Gbps
+38_fso3To53_fso1 10Gbps
+53_fso1To38_fso3 10Gbps
+38_fso3To53_fso2 10Gbps
+53_fso2To38_fso3 10Gbps
+38_fso3To53_fso3 10Gbps
+53_fso3To38_fso3 10Gbps
+38_fso3To53_fso4 10Gbps
+53_fso4To38_fso3 10Gbps
+38_fso4To53_fso1 10Gbps
+53_fso1To38_fso4 10Gbps
+38_fso4To53_fso2 10Gbps
+53_fso2To38_fso4 10Gbps
+38_fso4To53_fso3 10Gbps
+53_fso3To38_fso4 10Gbps
+38_fso4To53_fso4 10Gbps
+53_fso4To38_fso4 10Gbps
+40_fso1To41_fso1 10Gbps
+41_fso1To40_fso1 10Gbps
+40_fso1To41_fso2 10Gbps
+41_fso2To40_fso1 10Gbps
+40_fso1To41_fso3 10Gbps
+41_fso3To40_fso1 10Gbps
+40_fso1To41_fso4 10Gbps
+41_fso4To40_fso1 10Gbps
+40_fso2To41_fso1 10Gbps
+41_fso1To40_fso2 10Gbps
+40_fso2To41_fso2 10Gbps
+41_fso2To40_fso2 10Gbps
+40_fso2To41_fso3 10Gbps
+41_fso3To40_fso2 10Gbps
+40_fso2To41_fso4 10Gbps
+41_fso4To40_fso2 10Gbps
+40_fso3To41_fso1 10Gbps
+41_fso1To40_fso3 10Gbps
+40_fso3To41_fso2 10Gbps
+41_fso2To40_fso3 10Gbps
+40_fso3To41_fso3 10Gbps
+41_fso3To40_fso3 10Gbps
+40_fso3To41_fso4 10Gbps
+41_fso4To40_fso3 10Gbps
+40_fso4To41_fso1 10Gbps
+41_fso1To40_fso4 10Gbps
+40_fso4To41_fso2 10Gbps
+41_fso2To40_fso4 10Gbps
+40_fso4To41_fso3 10Gbps
+41_fso3To40_fso4 10Gbps
+40_fso4To41_fso4 10Gbps
+41_fso4To40_fso4 10Gbps
+41_fso1To48_fso1 10Gbps
+48_fso1To41_fso1 10Gbps
+41_fso1To48_fso2 10Gbps
+48_fso2To41_fso1 10Gbps
+41_fso1To48_fso3 10Gbps
+48_fso3To41_fso1 10Gbps
+41_fso1To48_fso4 10Gbps
+48_fso4To41_fso1 10Gbps
+41_fso2To48_fso1 10Gbps
+48_fso1To41_fso2 10Gbps
+41_fso2To48_fso2 10Gbps
+48_fso2To41_fso2 10Gbps
+41_fso2To48_fso3 10Gbps
+48_fso3To41_fso2 10Gbps
+41_fso2To48_fso4 10Gbps
+48_fso4To41_fso2 10Gbps
+41_fso3To48_fso1 10Gbps
+48_fso1To41_fso3 10Gbps
+41_fso3To48_fso2 10Gbps
+48_fso2To41_fso3 10Gbps
+41_fso3To48_fso3 10Gbps
+48_fso3To41_fso3 10Gbps
+41_fso3To48_fso4 10Gbps
+48_fso4To41_fso3 10Gbps
+41_fso4To48_fso1 10Gbps
+48_fso1To41_fso4 10Gbps
+41_fso4To48_fso2 10Gbps
+48_fso2To41_fso4 10Gbps
+41_fso4To48_fso3 10Gbps
+48_fso3To41_fso4 10Gbps
+41_fso4To48_fso4 10Gbps
+48_fso4To41_fso4 10Gbps
+48_fso1To51_fso1 10Gbps
+51_fso1To48_fso1 10Gbps
+48_fso1To51_fso2 10Gbps
+51_fso2To48_fso1 10Gbps
+48_fso1To51_fso3 10Gbps
+51_fso3To48_fso1 10Gbps
+48_fso1To51_fso4 10Gbps
+51_fso4To48_fso1 10Gbps
+48_fso2To51_fso1 10Gbps
+51_fso1To48_fso2 10Gbps
+48_fso2To51_fso2 10Gbps
+51_fso2To48_fso2 10Gbps
+48_fso2To51_fso3 10Gbps
+51_fso3To48_fso2 10Gbps
+48_fso2To51_fso4 10Gbps
+51_fso4To48_fso2 10Gbps
+48_fso3To51_fso1 10Gbps
+51_fso1To48_fso3 10Gbps
+48_fso3To51_fso2 10Gbps
+51_fso2To48_fso3 10Gbps
+48_fso3To51_fso3 10Gbps
+51_fso3To48_fso3 10Gbps
+48_fso3To51_fso4 10Gbps
+51_fso4To48_fso3 10Gbps
+48_fso4To51_fso1 10Gbps
+51_fso1To48_fso4 10Gbps
+48_fso4To51_fso2 10Gbps
+51_fso2To48_fso4 10Gbps
+48_fso4To51_fso3 10Gbps
+51_fso3To48_fso4 10Gbps
+48_fso4To51_fso4 10Gbps
+51_fso4To48_fso4 10Gbps
+48_fso1To53_fso1 10Gbps
+53_fso1To48_fso1 10Gbps
+48_fso1To53_fso2 10Gbps
+53_fso2To48_fso1 10Gbps
+48_fso1To53_fso3 10Gbps
+53_fso3To48_fso1 10Gbps
+48_fso1To53_fso4 10Gbps
+53_fso4To48_fso1 10Gbps
+48_fso2To53_fso1 10Gbps
+53_fso1To48_fso2 10Gbps
+48_fso2To53_fso2 10Gbps
+53_fso2To48_fso2 10Gbps
+48_fso2To53_fso3 10Gbps
+53_fso3To48_fso2 10Gbps
+48_fso2To53_fso4 10Gbps
+53_fso4To48_fso2 10Gbps
+48_fso3To53_fso1 10Gbps
+53_fso1To48_fso3 10Gbps
+48_fso3To53_fso2 10Gbps
+53_fso2To48_fso3 10Gbps
+48_fso3To53_fso3 10Gbps
+53_fso3To48_fso3 10Gbps
+48_fso3To53_fso4 10Gbps
+53_fso4To48_fso3 10Gbps
+48_fso4To53_fso1 10Gbps
+53_fso1To48_fso4 10Gbps
+48_fso4To53_fso2 10Gbps
+53_fso2To48_fso4 10Gbps
+48_fso4To53_fso3 10Gbps
+53_fso3To48_fso4 10Gbps
+48_fso4To53_fso4 10Gbps
+53_fso4To48_fso4 10Gbps
+51_fso1To53_fso1 10Gbps
+53_fso1To51_fso1 10Gbps
+51_fso1To53_fso2 10Gbps
+53_fso2To51_fso1 10Gbps
+51_fso1To53_fso3 10Gbps
+53_fso3To51_fso1 10Gbps
+51_fso1To53_fso4 10Gbps
+53_fso4To51_fso1 10Gbps
+51_fso2To53_fso1 10Gbps
+53_fso1To51_fso2 10Gbps
+51_fso2To53_fso2 10Gbps
+53_fso2To51_fso2 10Gbps
+51_fso2To53_fso3 10Gbps
+53_fso3To51_fso2 10Gbps
+51_fso2To53_fso4 10Gbps
+53_fso4To51_fso2 10Gbps
+51_fso3To53_fso1 10Gbps
+53_fso1To51_fso3 10Gbps
+51_fso3To53_fso2 10Gbps
+53_fso2To51_fso3 10Gbps
+51_fso3To53_fso3 10Gbps
+53_fso3To51_fso3 10Gbps
+51_fso3To53_fso4 10Gbps
+53_fso4To51_fso3 10Gbps
+51_fso4To53_fso1 10Gbps
+53_fso1To51_fso4 10Gbps
+51_fso4To53_fso2 10Gbps
+53_fso2To51_fso4 10Gbps
+51_fso4To53_fso3 10Gbps
+53_fso3To51_fso4 10Gbps
+51_fso4To53_fso4 10Gbps
+53_fso4To51_fso4 10Gbps
+51_fso1To71_fso1 10Gbps
+71_fso1To51_fso1 10Gbps
+51_fso1To71_fso2 10Gbps
+71_fso2To51_fso1 10Gbps
+51_fso1To71_fso3 10Gbps
+71_fso3To51_fso1 10Gbps
+51_fso1To71_fso4 10Gbps
+71_fso4To51_fso1 10Gbps
+51_fso2To71_fso1 10Gbps
+71_fso1To51_fso2 10Gbps
+51_fso2To71_fso2 10Gbps
+71_fso2To51_fso2 10Gbps
+51_fso2To71_fso3 10Gbps
+71_fso3To51_fso2 10Gbps
+51_fso2To71_fso4 10Gbps
+71_fso4To51_fso2 10Gbps
+51_fso3To71_fso1 10Gbps
+71_fso1To51_fso3 10Gbps
+51_fso3To71_fso2 10Gbps
+71_fso2To51_fso3 10Gbps
+51_fso3To71_fso3 10Gbps
+71_fso3To51_fso3 10Gbps
+51_fso3To71_fso4 10Gbps
+71_fso4To51_fso3 10Gbps
+51_fso4To71_fso1 10Gbps
+71_fso1To51_fso4 10Gbps
+51_fso4To71_fso2 10Gbps
+71_fso2To51_fso4 10Gbps
+51_fso4To71_fso3 10Gbps
+71_fso3To51_fso4 10Gbps
+51_fso4To71_fso4 10Gbps
+71_fso4To51_fso4 10Gbps
+185_fso1To186_fso1 10Gbps
+186_fso1To185_fso1 10Gbps
+185_fso1To186_fso2 10Gbps
+186_fso2To185_fso1 10Gbps
+185_fso1To186_fso3 10Gbps
+186_fso3To185_fso1 10Gbps
+185_fso1To186_fso4 10Gbps
+186_fso4To185_fso1 10Gbps
+185_fso2To186_fso1 10Gbps
+186_fso1To185_fso2 10Gbps
+185_fso2To186_fso2 10Gbps
+186_fso2To185_fso2 10Gbps
+185_fso2To186_fso3 10Gbps
+186_fso3To185_fso2 10Gbps
+185_fso2To186_fso4 10Gbps
+186_fso4To185_fso2 10Gbps
+185_fso3To186_fso1 10Gbps
+186_fso1To185_fso3 10Gbps
+185_fso3To186_fso2 10Gbps
+186_fso2To185_fso3 10Gbps
+185_fso3To186_fso3 10Gbps
+186_fso3To185_fso3 10Gbps
+185_fso3To186_fso4 10Gbps
+186_fso4To185_fso3 10Gbps
+185_fso4To186_fso1 10Gbps
+186_fso1To185_fso4 10Gbps
+185_fso4To186_fso2 10Gbps
+186_fso2To185_fso4 10Gbps
+185_fso4To186_fso3 10Gbps
+186_fso3To185_fso4 10Gbps
+185_fso4To186_fso4 10Gbps
+186_fso4To185_fso4 10Gbps
+186_fso1To234_fso1 10Gbps
+234_fso1To186_fso1 10Gbps
+186_fso1To234_fso2 10Gbps
+234_fso2To186_fso1 10Gbps
+186_fso1To234_fso3 10Gbps
+234_fso3To186_fso1 10Gbps
+186_fso1To234_fso4 10Gbps
+234_fso4To186_fso1 10Gbps
+186_fso2To234_fso1 10Gbps
+234_fso1To186_fso2 10Gbps
+186_fso2To234_fso2 10Gbps
+234_fso2To186_fso2 10Gbps
+186_fso2To234_fso3 10Gbps
+234_fso3To186_fso2 10Gbps
+186_fso2To234_fso4 10Gbps
+234_fso4To186_fso2 10Gbps
+186_fso3To234_fso1 10Gbps
+234_fso1To186_fso3 10Gbps
+186_fso3To234_fso2 10Gbps
+234_fso2To186_fso3 10Gbps
+186_fso3To234_fso3 10Gbps
+234_fso3To186_fso3 10Gbps
+186_fso3To234_fso4 10Gbps
+234_fso4To186_fso3 10Gbps
+186_fso4To234_fso1 10Gbps
+234_fso1To186_fso4 10Gbps
+186_fso4To234_fso2 10Gbps
+234_fso2To186_fso4 10Gbps
+186_fso4To234_fso3 10Gbps
+234_fso3To186_fso4 10Gbps
+186_fso4To234_fso4 10Gbps
+234_fso4To186_fso4 10Gbps
+454_fso1To462_fso1 10Gbps
+462_fso1To454_fso1 10Gbps
+454_fso1To462_fso2 10Gbps
+462_fso2To454_fso1 10Gbps
+454_fso1To462_fso3 10Gbps
+462_fso3To454_fso1 10Gbps
+454_fso1To462_fso4 10Gbps
+462_fso4To454_fso1 10Gbps
+454_fso2To462_fso1 10Gbps
+462_fso1To454_fso2 10Gbps
+454_fso2To462_fso2 10Gbps
+462_fso2To454_fso2 10Gbps
+454_fso2To462_fso3 10Gbps
+462_fso3To454_fso2 10Gbps
+454_fso2To462_fso4 10Gbps
+462_fso4To454_fso2 10Gbps
+454_fso3To462_fso1 10Gbps
+462_fso1To454_fso3 10Gbps
+454_fso3To462_fso2 10Gbps
+462_fso2To454_fso3 10Gbps
+454_fso3To462_fso3 10Gbps
+462_fso3To454_fso3 10Gbps
+454_fso3To462_fso4 10Gbps
+462_fso4To454_fso3 10Gbps
+454_fso4To462_fso1 10Gbps
+462_fso1To454_fso4 10Gbps
+454_fso4To462_fso2 10Gbps
+462_fso2To454_fso4 10Gbps
+454_fso4To462_fso3 10Gbps
+462_fso3To454_fso4 10Gbps
+454_fso4To462_fso4 10Gbps
+462_fso4To454_fso4 10Gbps
+71_fso1To96_fso1 10Gbps
+96_fso1To71_fso1 10Gbps
+71_fso1To96_fso2 10Gbps
+96_fso2To71_fso1 10Gbps
+71_fso1To96_fso3 10Gbps
+96_fso3To71_fso1 10Gbps
+71_fso1To96_fso4 10Gbps
+96_fso4To71_fso1 10Gbps
+71_fso2To96_fso1 10Gbps
+96_fso1To71_fso2 10Gbps
+71_fso2To96_fso2 10Gbps
+96_fso2To71_fso2 10Gbps
+71_fso2To96_fso3 10Gbps
+96_fso3To71_fso2 10Gbps
+71_fso2To96_fso4 10Gbps
+96_fso4To71_fso2 10Gbps
+71_fso3To96_fso1 10Gbps
+96_fso1To71_fso3 10Gbps
+71_fso3To96_fso2 10Gbps
+96_fso2To71_fso3 10Gbps
+71_fso3To96_fso3 10Gbps
+96_fso3To71_fso3 10Gbps
+71_fso3To96_fso4 10Gbps
+96_fso4To71_fso3 10Gbps
+71_fso4To96_fso1 10Gbps
+96_fso1To71_fso4 10Gbps
+71_fso4To96_fso2 10Gbps
+96_fso2To71_fso4 10Gbps
+71_fso4To96_fso3 10Gbps
+96_fso3To71_fso4 10Gbps
+71_fso4To96_fso4 10Gbps
+96_fso4To71_fso4 10Gbps
+329_fso1To337_fso1 10Gbps
+337_fso1To329_fso1 10Gbps
+329_fso1To337_fso2 10Gbps
+337_fso2To329_fso1 10Gbps
+329_fso1To337_fso3 10Gbps
+337_fso3To329_fso1 10Gbps
+329_fso1To337_fso4 10Gbps
+337_fso4To329_fso1 10Gbps
+329_fso2To337_fso1 10Gbps
+337_fso1To329_fso2 10Gbps
+329_fso2To337_fso2 10Gbps
+337_fso2To329_fso2 10Gbps
+329_fso2To337_fso3 10Gbps
+337_fso3To329_fso2 10Gbps
+329_fso2To337_fso4 10Gbps
+337_fso4To329_fso2 10Gbps
+329_fso3To337_fso1 10Gbps
+337_fso1To329_fso3 10Gbps
+329_fso3To337_fso2 10Gbps
+337_fso2To329_fso3 10Gbps
+329_fso3To337_fso3 10Gbps
+337_fso3To329_fso3 10Gbps
+329_fso3To337_fso4 10Gbps
+337_fso4To329_fso3 10Gbps
+329_fso4To337_fso1 10Gbps
+337_fso1To329_fso4 10Gbps
+329_fso4To337_fso2 10Gbps
+337_fso2To329_fso4 10Gbps
+329_fso4To337_fso3 10Gbps
+337_fso3To329_fso4 10Gbps
+329_fso4To337_fso4 10Gbps
+337_fso4To329_fso4 10Gbps
+223_fso1To225_fso1 10Gbps
+225_fso1To223_fso1 10Gbps
+223_fso1To225_fso2 10Gbps
+225_fso2To223_fso1 10Gbps
+223_fso1To225_fso3 10Gbps
+225_fso3To223_fso1 10Gbps
+223_fso1To225_fso4 10Gbps
+225_fso4To223_fso1 10Gbps
+223_fso2To225_fso1 10Gbps
+225_fso1To223_fso2 10Gbps
+223_fso2To225_fso2 10Gbps
+225_fso2To223_fso2 10Gbps
+223_fso2To225_fso3 10Gbps
+225_fso3To223_fso2 10Gbps
+223_fso2To225_fso4 10Gbps
+225_fso4To223_fso2 10Gbps
+223_fso3To225_fso1 10Gbps
+225_fso1To223_fso3 10Gbps
+223_fso3To225_fso2 10Gbps
+225_fso2To223_fso3 10Gbps
+223_fso3To225_fso3 10Gbps
+225_fso3To223_fso3 10Gbps
+223_fso3To225_fso4 10Gbps
+225_fso4To223_fso3 10Gbps
+223_fso4To225_fso1 10Gbps
+225_fso1To223_fso4 10Gbps
+223_fso4To225_fso2 10Gbps
+225_fso2To223_fso4 10Gbps
+223_fso4To225_fso3 10Gbps
+225_fso3To223_fso4 10Gbps
+223_fso4To225_fso4 10Gbps
+225_fso4To223_fso4 10Gbps
+
+gateways:
+275
+499
+462
+329
+260
+41
