@@ -509,6 +509,11 @@ class InputGenerator:
         return True
     return False
 
+  def getEdgeType(self, n1, n2):
+    con_type = 'non_edge'
+    if self.adj.has_edge(n1, n2):
+      con_type =  self.adj[n1][n2]['con_type']
+    return con_type
   
   def visualizeGraph(self, g, show_edges = True):
     '''
