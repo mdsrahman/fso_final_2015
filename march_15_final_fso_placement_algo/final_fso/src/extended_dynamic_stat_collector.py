@@ -298,13 +298,15 @@ class ExtendedDynamicStatCollector(StatCollector):
       iii) run max flow and save it
       for all iterations, find the avg max flow using the saved values
     '''
+    
     max_flow_list_dyn = []
     upperbound_flow_list_dyn = []
     
     candidate_pattern_nodes = list(set(self.dynamic_graph.nodes()) - set(self.gateways))
     if not candidate_pattern_nodes: #no non-gateway nodes in the static graph, so this avg finding is mute
       self.ext_dynamic_avg_flow = 0.0
-      self.logger.info("No non-gateway node found in static graph, avg and upperbound max flows set to 0!!")
+      self.ext_dynamic_upperbound_flow = 0.0
+      self.logger.info("No non-gateway node found in dynamic graph, avg and upperbound max flows set to 0!!")
       return
     number_of_candidate_pattern_nodes = len(candidate_pattern_nodes)
     number_of_pattern_nodes = \
@@ -410,21 +412,35 @@ class ExtendedDynamicStatCollector(StatCollector):
       print "Static upperbound max. flow:",stat_row['statc_upperbound_max_flow']
       print "Static total gateway capacity:",stat_row['total_gateway_capacity_static']
       print "Static avg. max. flow:",stat_row['static_avg_max_flow'], "!!"
-      print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",\
-            1.0*stat_row['static_avg_max_flow']/stat_row['statc_upperbound_max_flow']
-      print "Ratio of avg. max. flow to total gateway capacity for Static graph:",\
-            1.0*stat_row['static_avg_max_flow']/stat_row['total_gateway_capacity_static']
+      
+      print "Ratio of avg. max. flow to upperbound max. flow for Static graph:",
+      if stat_row['statc_upperbound_max_flow']>0:
+        print 1.0*stat_row['static_avg_max_flow']/stat_row['statc_upperbound_max_flow']
+      else:
+        print "N/A"
+        
+      print "Ratio of avg. max. flow to total gateway capacity for Static graph:",
+      if stat_row['total_gateway_capacity_static']>0:
+        print 1.0*stat_row['static_avg_max_flow']/stat_row['total_gateway_capacity_static']
+      else: 
+        print "N/A"
+        
       print "Dynamic:.................."
       print "Dynamic upperbound max. flow:",stat_row['dynamic_upperbound_max_flow']
       print "Dynamic total gateway capacity:",stat_row['total_gateway_capacity_dynamic']
       print "Dynamic avg. max. flow:",stat_row['dynamic_avg_max_flow'], "!!"
+      
       print "Ratio of avg. max. flow to upperbound max. flow for Dynamic graph:",
       if stat_row['dynamic_upperbound_max_flow']>0:
         print 1.0*stat_row['dynamic_avg_max_flow']/stat_row['dynamic_upperbound_max_flow']
       else:
         print "N/A"
-      print "Ratio of avg. max. flow to total gateway capacity for Dynamic graph:",\
-            1.0*stat_row['dynamic_avg_max_flow']/stat_row['total_gateway_capacity_dynamic']
+      
+      print "Ratio of avg. max. flow to total gateway capacity for Dynamic graph:",
+      if stat_row['total_gateway_capacity_dynamic']>0:
+        print  1.0*stat_row['dynamic_avg_max_flow']/stat_row['total_gateway_capacity_dynamic']
+      else:
+        print 'N/A'
       
       print "Static equivalent fso-per-node:",stat_row['Static_eq_fso_per_node'] 
       print "Static equivalent fso-per-gateway:", stat_row['Static_eq_fso_per_gateway']
@@ -446,6 +462,26 @@ class ExtendedDynamicStatCollector(StatCollector):
      
     self.createDynamicGraphSpecOutputFile()
     self.createStaticGraphSpecOutputFile()
+    
+    #------save adj graph--------------------------
+    filePath = \
+      self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_adj.txt"
+    self.saveGraphInFile(self.adj, filePath)
+    
+    #------save backbone graph--------------------------
+    filePath = \
+      self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_backbone.txt"
+    self.saveGraphInFile(self.backbone_graph, filePath)
+    
+    #------save static graph--------------------------
+    filePath = \
+      self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_static.txt"
+    self.saveGraphInFile(self.static_graph, filePath)
+    #------save dynamic graph--------------------------
+    filePath = \
+      self.graph_output_folder+"/"+str(self.experiment_name)+"-"+str(self.current_run_no)+"_dynamic.txt"
+    self.saveGraphInFile(self.dynamic_graph, filePath)
+    
     self.computeExtDynamicAvgFlow()
     self.findFlowEquivalentStaticGraph()
     self.saveStatInFile()
@@ -644,6 +680,12 @@ class ExtendedDynamicStatCollector(StatCollector):
     plt.show()
    
   def runAll(self):
+    static_avg_max_flows = []
+    static_avg_upperbound_flows = []
+    dynamic_avg_max_flows = []
+    dynamic_avg_upperbound_flows = []
+    static_eq_fso_per_node = []
+    
     if not self.onlyGeneratePlot:
       for i in xrange(1, self.no_of_samples+1):
         self.current_run_no = i
@@ -658,9 +700,43 @@ class ExtendedDynamicStatCollector(StatCollector):
         self.runILPSolver()
         self.printSummaryAfterSavingStat = True #will now print on screen summary
         self.runExtendedDynamicStatCollector()
+        #backup the following stat in master_stat
+        #number_of_fso_per_node, 
+#         number_of_edges_per_node, 
+#         percent_of_pattern_nodes,
+#         static_avg_max_flow, 
+#         static_up_flow, 
+#         dyn_avg_max_flow, 
+#         dyn_up_flow,
+#         static_eq_fso_per_node
+        static_avg_up_flow = min(self.static_upperbound_flow, self.total_gateway_capacity_static)
+        dynamic_avg_up_flow = min(self.ext_dynamic_upperbound_flow, self.total_gateway_capacity_dynamic)
         
+        static_avg_max_flows.append(self.static_avg_flow)
+        dynamic_avg_max_flows.append(self.ext_dynamic_avg_flow)
+        static_avg_upperbound_flows.append(static_avg_up_flow)
+        dynamic_avg_upperbound_flows.append(dynamic_avg_up_flow)
+        static_eq_fso_per_node.append(self.static_fso_per_node) #TODO:
         self.reset()
-    
+        
+    aggr_static_avg_max_flow = 1.0*sum(static_avg_max_flows)/len(static_avg_max_flows)
+    aggr_dynamic_avg_max_flow = 1.0*sum(dynamic_avg_max_flows)/len(dynamic_avg_max_flows)
+    aggr_static_avg_up_flow =  1.0*sum(static_avg_upperbound_flows)/len(static_avg_upperbound_flows)
+    aggr_dynamic_avg_up_flow =  1.0*sum(dynamic_avg_upperbound_flows)/len(dynamic_avg_upperbound_flows)
+    aggr_static_fso_per_node = 1.0*sum(static_eq_fso_per_node)/len(static_eq_fso_per_node)
+    f_text = str(self.fso_per_node)+","\
+                +str(self.max_short_edge_per_node)+","\
+                +str(self.max_long_edge_per_node)+","\
+                +str(self.percent_of_pattern_nodes_in_avg_flow_calculation)+","\
+                +str(aggr_static_avg_max_flow)+","\
+                +str(aggr_static_avg_up_flow)+","\
+                +str(aggr_dynamic_avg_max_flow)+","\
+                +str(aggr_dynamic_avg_up_flow)+","\
+                +str(aggr_static_fso_per_node)+"\n"
+    with open("./output/master_stat.txt","a") as f:
+      f.write(f_text)
+      
+    '''
     plot_keys = [
                  'static_avg_max_flow',
                  'dynamic_avg_max_flow',
@@ -668,7 +744,8 @@ class ExtendedDynamicStatCollector(StatCollector):
                  'dynamic_upperbound_max_flow'
                  ]
     self.plotFlowStat( plot_keys, 'Flow Value (Mbps)' )
-    self.plotFSOStat()
+    self.plotFSOStat()'''
+    
     
     
     
