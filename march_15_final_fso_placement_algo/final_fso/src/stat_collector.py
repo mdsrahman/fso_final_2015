@@ -62,6 +62,46 @@ class StatCollector(ILPSolver):
     self.java_code_stdout_file_path = './java/temp_java_stdout.txt'
     self.skipJavaCodeCall = False
 
+  def saveGraphInFile(self, g, filePath):
+    '''
+    save the graph g in 'fileName' file as follows:
+    Nodes:
+      n x y
+      ...
+    Edges:
+      n1 n2 eType
+      ...
+    
+    Gateways:
+      g1
+      ...
+    
+    Here, x,y are the coordinates of node n
+    eType is the edge type (either long or short) of edge n1-n2
+    '''
+    with open(filePath, 'w') as f:
+      gateway_list = []
+      f.write('Nodes:\n')
+      for n in g.nodes():
+        if n in self.gateways:
+          gateway_list.append(n)
+        x = self.node_x[n]
+        y = self.node_y[n]
+        f_text = str(n)+" "+str(x)+" "+str(y)+"\n"
+        f.write(f_text)
+        
+      f.write('Edges:\n')
+      for u,v in g.edges():
+        edge_type = self.getEdgeType(u, v)
+        if edge_type == 'long' or edge_type == 'short':
+          f_text =  str(u)+" "+str(v)+" "+edge_type+"\n"
+          f.write(f_text)
+      
+      f.write('Gateways:\n')
+      for g in gateway_list:
+        f.write(str(g)+"\n")
+      
+      
   def createDynamicGraphSpecOutputFile(self):
     '''
     creates the temporary dynamic spec file and save the self.dynamic_graph according
