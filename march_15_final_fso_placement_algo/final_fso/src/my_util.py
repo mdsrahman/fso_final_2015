@@ -75,6 +75,20 @@ class MyGridBin():
     by = int(y//self.y_interval)
     
     self.bin[bx][by].append(id)
+    
+  def getMaxGridCoords(self):
+    return self.max_bx, self.max_by
+  
+  def getGridCoords(self,x,y):
+    bx = int(x//self.x_interval)
+    by = int(y//self.y_interval)
+    return bx,by
+  
+  def getbyGridCoords(self, bx, by):
+    if bx<=self.max_bx and by<=self.max_by:
+      return list(self.bin[bx][by])
+    else:
+      return []
   
   def get(self, x, y, radius = 0.0):
     return_list = []
