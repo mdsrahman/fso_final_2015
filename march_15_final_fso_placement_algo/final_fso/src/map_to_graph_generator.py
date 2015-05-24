@@ -302,7 +302,7 @@ class MapToGraphGenerator:
       y1 = self.node_y[i]
       for j in xrange(i, total_nodes):
         stat_node_pairs +=1
-        if stat_node_pairs%10000 == 0:
+        if stat_node_pairs%100000 == 0:
           self.logger.info("processed node pairs:"+str(stat_node_pairs)+
                            " total edges so far:"+str(self.edge_counter)+
                            " time:"+str(self.getElapsedTime()))
