@@ -3,8 +3,8 @@ from final_fso.src.map_to_graph_generator import MapToGraphGenerator
 
 class TestMapToGraphGenerator(unittest.TestCase):
   def setUp(self):
-    mapFilePath = './maps/small_nyc_test.osm'
-    outputFilePath = './maps/graphs/small_nyc_test_edges.txt'
+    mapFilePath = './maps/nyc.osm'
+    outputFilePath = './maps/graphs/nyc_graph.txt'
     short_edge_length = 100
     long_edge_length = 1000
     
@@ -18,7 +18,7 @@ class TestMapToGraphGenerator(unittest.TestCase):
     call the method of MapToGraphGenerator...
     '''
     self.m2gg.generateMapToGraph()
-    self.m2gg.debugGenerateVisualGraph()
+    #self.m2gg.debugGenerateVisualGraph()
     self.m2gg.debugPrintSummary()
     
 if __name__=='__main__':
